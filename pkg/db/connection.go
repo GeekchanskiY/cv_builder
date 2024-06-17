@@ -60,10 +60,13 @@ func Connect() (*sql.DB, error) {
 			return
 		}
 		defer dir.Close()
-		files, err := dir.Readdir(-1)
+		files, err := dir.Readdir(0)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
+		}
+		for i, j := 0, len(files)-1; i < j; i, j = i+1, j-1 {
+			files[i], files[j] = files[j], files[i]
 		}
 		for _, file := range files {
 
@@ -74,7 +77,13 @@ func Connect() (*sql.DB, error) {
 				if err != nil {
 					panic(err)
 				}
-				connection.Exec(string(sql_data))
+				log.Println("Running migration: " + file.Name())
+
+				_, err = connection.Exec(string(sql_data))
+				if err != nil {
+					log.Panicln(err)
+				}
+
 			}
 		}
 		log.Println("Connected to database")
