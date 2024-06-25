@@ -4,12 +4,19 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/julienschmidt/httprouter"
 )
 
-func LoggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+func loggingMiddleware(n httprouter.Handle) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		start := time.Now()
-		next.ServeHTTP(w, req)
-		log.Printf("%s %s %s", req.Method, req.RequestURI, time.Since(start))
-	})
+
+		n(w, r, ps)
+		log.Printf("%s %s %s", r.Method, r.URL.Path, time.Since(start))
+	}
+}
+
+func Wrapper(h httprouter.Handle) httprouter.Handle {
+	return loggingMiddleware(h)
 }

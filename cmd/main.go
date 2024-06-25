@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"os"
 	"runtime/trace"
-	"time"
 
+	"github.com/GeekchanskiY/cv_builder/internal"
 	database "github.com/GeekchanskiY/cv_builder/pkg/db"
-	rt "github.com/GeekchanskiY/cv_builder/pkg/router"
+	"github.com/GeekchanskiY/cv_builder/pkg/router"
 )
 
 func main() {
@@ -46,20 +46,11 @@ func main() {
 		log.Fatal(err)
 	}
 	defer connection.Close()
+	internal.Samples(connection)
 
-	// Start server
-	r := rt.CreateRoutes()
-	server := http.Server{
-		Addr:           fmt.Sprintf("%s:%s", os.Getenv("server_host"), os.Getenv("server_port")),
-		Handler:        r,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 32,
-	}
-	log.Println("Routes created, server starting...")
-	err = server.ListenAndServe()
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Exit!")
+	log.Println("Server starting...")
+
+	router := router.CreateRoutes()
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("server_port")), router))
+
 }

@@ -1,12 +1,17 @@
 package router
 
-import "net/http"
+import (
+	"net/http"
 
-func CreateRoutes() *Router {
-	router := &Router{}
-	router.Use(LoggingMiddleware)
-	router.Route("GET", "/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Obsidian-go API"))
-	})
+	"github.com/julienschmidt/httprouter"
+)
+
+func handler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.Write([]byte("Hello, World!"))
+}
+
+func CreateRoutes() *httprouter.Router {
+	router := httprouter.New()
+	router.GET("/", Wrapper(handler))
 	return router
 }
