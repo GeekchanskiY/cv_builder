@@ -8,7 +8,7 @@ import (
 	"os"
 	"runtime/trace"
 
-	"github.com/GeekchanskiY/cv_builder/pkg/db"
+	database "github.com/GeekchanskiY/cv_builder/pkg/db"
 	rt "github.com/GeekchanskiY/cv_builder/pkg/router"
 )
 
@@ -52,9 +52,10 @@ func main() {
 		Addr:    fmt.Sprintf("%s:%s", os.Getenv("server_host"), os.Getenv("server_port")),
 		Handler: r,
 	}
-	log.Println("Server started!")
+	log.Println("Routes created, server starting...")
 	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Exit!")
 }
