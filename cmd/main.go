@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"runtime/trace"
+	"time"
 
 	database "github.com/GeekchanskiY/cv_builder/pkg/db"
 	rt "github.com/GeekchanskiY/cv_builder/pkg/router"
@@ -49,8 +50,11 @@ func main() {
 	// Start server
 	r := rt.CreateRoutes()
 	server := http.Server{
-		Addr:    fmt.Sprintf("%s:%s", os.Getenv("server_host"), os.Getenv("server_port")),
-		Handler: r,
+		Addr:           fmt.Sprintf("%s:%s", os.Getenv("server_host"), os.Getenv("server_port")),
+		Handler:        r,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 32,
 	}
 	log.Println("Routes created, server starting...")
 	err = server.ListenAndServe()
