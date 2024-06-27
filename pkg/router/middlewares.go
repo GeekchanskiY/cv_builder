@@ -17,6 +17,30 @@ func loggingMiddleware(n httprouter.Handle) httprouter.Handle {
 	}
 }
 
+func recoverer(next httprouter.Handle) httprouter.Handle {
+	fn := func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		defer func() {
+			if rvr := recover(); rvr != nil {
+				if rvr == http.ErrAbortHandler {
+					// we don't recover http.ErrAbortHandler so the response
+					// to the client is aborted, this should not be logged
+					panic(rvr)
+				}
+
+				log.Println("Recovered from panic")
+
+				if r.Header.Get("Connection") != "Upgrade" {
+					w.WriteHeader(http.StatusInternalServerError)
+				}
+			}
+		}()
+
+		next(w, r, ps)
+	}
+
+	return httprouter.Handle(fn)
+}
+
 func Wrapper(h httprouter.Handle) httprouter.Handle {
-	return loggingMiddleware(h)
+	return recoverer(loggingMiddleware(h))
 }
