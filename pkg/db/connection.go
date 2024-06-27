@@ -91,3 +91,11 @@ func Connect() (*sql.DB, error) {
 	)
 	return connection, err
 }
+
+func GetDB() *sql.DB {
+	db, err := Connect()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db
+}

@@ -20,6 +20,7 @@ func CreateApp() fx.Option {
 		fx.Provide(
 			server.NewHTTPServer,
 			router.CreateRoutes,
+			database.GetDB,
 		),
 		fx.Invoke(func(*http.Server) {}),
 	)
