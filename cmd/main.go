@@ -9,9 +9,21 @@ import (
 	"runtime/trace"
 
 	"github.com/GeekchanskiY/cv_builder/internal"
+	server "github.com/GeekchanskiY/cv_builder/internal/server"
 	database "github.com/GeekchanskiY/cv_builder/pkg/db"
 	"github.com/GeekchanskiY/cv_builder/pkg/router"
+	"go.uber.org/fx"
 )
+
+func CreateApp() fx.Option {
+	return fx.Options(
+		fx.Provide(
+			server.NewHTTPServer,
+			router.CreateRoutes,
+		),
+		fx.Invoke(func(*http.Server) {}),
+	)
+}
 
 func main() {
 
@@ -50,7 +62,9 @@ func main() {
 
 	log.Println("Server starting...")
 
-	router := router.CreateRoutes()
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("server_port")), router))
+	// router := router.CreateRoutes()
+	// log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("server_port")), router))
+
+	fx.New(CreateApp()).Run()
 
 }
