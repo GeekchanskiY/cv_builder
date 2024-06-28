@@ -39,13 +39,28 @@ func (repo *EmployeeRepository) CreateEmployee(employee schemas.Employee) error 
 
 func (repo *EmployeeRepository) GetEmployees() ([]schemas.Employee, error) {
 	var employees []schemas.Employee
-	if err := repo.db.QueryRow("SELECT * FROM employees").Scan(&employees); err != nil {
-		if err == sql.ErrNoRows {
-			return employees, nil
-		}
-		log.Println("Error getting employees")
-		log.Println(err)
+
+	rows, err := repo.db.Query("SELECT id, name FROM employees")
+	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var employee schemas.Employee
+		if err := rows.Scan(&employee.Id, &employee.Name); err != nil {
+			return nil, err
+		}
+		employees = append(employees, employee)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return employees, err
+	}
+
 	return employees, nil
 }

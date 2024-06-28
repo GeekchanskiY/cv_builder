@@ -9,7 +9,9 @@ import (
 	"runtime/trace"
 
 	"github.com/GeekchanskiY/cv_builder/internal"
+	"github.com/GeekchanskiY/cv_builder/internal/controllers"
 	database "github.com/GeekchanskiY/cv_builder/internal/db"
+	"github.com/GeekchanskiY/cv_builder/internal/repository"
 	"github.com/GeekchanskiY/cv_builder/internal/router"
 	server "github.com/GeekchanskiY/cv_builder/internal/server"
 
@@ -22,8 +24,13 @@ func CreateApp() fx.Option {
 			server.NewHTTPServer,
 			router.CreateRoutes,
 			database.GetDB,
+			repository.CreateEmployeeRepository,
+			controllers.CreateEmployeeController,
 		),
-		fx.Invoke(func(*http.Server) {}),
+		fx.Invoke(
+			func(*http.Server, *repository.EmployeeRepository) {},
+			router.CreateEmployeeRoutes,
+		),
 	)
 }
 

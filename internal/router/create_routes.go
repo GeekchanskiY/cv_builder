@@ -7,8 +7,7 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	panic("ASDASD")
-	w.Write([]byte("Hello, World!"))
+	w.Write([]byte("Hello, World! 2"))
 }
 
 func handler3(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
