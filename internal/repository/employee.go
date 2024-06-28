@@ -73,3 +73,10 @@ func (repo *EmployeeRepository) GetEmployees() ([]schemas.Employee, error) {
 
 	return employees, nil
 }
+
+func (repo *EmployeeRepository) GetEmployeeById(id int) (schemas.Employee, error) {
+	var employee schemas.Employee
+	row := repo.db.QueryRow("SELECT id, name FROM employees WHERE id = $1", id)
+	err := row.Scan(&employee.Id, &employee.Name)
+	return employee, err
+}
