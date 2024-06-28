@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/GeekchanskiY/cv_builder/internal/schemas"
-	"github.com/GeekchanskiY/cv_builder/internal/utils"
 )
 
 type EmployeeRepository struct {
@@ -21,19 +20,29 @@ func CreateEmployeeRepository(db *sql.DB) *EmployeeRepository {
 func (repo *EmployeeRepository) CreateEmployee(employee schemas.Employee) error {
 	_, err := repo.db.Exec("INSERT INTO employees(name) VALUES($1)", employee.Name)
 	if err != nil {
-		log.Println("Error creating employee")
-		log.Println(err)
-		pgerr, ok := utils.PQErrorHandler(err)
-		if ok {
-			// log.Println(pgerr.Code)
-			// log.Println(pgerr.Message)
+		log.Println("Error creating employee in employee repository: ", err)
+		// log.Println(err)
+		// pgerr, ok := utils.PQErrorHandler(err)
+		// if ok {
+		// 	// log.Println(pgerr.Code)
+		// 	// log.Println(pgerr.Message)
 
-			if pgerr.Code == pg_err_unique_violation {
-				return nil
-			}
-		}
+		// 	if pgerr.Code == pg_err_unique_violation {
+		// 		return nil
+		// 	}
+		// }
 		return err
 	}
+	return err
+}
+
+func (repo *EmployeeRepository) UpdateEmployee(employee schemas.Employee) error {
+	_, err := repo.db.Exec("UPDATE employees SET name = $1 WHERE id = $2", employee.Name, employee.Id)
+	return err
+}
+
+func (repo *EmployeeRepository) DeleteEmployee(employee schemas.Employee) error {
+	_, err := repo.db.Exec("DELETE FROM employees WHERE id = $1", employee.Id)
 	return err
 }
 
