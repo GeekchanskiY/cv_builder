@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/GeekchanskiY/cv_builder/internal"
 	"github.com/GeekchanskiY/cv_builder/internal/config"
 	"github.com/GeekchanskiY/cv_builder/internal/controllers"
 	database "github.com/GeekchanskiY/cv_builder/internal/db"
@@ -40,12 +39,6 @@ func main() {
 		log.Fatal(err)
 	}
 	defer connection.Close()
-	internal.Samples(connection)
-
-	log.Println("Server starting...")
-
-	// router := router.CreateRoutes()
-	// log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", os.Getenv("server_port")), router))
 
 	fx.New(CreateApp()).Run()
 
