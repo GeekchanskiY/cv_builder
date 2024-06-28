@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/GeekchanskiY/cv_builder/pkg/repository"
-	"github.com/GeekchanskiY/cv_builder/pkg/schemas"
+	"github.com/GeekchanskiY/cv_builder/internal/repository"
+	"github.com/GeekchanskiY/cv_builder/internal/schemas"
 )
 
 func Samples(db *sql.DB) {

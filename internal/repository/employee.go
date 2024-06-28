@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/GeekchanskiY/cv_builder/pkg/schemas"
+	"github.com/GeekchanskiY/cv_builder/internal/schemas"
 )
 
 type EmployeeRepository struct {

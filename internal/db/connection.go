@@ -12,7 +12,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	config "github.com/GeekchanskiY/cv_builder/pkg/config"
+	config "github.com/GeekchanskiY/cv_builder/internal/config"
 )
 
 var (

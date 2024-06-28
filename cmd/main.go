@@ -9,9 +9,10 @@ import (
 	"runtime/trace"
 
 	"github.com/GeekchanskiY/cv_builder/internal"
+	database "github.com/GeekchanskiY/cv_builder/internal/db"
+	"github.com/GeekchanskiY/cv_builder/internal/router"
 	server "github.com/GeekchanskiY/cv_builder/internal/server"
-	database "github.com/GeekchanskiY/cv_builder/pkg/db"
-	"github.com/GeekchanskiY/cv_builder/pkg/router"
+
 	"go.uber.org/fx"
 )
 
