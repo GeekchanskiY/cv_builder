@@ -12,11 +12,12 @@ function App() {
       </header>
       <nav>
       <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Pricing</a></li>
-          <li><a href="#">Terms of use</a></li>
-          <li><a href="#">Contact</a></li>
+        <li><a href="#">Main page</a></li>
+        <li><a href="#">Build CV</a></li>
+        <li><a href="#">Create models</a></li>
+        <li><a href="#">List all cv's</a></li>
+        
+        <li><a href="#">Healthcheck</a></li>
       </ul>
       </nav>
       <main>
