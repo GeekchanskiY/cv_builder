@@ -43,6 +43,8 @@ func CreateEmployeeRoutes(router *httprouter.Router, employeeController *control
 			Route:   employeeRoutePrefix,
 		},
 	}
+
+	// Route generation
 	for _, route := range routes {
 		router.Handle(route.Method, route.Route, Wrapper(route.Handler))
 		options := []endpoint.Option{
