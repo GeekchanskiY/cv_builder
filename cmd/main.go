@@ -19,7 +19,6 @@ func CreateApp() fx.Option {
 		fx.Provide(
 			server.NewHTTPServer,
 			router.CreateRoutes,
-			router.CreateSwagger,
 			database.GetDB,
 			repository.CreateEmployeeRepository,
 			controllers.CreateEmployeeController,
