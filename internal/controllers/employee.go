@@ -42,19 +42,26 @@ func (c *EmployeeController) CreateEmployee(w http.ResponseWriter, r *http.Reque
 	err := json.NewDecoder(r.Body).Decode(&employee)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 
-	err = c.employeeRepo.CreateEmployee(employee)
+	uid, err := c.employeeRepo.CreateEmployee(employee)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
+	}
+
+	if uid != 0 {
+		employee.Id = uid
 	}
 
 	w.WriteHeader(http.StatusCreated)
 	b, err := json.Marshal(employee)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 	w.Write(b)
