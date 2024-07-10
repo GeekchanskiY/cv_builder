@@ -17,7 +17,7 @@ func CreateEmployeeRepository(db *sql.DB) *EmployeeRepository {
 	}
 }
 
-func (repo *EmployeeRepository) CreateEmployee(employee schemas.Employee) (int, error) {
+func (repo *EmployeeRepository) Create(employee schemas.Employee) (int, error) {
 	new_id := 0
 	err := repo.db.QueryRow("INSERT INTO employees(name) VALUES($1) RETURNING id", employee.Name).Scan(&new_id)
 	if err != nil {
@@ -38,17 +38,17 @@ func (repo *EmployeeRepository) CreateEmployee(employee schemas.Employee) (int, 
 	return int(new_id), nil
 }
 
-func (repo *EmployeeRepository) UpdateEmployee(employee schemas.Employee) error {
+func (repo *EmployeeRepository) Update(employee schemas.Employee) error {
 	_, err := repo.db.Exec("UPDATE employees SET name = $1 WHERE id = $2", employee.Name, employee.Id)
 	return err
 }
 
-func (repo *EmployeeRepository) DeleteEmployee(employee schemas.Employee) error {
+func (repo *EmployeeRepository) Delete(employee schemas.Employee) error {
 	_, err := repo.db.Exec("DELETE FROM employees WHERE id = $1", employee.Id)
 	return err
 }
 
-func (repo *EmployeeRepository) GetEmployees() ([]schemas.Employee, error) {
+func (repo *EmployeeRepository) GetAll() ([]schemas.Employee, error) {
 	var employees []schemas.Employee
 
 	rows, err := repo.db.Query("SELECT id, name FROM employees")
@@ -76,7 +76,7 @@ func (repo *EmployeeRepository) GetEmployees() ([]schemas.Employee, error) {
 	return employees, nil
 }
 
-func (repo *EmployeeRepository) GetEmployeeById(id int) (schemas.Employee, error) {
+func (repo *EmployeeRepository) Get(id int) (schemas.Employee, error) {
 	var employee schemas.Employee
 	row := repo.db.QueryRow("SELECT id, name FROM employees WHERE id = $1", id)
 	err := row.Scan(&employee.Id, &employee.Name)

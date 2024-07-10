@@ -20,8 +20,8 @@ func CreateEmployeeController(repo *repository.EmployeeRepository) *EmployeeCont
 	}
 }
 
-func (c *EmployeeController) GetEmployees(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	employees, err := c.employeeRepo.GetEmployees()
+func (c *EmployeeController) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	employees, err := c.employeeRepo.GetAll()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -35,7 +35,7 @@ func (c *EmployeeController) GetEmployees(w http.ResponseWriter, r *http.Request
 
 }
 
-func (c *EmployeeController) CreateEmployee(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	employee := schemas.Employee{}
 
@@ -46,7 +46,7 @@ func (c *EmployeeController) CreateEmployee(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	uid, err := c.employeeRepo.CreateEmployee(employee)
+	uid, err := c.employeeRepo.Create(employee)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -68,7 +68,7 @@ func (c *EmployeeController) CreateEmployee(w http.ResponseWriter, r *http.Reque
 
 }
 
-func (c *EmployeeController) UpdateEmployee(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	employee := schemas.Employee{}
 	err := json.NewDecoder(r.Body).Decode(&employee)
@@ -77,7 +77,7 @@ func (c *EmployeeController) UpdateEmployee(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = c.employeeRepo.UpdateEmployee(employee)
+	err = c.employeeRepo.Update(employee)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -92,7 +92,7 @@ func (c *EmployeeController) UpdateEmployee(w http.ResponseWriter, r *http.Reque
 	w.Write(b)
 }
 
-func (c *EmployeeController) DeleteEmployee(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Delete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	employee := schemas.Employee{}
 	err := json.NewDecoder(r.Body).Decode(&employee)
 	if err != nil {
@@ -100,7 +100,7 @@ func (c *EmployeeController) DeleteEmployee(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = c.employeeRepo.DeleteEmployee(employee)
+	err = c.employeeRepo.Delete(employee)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -115,7 +115,7 @@ func (c *EmployeeController) DeleteEmployee(w http.ResponseWriter, r *http.Reque
 	w.Write(b)
 }
 
-func (c *EmployeeController) GetEmployee(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	var employee schemas.Employee
 	employee_id, err := strconv.Atoi(p.ByName("id"))
@@ -125,7 +125,7 @@ func (c *EmployeeController) GetEmployee(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
-	employee, err = c.employeeRepo.GetEmployeeById(int(employee_id))
+	employee, err = c.employeeRepo.Get(int(employee_id))
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
