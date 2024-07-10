@@ -20,12 +20,17 @@ func CreateApp() fx.Option {
 			server.NewHTTPServer,
 			router.CreateRoutes,
 			database.GetDB,
+
 			repository.CreateEmployeeRepository,
+			repository.CreateDomainRepository,
+
 			controllers.CreateEmployeeController,
+			controllers.CreateDomainController,
 		),
 		fx.Invoke(
 			func(*http.Server, *repository.EmployeeRepository) {},
 			router.CreateEmployeeRoutes,
+			router.CreateDomainRoutes,
 			config.SetupLogger,
 		),
 	)
