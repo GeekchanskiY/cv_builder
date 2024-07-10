@@ -17,7 +17,7 @@ func CreateDomainRepository(db *sql.DB) *DomainRepository {
 	}
 }
 
-func (repo *DomainRepository) CreateDomain(domain schemas.Domain) (int, error) {
+func (repo *DomainRepository) Create(domain schemas.Domain) (int, error) {
 	new_id := 0
 	err := repo.db.QueryRow("INSERT INTO domains(name) VALUES($1) RETURNING id", domain.Name).Scan(&new_id)
 	if err != nil {
@@ -38,17 +38,17 @@ func (repo *DomainRepository) CreateDomain(domain schemas.Domain) (int, error) {
 	return int(new_id), nil
 }
 
-func (repo *DomainRepository) UpdateDomain(domain schemas.Domain) error {
+func (repo *DomainRepository) Update(domain schemas.Domain) error {
 	_, err := repo.db.Exec("UPDATE domains SET name = $1 WHERE id = $2", domain.Name, domain.Id)
 	return err
 }
 
-func (repo *DomainRepository) DeleteDomain(domain schemas.Domain) error {
+func (repo *DomainRepository) Delete(domain schemas.Domain) error {
 	_, err := repo.db.Exec("DELETE FROM domains WHERE id = $1", domain.Id)
 	return err
 }
 
-func (repo *DomainRepository) GetDomains() (domains []schemas.Domain, err error) {
+func (repo *DomainRepository) GetAll() (domains []schemas.Domain, err error) {
 	rows, err := repo.db.Query("SELECT id, name FROM domains")
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (repo *DomainRepository) GetDomains() (domains []schemas.Domain, err error)
 	return domains, nil
 }
 
-func (repo *DomainRepository) GetDomainById(id int) (domain schemas.Domain, err error) {
+func (repo *DomainRepository) Get(id int) (domain schemas.Domain, err error) {
 	row := repo.db.QueryRow("SELECT id, name FROM domains WHERE id = $1", id)
 	err = row.Scan(&domain.Id, &domain.Name)
 	return domain, err

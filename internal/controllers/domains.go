@@ -20,8 +20,8 @@ func CreateDomainController(repo *repository.DomainRepository) *DomainController
 	}
 }
 
-func (c *DomainController) GetDomains(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	domains, err := c.domainRepo.GetDomains()
+func (c *DomainController) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	domains, err := c.domainRepo.GetAll()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -35,7 +35,7 @@ func (c *DomainController) GetDomains(w http.ResponseWriter, r *http.Request, p 
 
 }
 
-func (c *DomainController) CreateDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	domain := schemas.Domain{}
 
@@ -46,7 +46,7 @@ func (c *DomainController) CreateDomain(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	uid, err := c.domainRepo.CreateDomain(domain)
+	uid, err := c.domainRepo.Create(domain)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
@@ -68,7 +68,7 @@ func (c *DomainController) CreateDomain(w http.ResponseWriter, r *http.Request, 
 
 }
 
-func (c *DomainController) UpdateDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	domain := schemas.Domain{}
 	err := json.NewDecoder(r.Body).Decode(&domain)
@@ -77,7 +77,7 @@ func (c *DomainController) UpdateDomain(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	err = c.domainRepo.UpdateDomain(domain)
+	err = c.domainRepo.Update(domain)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -92,7 +92,7 @@ func (c *DomainController) UpdateDomain(w http.ResponseWriter, r *http.Request, 
 	w.Write(b)
 }
 
-func (c *DomainController) DeleteDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Delete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	domain := schemas.Domain{}
 	err := json.NewDecoder(r.Body).Decode(&domain)
 	if err != nil {
@@ -100,7 +100,7 @@ func (c *DomainController) DeleteDomain(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	err = c.domainRepo.DeleteDomain(domain)
+	err = c.domainRepo.Delete(domain)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -115,7 +115,7 @@ func (c *DomainController) DeleteDomain(w http.ResponseWriter, r *http.Request, 
 	w.Write(b)
 }
 
-func (c *DomainController) GetDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	var domain schemas.Domain
 	domain_id, err := strconv.Atoi(p.ByName("id"))
@@ -125,7 +125,7 @@ func (c *DomainController) GetDomain(w http.ResponseWriter, r *http.Request, p h
 		return
 	}
 
-	domain, err = c.domainRepo.GetDomainById(int(domain_id))
+	domain, err = c.domainRepo.Get(int(domain_id))
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
