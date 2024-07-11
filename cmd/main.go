@@ -24,16 +24,19 @@ func CreateApp() fx.Option {
 			repository.CreateEmployeeRepository,
 			repository.CreateDomainRepository,
 			repository.CreateSkillRepository,
+			repository.CreateCompanyRepository,
 
 			controllers.CreateEmployeeController,
 			controllers.CreateDomainController,
 			controllers.CreateSkillController,
+			controllers.CreateComapnyController,
 		),
 		fx.Invoke(
 			func(*http.Server, *repository.EmployeeRepository) {},
 			router.CreateEmployeeRoutes,
 			router.CreateDomainRoutes,
 			router.CreateSkillRoutes,
+			router.CreateCompanyRoutes,
 			config.SetupLogger,
 		),
 	)
