@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/GeekchanskiY/cv_builder/internal/config"
@@ -46,14 +45,5 @@ func CreateApp() fx.Option {
 }
 
 func main() {
-
-	// Connect to database
-	connection, err := database.Connect()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer connection.Close()
-
 	fx.New(CreateApp()).Run()
-
 }
