@@ -18,7 +18,7 @@ func CreateVacanciesRepository(db *sql.DB) *VacanciesRepository {
 }
 
 func (repo *VacanciesRepository) Create(schema schemas.Vacancy) (int, error) {
-	q := `INSERT INTO vacancies(name, company_id, link, description, published_at, experience) VALUES($1) RETURNING id`
+	q := `INSERT INTO vacancies(name, company_id, link, description, published_at, experience) VALUES($1, $2, $3, $4, $5, $6) RETURNING id`
 	new_id := 0
 	err := repo.db.QueryRow(q, schema.Name, schema.CompanyId, schema.Link, schema.Description, schema.PublishedAt, schema.Experience).Scan(&new_id)
 	if err != nil {
