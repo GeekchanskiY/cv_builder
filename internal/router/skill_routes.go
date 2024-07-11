@@ -12,10 +12,10 @@ const skillConflictRoutePrefix = skillRoutePrefix + "/conflicts"
 
 func CreateSkillRoutes(router *httprouter.Router, skillController *controllers.SkillController) {
 	// Conflicts
-	router.Handle(http.MethodGet, skillConflictRoutePrefix+":id", Wrapper(skillController.GetConflicts))
-	router.Handle(http.MethodPost, skillConflictRoutePrefix+"/conflicts", Wrapper(skillController.CreateConflict))
-	router.Handle(http.MethodPut, skillConflictRoutePrefix+"/conflicts", Wrapper(skillController.UpdateConflict))
-	router.Handle(http.MethodDelete, skillConflictRoutePrefix+"/conflicts", Wrapper(skillController.DeleteConflict))
+	router.Handle(http.MethodGet, skillConflictRoutePrefix+"/:id", Wrapper(skillController.GetConflicts))
+	router.Handle(http.MethodPost, skillConflictRoutePrefix, Wrapper(skillController.CreateConflict))
+	router.Handle(http.MethodPut, skillConflictRoutePrefix, Wrapper(skillController.UpdateConflict))
+	router.Handle(http.MethodDelete, skillConflictRoutePrefix, Wrapper(skillController.DeleteConflict))
 
 	// Skills
 	router.Handle(http.MethodGet, skillRoutePrefix, Wrapper(skillController.GetAll))
