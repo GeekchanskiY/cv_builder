@@ -14,6 +14,7 @@ func CreateVacancyRoutes(router *httprouter.Router, controller *controllers.Vaca
 	router.Handle(http.MethodPost, vacancyRoutePrefix, Wrapper(controller.Create))
 	router.Handle(http.MethodPut, vacancyRoutePrefix, Wrapper(controller.Update))
 	router.Handle(http.MethodDelete, vacancyRoutePrefix, Wrapper(controller.Delete))
-	router.Handle(http.MethodGet, vacancyRoutePrefix+"/:id", Wrapper(controller.Get))
+	router.Handle(http.MethodGet, vacancyRoutePrefix+"vacancy/:id", Wrapper(controller.Get))
+	router.Handle(http.MethodGet, vacancyRoutePrefix+"skills/:id/", Wrapper(controller.Get))
 
 }

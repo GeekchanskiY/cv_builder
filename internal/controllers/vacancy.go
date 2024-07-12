@@ -145,3 +145,30 @@ func (c *VacancyController) Get(w http.ResponseWriter, r *http.Request, p httpro
 	w.WriteHeader(http.StatusOK)
 	w.Write(b)
 }
+
+func (c *VacancyController) GetSkills(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	var skills []schemas.Skill
+	vacancy_id, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid domain id"))
+		return
+	}
+
+	skills, err = c.vacancyRepo.GetSkills(int(vacancy_id))
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid skill id"))
+		return
+	}
+
+	b, err := json.Marshal(skills)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(b)
+}

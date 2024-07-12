@@ -258,30 +258,3 @@ func (c *SkillController) DeleteConflict(w http.ResponseWriter, r *http.Request,
 	w.WriteHeader(http.StatusNoContent)
 	w.Write(b)
 }
-
-func (c *SkillController) GetByVacancyId(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	var skills []schemas.Skill
-	vacancy_id, err := strconv.Atoi(p.ByName("id"))
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
-		return
-	}
-
-	skills, err = c.skillRepo.GetByVacancyId(int(vacancy_id))
-
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid skill id"))
-		return
-	}
-
-	b, err := json.Marshal(skills)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(b)
-}
