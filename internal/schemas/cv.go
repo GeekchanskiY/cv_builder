@@ -18,3 +18,11 @@ type CvDomain struct {
 	DomainId int `json:"domain_id"`
 	CvId     int `json:"cv_id"`
 }
+
+type CVSkillExtension struct {
+	SkillId     int    `json:"skill_id"`
+	Name        int    `json:"name"`
+	Description string `json:"description"`
+	ParentId    int    `json:"parent_id"`
+	Years       int    `json:"years"`
+}
