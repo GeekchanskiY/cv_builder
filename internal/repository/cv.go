@@ -81,7 +81,7 @@ func (repo *CVRepository) GetSkills(id int) (schemes []schemas.CVSkillExtension,
 	JOIN cv_skills ON cv_skills.skill_id = skill.id
 	WHERE cv_skills.cv_id = $1`
 
-	rows, err := repo.db.Query(q)
+	rows, err := repo.db.Query(q, id)
 	if err != nil {
 		return nil, err
 	}
