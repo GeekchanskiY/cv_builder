@@ -24,4 +24,6 @@ func CreateSkillRoutes(router *httprouter.Router, skillController *controllers.S
 	router.Handle(http.MethodDelete, skillRoutePrefix, Wrapper(skillController.Delete))
 	router.Handle(http.MethodGet, skillRoutePrefix+"/skill/:id", Wrapper(skillController.Get))
 
+	router.Handle(http.MethodGet, skillRoutePrefix+"/vacancy/:id", Wrapper(skillController.GetByVacancyId))
+
 }
