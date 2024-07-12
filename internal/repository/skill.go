@@ -149,3 +149,35 @@ func (repo *SkillRepository) DeleteConflict(conflict schemas.SkillConflict) erro
 	_, err := repo.db.Exec(q, conflict.Id)
 	return err
 }
+
+func (repo *SkillRepository) GetByVacancyId(id int) (skills []schemas.Skill, err error) {
+	q := `SELECT s.id, s.name, s.description, s.parent_id FROM skills s
+	JOIN vacancy_skills vs ON s.id = vs.skill_id
+	WHERE vs.vacancy_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var skill schemas.Skill
+		if err := rows.Scan(&skill.Id, &skill.Name, &skill.Description, &skill.ParentId); err != nil {
+			return nil, err
+		}
+		skills = append(skills, skill)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return skills, err
+	}
+
+	return skills, nil
+}
