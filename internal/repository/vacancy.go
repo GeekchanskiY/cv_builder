@@ -106,3 +106,22 @@ func (repo *VacanciesRepository) GetSkills(id int) (skills []schemas.Skill, err 
 
 	return skills, nil
 }
+
+func (repo *VacanciesRepository) AddSkill(id int, skillId int) (new_id int, err error) {
+	q := `INSERT INTO vacancy_skills(vacancy_id, skill_id) VALUES($1, $2) returning id`
+	err = repo.db.QueryRow(q, id, skillId).Scan(&new_id)
+	if err != nil {
+		log.Println("Error creating schema in repository: ", err)
+
+		return 0, err
+	}
+
+	return int(new_id), nil
+
+}
+
+func (repo *VacanciesRepository) DeleteSkill(id int, skillId int) (err error) {
+	q := `DELETE FROM  vacancy_skills WHERE vacancy_id = $1 AND skill_id = $2`
+	_, err = repo.db.Exec(q, id, skillId)
+	return err
+}
