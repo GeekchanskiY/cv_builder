@@ -70,7 +70,7 @@ func (repo *CVRepository) Get(id int) (schema schemas.CV, err error) {
 }
 
 func (repo *CVRepository) AddSkill(schema schemas.CvSkill) (err error) {
-	q := `INSERT INTO cv_skills(cv_id, skill_id, years) VALUES($1, $2)`
+	q := `INSERT INTO cv_skills(cv_id, skill_id, years) VALUES($1, $2, $3)`
 	_, err = repo.db.Exec(q, schema.CvId, schema.SkillId, schema.Years)
 	return err
 }
