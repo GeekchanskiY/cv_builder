@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -171,4 +172,60 @@ func (c *VacancyController) GetSkills(w http.ResponseWriter, r *http.Request, p 
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(b)
+}
+
+func (c *VacancyController) DeleteSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	vacancy_id, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid vacancy id"))
+		return
+	}
+
+	schema := schemas.Id{}
+	err = json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil || schema.Id == 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid skill id"))
+		return
+	}
+
+	err = c.vacancyRepo.DeleteSkill(int(vacancy_id), schema.Id)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("No such skill in this vacancy"))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+	w.Write([]byte("Skill deleted from vacancy"))
+}
+
+func (c *VacancyController) AddSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	vacancy_id, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid domain id"))
+		return
+	}
+	schema := schemas.Id{}
+	err = json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil || schema.Id == 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid skill id"))
+		return
+	}
+
+	_, err = c.vacancyRepo.AddSkill(int(vacancy_id), schema.Id)
+
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Cant add skill to this vacancy"))
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte("Skill added to vacancy"))
 }
