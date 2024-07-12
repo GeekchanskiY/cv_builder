@@ -31,8 +31,9 @@ func (c *DomainController) GetAll(w http.ResponseWriter, r *http.Request, p http
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.Write(b)
 
+	w.WriteHeader(http.StatusOK)
+	w.Write(b)
 }
 
 func (c *DomainController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -57,15 +58,15 @@ func (c *DomainController) Create(w http.ResponseWriter, r *http.Request, p http
 		domain.Id = uid
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	b, err := json.Marshal(domain)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte(err.Error()))
 		return
 	}
-	w.Write(b)
 
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
 }
 
 func (c *DomainController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -83,12 +84,13 @@ func (c *DomainController) Update(w http.ResponseWriter, r *http.Request, p http
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	b, err := json.Marshal(domain)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 	w.Write(b)
 }
 
@@ -106,12 +108,13 @@ func (c *DomainController) Delete(w http.ResponseWriter, r *http.Request, p http
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
 	b, err := json.Marshal(domain)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusNoContent)
 	w.Write(b)
 }
 
@@ -138,5 +141,7 @@ func (c *DomainController) Get(w http.ResponseWriter, r *http.Request, p httprou
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 	w.Write(b)
 }
