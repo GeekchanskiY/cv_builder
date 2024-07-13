@@ -78,7 +78,8 @@ create table if not exists responsibility_conflicts(
 create table if not exists projects(
     id serial primary key,
     name varchar(255) not null unique,
-    description text
+    description text,
+    company_id int references companies(id)
 );
 
 create table if not exists cv_project(
