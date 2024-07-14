@@ -14,3 +14,11 @@ type SkillConflict struct {
 	Comment  string `json:"comment"`
 	Priority int    `json:"priority"`
 }
+
+type SkillDomain struct {
+	Id       int    `json:"id"`
+	DomainId int    `json:"domain_id"`
+	SkillId  int    `json:"skill_id"`
+	Comments string `json:"comments"`
+	Priority int    `json:"priority"`
+}
