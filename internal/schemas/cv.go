@@ -1,5 +1,7 @@
 package schemas
 
+import "time"
+
 type CV struct {
 	Id         int `json:"id"`
 	VacancyId  int `json:"vacancy_id"`
@@ -20,5 +22,8 @@ type CVProject struct {
 	CVId      int `json:"cv_id"`
 	ProjectId int `json:"project_id"`
 	CompanyId int `json:"company_id"`
-	Years     int `json:"years"`
+
+	// Work experience on project
+	StartTime time.Time `json:"start_time"`
+	EndTime   time.Time `json:"end_time"`
 }
