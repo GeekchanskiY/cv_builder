@@ -25,5 +25,7 @@ type VacancyDomain struct {
 	Id        int `json:"id"`
 	VacancyId int `json:"vacancy_id"`
 	DomainId  int `json:"domain_id"`
-	Priority  int `json:"priority"`
+
+	// Used to check if this domain is required in a CV
+	Priority int `json:"priority"`
 }
