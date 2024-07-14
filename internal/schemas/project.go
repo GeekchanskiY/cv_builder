@@ -13,3 +13,10 @@ type ProjectSkill struct {
 	ProjectId int `json:"project_id"`
 	Years     int `json:"years"`
 }
+
+type ProjectDomain struct {
+	Id        int    `json:"id"`
+	DomainId  int    `json:"domain_id"`
+	ProjectId int    `json:"project_id"`
+	Comments  string `json:"comments"`
+}
