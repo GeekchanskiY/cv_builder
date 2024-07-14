@@ -15,10 +15,10 @@ type CvDomain struct {
 	CvId     int `json:"cv_id"`
 }
 
-type CVSkillExtension struct {
-	SkillId     int    `json:"skill_id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	ParentId    *int   `json:"parent_id"`
-	Years       int    `json:"years"`
+type CVProject struct {
+	Id        int `json:"id"`
+	CVId      int `json:"cv_id"`
+	ProjectId int `json:"project_id"`
+	CompanyId int `json:"company_id"`
+	Years     int `json:"years"`
 }
