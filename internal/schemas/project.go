@@ -13,7 +13,7 @@ type ProjectDomain struct {
 	Comments  string `json:"comments"`
 }
 
-type ProjectRespobsibilities struct {
+type ProjectRespobsibility struct {
 	Id               int `json:"id"`
 	ResponsibilityId int `json:"responsibility_id"`
 	ProjectId        int `json:"project_id"`
