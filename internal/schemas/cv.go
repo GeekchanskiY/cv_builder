@@ -11,12 +11,6 @@ type CV struct {
 	IsReal bool `json:"is_real"`
 }
 
-type CvDomain struct {
-	Id       int `json:"id"`
-	DomainId int `json:"domain_id"`
-	CvId     int `json:"cv_id"`
-}
-
 type CVProject struct {
 	Id        int `json:"id"`
 	CVId      int `json:"cv_id"`
@@ -26,4 +20,12 @@ type CVProject struct {
 	// Work experience on project
 	StartTime time.Time `json:"start_time"`
 	EndTime   time.Time `json:"end_time"`
+}
+
+// Responsibility that will be used in CV
+type CVProjectRespobsibility struct {
+	Id               int `json:"id"`
+	ResponsibilityId int `json:"responsibility_id"`
+	CVProjectId      int `json:"cv_project_id"`
+	Priority         int `json:"priority"`
 }
