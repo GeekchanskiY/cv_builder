@@ -20,3 +20,10 @@ type VacancySkill struct {
 	// Used to check if this skill is required in a CV
 	Priority int `json:"priority"`
 }
+
+type VacancyDomain struct {
+	Id        int `json:"id"`
+	VacancyId int `json:"vacancy_id"`
+	DomainId  int `json:"domain_id"`
+	Priority  int `json:"priority"`
+}
