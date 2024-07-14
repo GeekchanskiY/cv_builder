@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -145,82 +144,4 @@ func (c *CVController) Get(w http.ResponseWriter, r *http.Request, p httprouter.
 
 	w.WriteHeader(http.StatusOK)
 	w.Write(b)
-}
-
-func (c *CVController) AddSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	var schema schemas.CvSkill
-	err := json.NewDecoder(r.Body).Decode(&schema)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid request"))
-		return
-	}
-
-	err = c.cvRepo.AddSkill(schema)
-
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Error in adding skill to cv"))
-		return
-	}
-
-	b, err := json.Marshal(schema)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
-}
-
-func (c *CVController) DeleteSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	var schema schemas.CvSkill
-	err := json.NewDecoder(r.Body).Decode(&schema)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid request"))
-		return
-	}
-
-	err = c.cvRepo.DeleteSkill(schema)
-
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Error in deleting skill from cv"))
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-	w.Write([]byte("Deleted"))
-}
-
-func (c *CVController) GetSkills(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-
-	cv_id, err := strconv.Atoi(p.ByName("id"))
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid cv id"))
-		return
-	}
-
-	res, err := c.cvRepo.GetSkills(cv_id)
-
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Error getting cv skills"))
-		return
-	}
-
-	b, err := json.Marshal(res)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(b)
-
 }

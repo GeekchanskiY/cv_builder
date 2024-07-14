@@ -16,8 +16,8 @@ func CreateCVRoutes(router *httprouter.Router, controller *controllers.CVControl
 	router.Handle(http.MethodDelete, cvRoutePrefix, Wrapper(controller.Delete))
 	router.Handle(http.MethodGet, cvRoutePrefix+"/cv/:id", Wrapper(controller.Get))
 
-	router.Handle(http.MethodGet, cvRoutePrefix+"/skill/:id", Wrapper(controller.GetSkills))
-	router.Handle(http.MethodPost, cvRoutePrefix+"/skill", Wrapper(controller.AddSkill))
-	router.Handle(http.MethodDelete, cvRoutePrefix+"/skill", Wrapper(controller.DeleteSkill))
+	// router.Handle(http.MethodGet, cvRoutePrefix+"/skill/:id", Wrapper(controller.GetSkills))
+	// router.Handle(http.MethodPost, cvRoutePrefix+"/skill", Wrapper(controller.AddSkill))
+	// router.Handle(http.MethodDelete, cvRoutePrefix+"/skill", Wrapper(controller.DeleteSkill))
 
 }
