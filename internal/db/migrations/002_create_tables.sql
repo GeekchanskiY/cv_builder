@@ -38,7 +38,7 @@ create table if not exists vacancy_skills (
     skill_id int references skills(id)
 );
 
-create table if not exists cv_domains (
+create table if not exists cv_domains ( /* Project domains */
     id serial primary key,
     cv_id int references cvs(id),
     domain_id int references domains(id)
@@ -95,3 +95,10 @@ create table if not exists project_responsibilities(
     responsibility_id int references responsibilities(id),
     years int
 );
+
+
+create table if not exists vacancy_domains(
+    id serial primary key,
+    vacancy_id int references vacancies(id),
+    domain_id int references domains(id)
+)

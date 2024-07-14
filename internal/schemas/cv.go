@@ -4,13 +4,9 @@ type CV struct {
 	Id         int `json:"id"`
 	VacancyId  int `json:"vacancy_id"`
 	EmployeeId int `json:"employee_id"`
-}
 
-type CvSkill struct {
-	Id      int `json:"id"`
-	SkillId int `json:"skill_id"`
-	CvId    int `json:"cv_id"`
-	Years   int `json:"years"`
+	// Need to confirm real employee experience
+	IsReal bool `json:"is_real"`
 }
 
 type CvDomain struct {

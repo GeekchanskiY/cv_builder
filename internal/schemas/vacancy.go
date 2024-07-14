@@ -7,11 +7,16 @@ type Vacancy struct {
 	Link        string `json:"link"`
 	Description string `json:"description"`
 	PublishedAt string `json:"published_at"`
-	Experience  int    `json:"experience"`
+
+	// Required experience in years
+	Experience int `json:"experience"`
 }
 
 type VacancySkill struct {
 	Id        int `json:"id"`
 	SkillId   int `json:"skill_id"`
 	VacancyId int `json:"vacancy_id"`
+
+	// Used to check if this skill is required in a CV
+	Priority int `json:"priority"`
 }
