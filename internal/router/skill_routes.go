@@ -9,6 +9,7 @@ import (
 
 const skillRoutePrefix = "/skills"
 const skillConflictRoutePrefix = skillRoutePrefix + "/conflicts"
+const skillDomainRoutePrefix = skillRoutePrefix + "/domains"
 
 func CreateSkillRoutes(router *httprouter.Router, skillController *controllers.SkillController) {
 	// Conflicts
@@ -16,6 +17,12 @@ func CreateSkillRoutes(router *httprouter.Router, skillController *controllers.S
 	router.Handle(http.MethodPost, skillConflictRoutePrefix, Wrapper(skillController.CreateConflict))
 	router.Handle(http.MethodPut, skillConflictRoutePrefix, Wrapper(skillController.UpdateConflict))
 	router.Handle(http.MethodDelete, skillConflictRoutePrefix, Wrapper(skillController.DeleteConflict))
+
+	// Domains
+	router.Handle(http.MethodGet, skillDomainRoutePrefix+"/:id", Wrapper(skillController.GetDomains))
+	router.Handle(http.MethodPost, skillDomainRoutePrefix, Wrapper(skillController.CreateDomains))
+	router.Handle(http.MethodPut, skillDomainRoutePrefix, Wrapper(skillController.UpdateDomain))
+	router.Handle(http.MethodDelete, skillDomainRoutePrefix, Wrapper(skillController.DeleteDomain))
 
 	// Skills
 	router.Handle(http.MethodGet, skillRoutePrefix, Wrapper(skillController.GetAll))
