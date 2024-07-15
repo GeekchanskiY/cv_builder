@@ -19,27 +19,19 @@ func CreateDomainRepository(db *sql.DB) *DomainRepository {
 
 func (repo *DomainRepository) Create(domain schemas.Domain) (int, error) {
 	new_id := 0
-	err := repo.db.QueryRow("INSERT INTO domains(name) VALUES($1) RETURNING id", domain.Name).Scan(&new_id)
+	q := `INSERT INTO domains(name, description) VALUES($1, $2) RETURNING id`
+	err := repo.db.QueryRow(q, domain.Name, domain.Description).Scan(&new_id)
 	if err != nil {
 		log.Println("Error creating domain in domain repository: ", err)
-		// log.Println(err)
-		// pgerr, ok := utils.PQErrorHandler(err)
-		// if ok {
-		// 	// log.Println(pgerr.Code)
-		// 	// log.Println(pgerr.Message)
-
-		// 	if pgerr.Code == pg_err_unique_violation {
-		// 		return nil
-		// 	}
-		// }
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return new_id, nil
 }
 
 func (repo *DomainRepository) Update(domain schemas.Domain) error {
-	_, err := repo.db.Exec("UPDATE domains SET name = $1 WHERE id = $2", domain.Name, domain.Id)
+	q := `UPDATE domains SET name = $1, description = $2 WHERE id = $3`
+	_, err := repo.db.Exec(q, domain.Name, domain.Description, domain.Id)
 	return err
 }
 
@@ -49,25 +41,22 @@ func (repo *DomainRepository) Delete(domain schemas.Domain) error {
 }
 
 func (repo *DomainRepository) GetAll() (domains []schemas.Domain, err error) {
-	rows, err := repo.db.Query("SELECT id, name FROM domains")
+	q := `SELECT id, name, description FROM domains`
+	rows, err := repo.db.Query(q)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-
 	for rows.Next() {
 		var domain schemas.Domain
-		if err := rows.Scan(&domain.Id, &domain.Name); err != nil {
+		err = rows.Scan(&domain.Id, &domain.Name, &domain.Description)
+		if err != nil {
 			return nil, err
 		}
 		domains = append(domains, domain)
 	}
 
 	if err := rows.Err(); err != nil {
-		// Here's not nil, err. I'm not sure why, but:
-		// https://go.dev/doc/database/querying
-		// documentation has the same issue
-
 		return domains, err
 	}
 
@@ -75,7 +64,8 @@ func (repo *DomainRepository) GetAll() (domains []schemas.Domain, err error) {
 }
 
 func (repo *DomainRepository) Get(id int) (domain schemas.Domain, err error) {
-	row := repo.db.QueryRow("SELECT id, name FROM domains WHERE id = $1", id)
-	err = row.Scan(&domain.Id, &domain.Name)
+	q := `SELECT id, name, description FROM domains WHERE id = $1`
+	row := repo.db.QueryRow(q, id)
+	err = row.Scan(&domain.Id, &domain.Name, &domain.Description)
 	return domain, err
 }
