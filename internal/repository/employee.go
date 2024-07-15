@@ -19,19 +19,12 @@ func CreateEmployeeRepository(db *sql.DB) *EmployeeRepository {
 
 func (repo *EmployeeRepository) Create(employee schemas.Employee) (int, error) {
 	new_id := 0
-	err := repo.db.QueryRow("INSERT INTO employees(name) VALUES($1) RETURNING id", employee.Name).Scan(&new_id)
+	q := `INSERT INTO employees(name, about_me, image_url, real_experience) VALUES($1, $2, $3, $4) RETURNING id`
+	err := repo.db.QueryRow(
+		q, employee.Name, employee.AboutMe, employee.ImageUrl, employee.RealExperience,
+	).Scan(&new_id)
 	if err != nil {
 		log.Println("Error creating employee in employee repository: ", err)
-		// log.Println(err)
-		// pgerr, ok := utils.PQErrorHandler(err)
-		// if ok {
-		// 	// log.Println(pgerr.Code)
-		// 	// log.Println(pgerr.Message)
-
-		// 	if pgerr.Code == pg_err_unique_violation {
-		// 		return nil
-		// 	}
-		// }
 		return 0, err
 	}
 
@@ -39,19 +32,21 @@ func (repo *EmployeeRepository) Create(employee schemas.Employee) (int, error) {
 }
 
 func (repo *EmployeeRepository) Update(employee schemas.Employee) error {
-	_, err := repo.db.Exec("UPDATE employees SET name = $1 WHERE id = $2", employee.Name, employee.Id)
+	q := `UPDATE employees SET name = $1, about_me = $2, image_url = $3, real_experience = $4 WHERE id = $5`
+	_, err := repo.db.Exec(q, employee.Name, employee.AboutMe, employee.ImageUrl, employee.RealExperience, employee.Id)
 	return err
 }
 
 func (repo *EmployeeRepository) Delete(employee schemas.Employee) error {
-	_, err := repo.db.Exec("DELETE FROM employees WHERE id = $1", employee.Id)
+	q := `DELETE FROM employees WHERE id = $1`
+	_, err := repo.db.Exec(q, employee.Id)
 	return err
 }
 
 func (repo *EmployeeRepository) GetAll() ([]schemas.Employee, error) {
 	var employees []schemas.Employee
-
-	rows, err := repo.db.Query("SELECT id, name FROM employees")
+	q := `SELECT id, name, about_me, image_url, real_experience FROM employees`
+	rows, err := repo.db.Query(q)
 	if err != nil {
 		return nil, err
 	}
@@ -59,17 +54,20 @@ func (repo *EmployeeRepository) GetAll() ([]schemas.Employee, error) {
 
 	for rows.Next() {
 		var employee schemas.Employee
-		if err := rows.Scan(&employee.Id, &employee.Name); err != nil {
+		err = rows.Scan(
+			&employee.Id,
+			&employee.Name,
+			&employee.AboutMe,
+			&employee.ImageUrl,
+			&employee.RealExperience,
+		)
+		if err != nil {
 			return nil, err
 		}
 		employees = append(employees, employee)
 	}
 
 	if err := rows.Err(); err != nil {
-		// Here's not nil, err. I'm not sure why, but:
-		// https://go.dev/doc/database/querying
-		// documentation has the same issue
-
 		return employees, err
 	}
 
@@ -78,7 +76,8 @@ func (repo *EmployeeRepository) GetAll() ([]schemas.Employee, error) {
 
 func (repo *EmployeeRepository) Get(id int) (schemas.Employee, error) {
 	var employee schemas.Employee
-	row := repo.db.QueryRow("SELECT id, name FROM employees WHERE id = $1", id)
-	err := row.Scan(&employee.Id, &employee.Name)
+	q := `SELECT id, name, about_me, image_url, real_experience FROM employees WHERE id = $1`
+	row := repo.db.QueryRow(q, id)
+	err := row.Scan(&employee.Id, &employee.Name, &employee.AboutMe, &employee.ImageUrl, &employee.RealExperience)
 	return employee, err
 }
