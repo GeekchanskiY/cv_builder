@@ -15,6 +15,7 @@ create table if not exists domains (
 create table if not exists companies (
     id serial primary key,
     name varchar(255) not null unique,
+    homepage varchar(255),
     is_trusted boolean
 );
 
