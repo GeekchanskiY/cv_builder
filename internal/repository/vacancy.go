@@ -75,9 +75,8 @@ func (repo *VacanciesRepository) Get(id int) (schema schemas.Vacancy, err error)
 	return schema, err
 }
 
-func (repo *VacanciesRepository) GetSkills(id int) (skills []schemas.Skill, err error) {
-	q := `SELECT s.id, s.name, s.description, s.parent_id FROM skills s
-	JOIN vacancy_skills vs ON s.id = vs.skill_id
+func (repo *VacanciesRepository) GetSkills(id int) (vacancySkills []schemas.VacancySkill, err error) {
+	q := `SELECT vs.id, vs.skill_id, vs.vacancy_id, vs.priority FROM vacancy_skills vs
 	WHERE vs.vacancy_id = $1`
 
 	rows, err := repo.db.Query(q, id)
@@ -89,11 +88,12 @@ func (repo *VacanciesRepository) GetSkills(id int) (skills []schemas.Skill, err 
 	defer rows.Close()
 
 	for rows.Next() {
-		var skill schemas.Skill
-		if err := rows.Scan(&skill.Id, &skill.Name, &skill.Description, &skill.ParentId); err != nil {
+		var vacancySkill schemas.VacancySkill
+		err = rows.Scan(&vacancySkill.Id, &vacancySkill.SkillId, &vacancySkill.VacancyId, &vacancySkill.Priority)
+		if err != nil {
 			return nil, err
 		}
-		skills = append(skills, skill)
+		vacancySkills = append(vacancySkills, vacancySkill)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -101,27 +101,39 @@ func (repo *VacanciesRepository) GetSkills(id int) (skills []schemas.Skill, err 
 		// https://go.dev/doc/database/querying
 		// documentation has the same issue
 
-		return skills, err
+		return vacancySkills, err
 	}
 
-	return skills, nil
+	return vacancySkills, nil
 }
 
-func (repo *VacanciesRepository) AddSkill(id int, skillId int) (new_id int, err error) {
-	q := `INSERT INTO vacancy_skills(vacancy_id, skill_id) VALUES($1, $2) returning id`
-	err = repo.db.QueryRow(q, id, skillId).Scan(&new_id)
+func (repo *VacanciesRepository) AddSkill(schema schemas.VacancySkill) (new_id int, err error) {
+	q := `INSERT INTO vacancy_skills(vacancy_id, skill_id, priority) VALUES($1, $2, $3) returning id`
+	err = repo.db.QueryRow(q, schema.VacancyId, schema.SkillId, schema.Priority).Scan(&new_id)
 	if err != nil {
 		log.Println("Error creating schema in repository: ", err)
 
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return new_id, nil
 
 }
 
-func (repo *VacanciesRepository) DeleteSkill(id int, skillId int) (err error) {
-	q := `DELETE FROM  vacancy_skills WHERE vacancy_id = $1 AND skill_id = $2`
-	_, err = repo.db.Exec(q, id, skillId)
+func (repo *VacanciesRepository) DeleteSkill(schema schemas.VacancySkill) (err error) {
+	q := `DELETE FROM vacancy_skills WHERE id = $1`
+	_, err = repo.db.Exec(q, schema.Id)
+	return err
+}
+
+func (repo *VacanciesRepository) UpdateSkill(schema schemas.VacancySkill) error {
+	q := `UPDATE vacancy_skills SET skill_id = $1, vacancy_id = $2, priority = $3 WHERE id = $4`
+	_, err := repo.db.Exec(
+		q,
+		schema.SkillId,
+		schema.VacancyId,
+		schema.Priority,
+		schema.Id,
+	)
 	return err
 }
