@@ -158,7 +158,7 @@ func (c *SkillController) GetConflicts(w http.ResponseWriter, r *http.Request, p
 	skill_id, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
+		w.Write([]byte("Invalid skill id"))
 		return
 	}
 
@@ -250,6 +250,112 @@ func (c *SkillController) DeleteConflict(w http.ResponseWriter, r *http.Request,
 	}
 
 	b, err := json.Marshal(conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+	w.Write(b)
+}
+
+func (c *SkillController) GetDomains(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	var schemes []schemas.SkillDomain
+	skill_id, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid skill id"))
+		return
+	}
+
+	schemes, err = c.skillRepo.GetDomains(skill_id)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid skill id"))
+		return
+	}
+
+	b, err := json.Marshal(schemes)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(b)
+}
+
+func (c *SkillController) CreateDomains(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.SkillDomain{}
+
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	uid, err := c.skillRepo.CreateDomains(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	if uid != 0 {
+		schema.Id = uid
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *SkillController) UpdateDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.SkillDomain{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.skillRepo.UpdateDomains(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *SkillController) DeleteDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.SkillDomain{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.skillRepo.DeleteDomains(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(schema)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
