@@ -148,7 +148,7 @@ func (c *VacancyController) Get(w http.ResponseWriter, r *http.Request, p httpro
 }
 
 func (c *VacancyController) GetSkills(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	var skills []schemas.Skill
+	var schemes []schemas.VacancySkill
 	vacancy_id, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -156,7 +156,7 @@ func (c *VacancyController) GetSkills(w http.ResponseWriter, r *http.Request, p 
 		return
 	}
 
-	skills, err = c.vacancyRepo.GetSkills(int(vacancy_id))
+	schemes, err = c.vacancyRepo.GetSkills(int(vacancy_id))
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -164,7 +164,7 @@ func (c *VacancyController) GetSkills(w http.ResponseWriter, r *http.Request, p 
 		return
 	}
 
-	b, err := json.Marshal(skills)
+	b, err := json.Marshal(schemes)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -175,22 +175,15 @@ func (c *VacancyController) GetSkills(w http.ResponseWriter, r *http.Request, p 
 }
 
 func (c *VacancyController) DeleteSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	vacancy_id, err := strconv.Atoi(p.ByName("id"))
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid vacancy id"))
-		return
-	}
-
-	schema := schemas.Id{}
-	err = json.NewDecoder(r.Body).Decode(&schema)
+	schema := schemas.VacancySkill{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil || schema.Id == 0 {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("Invalid skill id"))
 		return
 	}
 
-	err = c.vacancyRepo.DeleteSkill(int(vacancy_id), schema.Id)
+	err = c.vacancyRepo.DeleteSkill(schema)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -203,21 +196,15 @@ func (c *VacancyController) DeleteSkill(w http.ResponseWriter, r *http.Request, 
 }
 
 func (c *VacancyController) AddSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	vacancy_id, err := strconv.Atoi(p.ByName("id"))
+	schema := schemas.VacancySkill{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
-		return
-	}
-	schema := schemas.Id{}
-	err = json.NewDecoder(r.Body).Decode(&schema)
-	if err != nil || schema.Id == 0 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid skill id"))
+		w.Write([]byte("Invalid data provided"))
 		return
 	}
 
-	_, err = c.vacancyRepo.AddSkill(int(vacancy_id), schema.Id)
+	_, err = c.vacancyRepo.AddSkill(schema)
 
 	if err != nil {
 		log.Println(err)
@@ -228,4 +215,28 @@ func (c *VacancyController) AddSkill(w http.ResponseWriter, r *http.Request, p h
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Skill added to vacancy"))
+}
+
+func (c *VacancyController) UpdateSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.VacancySkill{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.vacancyRepo.UpdateSkill(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
 }
