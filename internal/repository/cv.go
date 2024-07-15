@@ -18,20 +18,20 @@ func CreateCVRepository(db *sql.DB) *CVRepository {
 }
 
 func (repo *CVRepository) Create(schema schemas.CV) (int, error) {
-	q := `INSERT INTO cvs(vacancy_id, employee_id) VALUES($1, $2) RETURNING id`
+	q := `INSERT INTO cvs(vacancy_id, employee_id, is_real) VALUES($1, $2, $3) RETURNING id`
 	new_id := 0
-	err := repo.db.QueryRow(q, schema.VacancyId, schema.EmployeeId).Scan(&new_id)
+	err := repo.db.QueryRow(q, schema.VacancyId, schema.EmployeeId, schema.IsReal).Scan(&new_id)
 	if err != nil {
 		log.Println("Error creating cv in cv repository: ", err)
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return new_id, nil
 }
 
 func (repo *CVRepository) Update(schema schemas.CV) error {
-	q := `UPDATE cvs SET vacancy_id = $1, employee_id = $2 WHERE id = $3`
-	_, err := repo.db.Exec(q, schema.VacancyId, schema.EmployeeId, schema.Id)
+	q := `UPDATE cvs SET vacancy_id = $1, employee_id = $2, is_real = $3 WHERE id = $4`
+	_, err := repo.db.Exec(q, schema.VacancyId, schema.EmployeeId, schema.IsReal, schema.Id)
 	return err
 }
 
@@ -41,7 +41,8 @@ func (repo *CVRepository) Delete(schema schemas.CV) error {
 }
 
 func (repo *CVRepository) GetAll() (schemes []schemas.CV, err error) {
-	rows, err := repo.db.Query("SELECT id, vacancy_id, employee_id FROM cvs")
+	q := `SELECT id, vacancy_id, employee_id, is_real FROM cvs`
+	rows, err := repo.db.Query(q)
 	if err != nil {
 		return nil, err
 	}
@@ -49,13 +50,14 @@ func (repo *CVRepository) GetAll() (schemes []schemas.CV, err error) {
 
 	for rows.Next() {
 		var schema schemas.CV
-		if err := rows.Scan(&schema.Id, &schema.VacancyId, &schema.EmployeeId); err != nil {
+		err = rows.Scan(&schema.Id, &schema.VacancyId, &schema.EmployeeId, &schema.IsReal)
+		if err != nil {
 			return nil, err
 		}
 		schemes = append(schemes, schema)
 	}
 
-	if err := rows.Err(); err != nil {
+	if err = rows.Err(); err != nil {
 
 		return schemes, err
 	}
@@ -64,7 +66,8 @@ func (repo *CVRepository) GetAll() (schemes []schemas.CV, err error) {
 }
 
 func (repo *CVRepository) Get(id int) (schema schemas.CV, err error) {
-	row := repo.db.QueryRow("SELECT id, vacancy_id, employee_id FROM cvs WHERE id = $1", id)
-	err = row.Scan(&schema.Id, &schema.VacancyId, &schema.EmployeeId)
+	q := `SELECT id, vacancy_id, employee_id, is_real FROM cvs WHERE id = $1`
+	row := repo.db.QueryRow(q, id)
+	err = row.Scan(&schema.Id, &schema.VacancyId, &schema.EmployeeId, &schema.IsReal)
 	return schema, err
 }
