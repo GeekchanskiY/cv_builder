@@ -124,7 +124,7 @@ func (repo *SkillRepository) CreateConflict(conflict schemas.SkillConflict) (new
 		q, conflict.Skill1Id, conflict.Skill2Id, conflict.Comment, conflict.Priority,
 	).Scan(&new_id)
 	if err != nil {
-		log.Println("Error creating skill in skill repository: ", err)
+		log.Println("Error creating skillConflict in skillConflict repository: ", err)
 		return 0, err
 	}
 
@@ -147,5 +147,75 @@ func (repo *SkillRepository) UpdateConflict(conflict schemas.SkillConflict) erro
 func (repo *SkillRepository) DeleteConflict(conflict schemas.SkillConflict) error {
 	q := `DELETE FROM skill_conflicts WHERE id = $1`
 	_, err := repo.db.Exec(q, conflict.Id)
+	return err
+}
+
+func (repo *SkillRepository) GetDomains(id int) (skillDomains []schemas.SkillDomain, err error) {
+	q := `SELECT id, skill_id, domain_id, comments, priority 
+	FROM skill_domains
+	WHERE skill_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var skillDomain schemas.SkillDomain
+		err = rows.Scan(
+			&skillDomain.Id,
+			&skillDomain.SkillId,
+			&skillDomain.DomainId,
+			&skillDomain.Comments,
+			&skillDomain.Priority,
+		)
+		if err != nil {
+			return nil, err
+		}
+		skillDomains = append(skillDomains, skillDomain)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return skillDomains, err
+	}
+
+	return skillDomains, nil
+}
+
+func (repo *SkillRepository) CreateDomains(skillDomain schemas.SkillDomain) (new_id int, err error) {
+	q := `INSERT INTO skill_domains(skill_id, domain_id, comments, priority) VALUES($1, $2, $3, $4) RETURNING id`
+
+	new_id = 0
+	err = repo.db.QueryRow(
+		q, skillDomain.SkillId, skillDomain.DomainId, skillDomain.Comments, skillDomain.Priority,
+	).Scan(&new_id)
+	if err != nil {
+		log.Println("Error creating skillDomain in skillDomain repository: ", err)
+		return 0, err
+	}
+
+	return int(new_id), nil
+}
+
+func (repo *SkillRepository) UpdateDomains(skillDomain schemas.SkillDomain) error {
+	q := `UPDATE skill_domains SET skill_id = $1, domain_id = $2, comments = $3, priority = $4 WHERE id = $5`
+	_, err := repo.db.Exec(
+		q,
+		skillDomain.SkillId,
+		skillDomain.DomainId,
+		skillDomain.Comments,
+		skillDomain.Priority,
+		skillDomain.Id,
+	)
+	return err
+}
+
+func (repo *SkillRepository) DeleteDomains(skillDomain schemas.SkillDomain) error {
+	q := `DELETE FROM skill_domains WHERE id = $1`
+	_, err := repo.db.Exec(q, skillDomain.Id)
 	return err
 }
