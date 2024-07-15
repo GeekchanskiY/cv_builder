@@ -19,28 +19,33 @@ func CreateCompanyRepository(db *sql.DB) *CompanyRepository {
 
 func (repo *CompanyRepository) Create(company schemas.Company) (int, error) {
 	new_id := 0
-	err := repo.db.QueryRow("INSERT INTO companies(name) VALUES($1) RETURNING id", company.Name).Scan(&new_id)
+	q := `INSERT INTO companies(name, description, homepage, is_trusted) VALUES($1, $2, $3, $4) RETURNING id`
+
+	err := repo.db.QueryRow(q, company.Name, company.Description, company.Homepage, company.IsTrusted).Scan(&new_id)
+
 	if err != nil {
 		log.Println("Error creating company in company repository: ", err)
 
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return new_id, nil
 }
 
 func (repo *CompanyRepository) Update(company schemas.Company) error {
-	_, err := repo.db.Exec("UPDATE companies SET name = $1 WHERE id = $2", company.Name, company.Id)
+	q := `UPDATE companies SET name = $1, description = $2, homepage = $3, is_trusted = $4 WHERE id = $5`
+	_, err := repo.db.Exec(q, company.Name, company.Description, company.Homepage, company.IsTrusted, company.Id)
 	return err
 }
 
 func (repo *CompanyRepository) Delete(company schemas.Company) error {
-	_, err := repo.db.Exec("DELETE FROM companies WHERE id = $1", company.Id)
+	_, err := repo.db.Exec(`DELETE FROM companies WHERE id = $1`, company.Id)
 	return err
 }
 
 func (repo *CompanyRepository) GetAll() (companies []schemas.Company, err error) {
-	rows, err := repo.db.Query("SELECT id, name FROM companies")
+	q := `SELECT id, name, description, homepage, is_trusted FROM companies`
+	rows, err := repo.db.Query(q)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +53,8 @@ func (repo *CompanyRepository) GetAll() (companies []schemas.Company, err error)
 
 	for rows.Next() {
 		var company schemas.Company
-		if err := rows.Scan(&company.Id, &company.Name); err != nil {
+		err = rows.Scan(&company.Id, &company.Name, &company.Description, &company.Homepage, &company.IsTrusted)
+		if err != nil {
 			return nil, err
 		}
 		companies = append(companies, company)
@@ -63,7 +69,7 @@ func (repo *CompanyRepository) GetAll() (companies []schemas.Company, err error)
 }
 
 func (repo *CompanyRepository) Get(id int) (company schemas.Company, err error) {
-	row := repo.db.QueryRow("SELECT id, name FROM companies WHERE id = $1", id)
-	err = row.Scan(&company.Id, &company.Name)
+	row := repo.db.QueryRow("SELECT id, name, description, homepage, is_trusted FROM companies WHERE id = $1", id)
+	err = row.Scan(&company.Id, &company.Name, &company.Description, &company.Homepage, &company.IsTrusted)
 	return company, err
 }
