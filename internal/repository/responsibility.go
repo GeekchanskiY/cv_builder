@@ -77,3 +77,69 @@ func (repo *ResponsibilityRepository) Get(id int) (schema schemas.Responsibility
 	err = row.Scan(&schema.Id, &schema.Name, &schema.Priority, &schema.SkillId, &schema.Experience, &schema.Comments)
 	return schema, err
 }
+
+func (repo *ResponsibilityRepository) GetConflicts(id int) (conflicts []schemas.ResponsibilityConflict, err error) {
+	q := `SELECT id, responsibility_1_id, responsibility_2_id, comment, priority 
+	FROM responsibility_conflicts
+	WHERE responsibility_1_id = $1 OR responsibility_2_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var conflict schemas.ResponsibilityConflict
+		if err := rows.Scan(&conflict.Id, &conflict.Responsibility1Id, &conflict.Responsibility2Id, &conflict.Comment, &conflict.Priority); err != nil {
+			return nil, err
+		}
+		conflicts = append(conflicts, conflict)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return conflicts, err
+	}
+
+	return conflicts, nil
+}
+
+func (repo *ResponsibilityRepository) CreateConflict(conflict schemas.ResponsibilityConflict) (new_id int, err error) {
+	q := `INSERT INTO responsibility_conflicts(responsibility_1_id, responsibility_2_id, comment, priority) VALUES($1, $2, $3, $4) RETURNING id`
+
+	new_id = 0
+	err = repo.db.QueryRow(
+		q, conflict.Responsibility1Id, conflict.Responsibility2Id, conflict.Comment, conflict.Priority,
+	).Scan(&new_id)
+	if err != nil {
+		log.Println("Error creating skillConflict in skillConflict repository: ", err)
+		return 0, err
+	}
+
+	return new_id, nil
+}
+
+func (repo *ResponsibilityRepository) UpdateConflict(conflict schemas.ResponsibilityConflict) error {
+	q := `UPDATE responsibility_conflicts SET responsibility_1_id = $1, responsibility_2_id = $2, comment = $3, priority = $4 WHERE id = $5`
+	_, err := repo.db.Exec(
+		q,
+		conflict.Responsibility1Id,
+		conflict.Responsibility2Id,
+		conflict.Comment,
+		conflict.Priority,
+		conflict.Id,
+	)
+	return err
+}
+
+func (repo *ResponsibilityRepository) DeleteConflict(conflict schemas.ResponsibilityConflict) error {
+	q := `DELETE FROM responsibility_conflicts WHERE id = $1`
+	_, err := repo.db.Exec(q, conflict.Id)
+	return err
+}
