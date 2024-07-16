@@ -9,6 +9,7 @@ import (
 
 const cvRoutePrefix = "/cvs"
 const cvProjectRoutePrefix = cvRoutePrefix + "/projects"
+const cvProjectResponsibilitiesRoutePrefix = cvRoutePrefix + "/project_responsibilities"
 
 func CreateCVRoutes(router *httprouter.Router, controller *controllers.CVController) {
 	// Conflicts
@@ -16,6 +17,12 @@ func CreateCVRoutes(router *httprouter.Router, controller *controllers.CVControl
 	router.Handle(http.MethodPost, cvProjectRoutePrefix, Wrapper(controller.CreateProjects))
 	router.Handle(http.MethodPut, cvProjectRoutePrefix, Wrapper(controller.UpdateProject))
 	router.Handle(http.MethodDelete, cvProjectRoutePrefix, Wrapper(controller.DeleteProject))
+
+	// Project Responsibilities
+	router.Handle(http.MethodGet, cvProjectResponsibilitiesRoutePrefix+"/:id", Wrapper(controller.GetProjectResponsibilities))
+	router.Handle(http.MethodPost, cvProjectResponsibilitiesRoutePrefix, Wrapper(controller.CreateProjectsResponsibilities))
+	router.Handle(http.MethodPut, cvProjectResponsibilitiesRoutePrefix, Wrapper(controller.UpdateProjectResponsibility))
+	router.Handle(http.MethodDelete, cvProjectResponsibilitiesRoutePrefix, Wrapper(controller.DeleteProjectResponsibility))
 
 	// CV
 	router.Handle(http.MethodGet, cvRoutePrefix, Wrapper(controller.GetAll))
