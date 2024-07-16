@@ -198,7 +198,7 @@ func (repo *SkillRepository) CreateDomains(skillDomain schemas.SkillDomain) (new
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return new_id, nil
 }
 
 func (repo *SkillRepository) UpdateDomains(skillDomain schemas.SkillDomain) error {
