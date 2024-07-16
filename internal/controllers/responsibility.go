@@ -133,3 +133,109 @@ func (c *ResponsibilityController) Get(w http.ResponseWriter, r *http.Request, p
 	}
 	w.Write(b)
 }
+
+func (c *ResponsibilityController) GetConflicts(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	var conflicts []schemas.ResponsibilityConflict
+	resp_id, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid id"))
+		return
+	}
+
+	conflicts, err = c.responsibilityRepo.GetConflicts(resp_id)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid id"))
+		return
+	}
+
+	b, err := json.Marshal(conflicts)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(b)
+}
+
+func (c *ResponsibilityController) CreateConflict(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	conflict := schemas.ResponsibilityConflict{}
+
+	err := json.NewDecoder(r.Body).Decode(&conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	uid, err := c.responsibilityRepo.CreateConflict(conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	if uid != 0 {
+		conflict.Id = uid
+	}
+
+	b, err := json.Marshal(conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *ResponsibilityController) UpdateConflict(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	conflict := schemas.ResponsibilityConflict{}
+	err := json.NewDecoder(r.Body).Decode(&conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.responsibilityRepo.UpdateConflict(conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *ResponsibilityController) DeleteConflict(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	conflict := schemas.ResponsibilityConflict{}
+	err := json.NewDecoder(r.Body).Decode(&conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.responsibilityRepo.DeleteConflict(conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(conflict)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+	w.Write(b)
+}
