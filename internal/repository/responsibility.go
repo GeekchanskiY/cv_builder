@@ -143,3 +143,67 @@ func (repo *ResponsibilityRepository) DeleteConflict(conflict schemas.Responsibi
 	_, err := repo.db.Exec(q, conflict.Id)
 	return err
 }
+
+func (repo *ResponsibilityRepository) GetSynonyms(id int) (schemes []schemas.ResponsibilitySynonym, err error) {
+	q := `SELECT id, responsibility_id, name
+	FROM responsibility_synonyms
+	WHERE responsibility_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.ResponsibilitySynonym
+		if err := rows.Scan(&schema.Id, &schema.ResponsibilityId, &schema.Name); err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *ResponsibilityRepository) CreateSynonym(schema schemas.ResponsibilitySynonym) (new_id int, err error) {
+	q := `INSERT INTO responsibility_synonyms(responsibility_id, name) VALUES($1, $2) RETURNING id`
+
+	new_id = 0
+	err = repo.db.QueryRow(
+		q, schema.ResponsibilityId, schema.Name,
+	).Scan(&new_id)
+	if err != nil {
+		log.Println("Error creating responsibility synonym: ", err)
+		return 0, err
+	}
+
+	return new_id, nil
+}
+
+func (repo *ResponsibilityRepository) UpdateSynonym(schema schemas.ResponsibilitySynonym) error {
+	q := `UPDATE responsibility_synonyms SET responsibility_id = $1, name = $2 WHERE id = $3`
+	_, err := repo.db.Exec(
+		q,
+		schema.ResponsibilityId,
+		schema.Name,
+		schema.Id,
+	)
+	return err
+}
+
+func (repo *ResponsibilityRepository) DeleteSynonym(schema schemas.ResponsibilitySynonym) error {
+	q := `DELETE FROM responsibility_synonyms WHERE id = $1`
+	_, err := repo.db.Exec(q, schema.Id)
+	return err
+}
