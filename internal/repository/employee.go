@@ -17,10 +17,9 @@ func CreateEmployeeRepository(db *sql.DB) *EmployeeRepository {
 	}
 }
 
-func (repo *EmployeeRepository) Create(employee schemas.Employee) (int, error) {
-	new_id := 0
+func (repo *EmployeeRepository) Create(employee schemas.Employee) (new_id int, err error) {
 	q := `INSERT INTO employees(name, about_me, image_url, real_experience) VALUES($1, $2, $3, $4) RETURNING id`
-	err := repo.db.QueryRow(
+	err = repo.db.QueryRow(
 		q, employee.Name, employee.AboutMe, employee.ImageUrl, employee.RealExperience,
 	).Scan(&new_id)
 	if err != nil {
@@ -28,7 +27,7 @@ func (repo *EmployeeRepository) Create(employee schemas.Employee) (int, error) {
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return new_id, nil
 }
 
 func (repo *EmployeeRepository) Update(employee schemas.Employee) error {
