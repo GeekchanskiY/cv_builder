@@ -145,3 +145,109 @@ func (c *CVController) Get(w http.ResponseWriter, r *http.Request, p httprouter.
 	w.WriteHeader(http.StatusOK)
 	w.Write(b)
 }
+
+func (c *CVController) GetProjects(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	var schemes []schemas.CVProject
+	cv_id, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid cv id"))
+		return
+	}
+
+	schemes, err = c.cvRepo.GetProjects(cv_id)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid cv id"))
+		return
+	}
+
+	b, err := json.Marshal(schemes)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(b)
+}
+
+func (c *CVController) CreateProjects(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.CVProject{}
+
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	uid, err := c.cvRepo.CreateProject(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	if uid != 0 {
+		schema.Id = uid
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *CVController) UpdateProject(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.CVProject{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.cvRepo.UpdateProject(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *CVController) DeleteProject(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.CVProject{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.cvRepo.DeleteProject(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+	w.Write(b)
+}
