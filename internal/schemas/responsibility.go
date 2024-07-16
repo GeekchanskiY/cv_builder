@@ -9,7 +9,7 @@ type Responsibility struct {
 	Comments   string `json:"comments"`
 }
 
-type ResponsibilitySynonim struct {
+type ResponsibilitySynonym struct {
 	Id               int    `json:"id"`
 	ResponsibilityId int    `json:"responsibility_id"`
 	Name             string `json:"name"`
