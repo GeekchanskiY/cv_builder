@@ -27,6 +27,7 @@ func CreateApp() fx.Option {
 			repository.CreateVacanciesRepository,
 			repository.CreateCVRepository,
 			repository.CreateProjectRepository,
+			repository.CreateResponsibilityRepository,
 
 			controllers.CreateEmployeeController,
 			controllers.CreateDomainController,
@@ -35,9 +36,10 @@ func CreateApp() fx.Option {
 			controllers.CreateVacancyController,
 			controllers.CreateCVController,
 			controllers.CreateProjectController,
+			controllers.CreateResponsibilityController,
 		),
 		fx.Invoke(
-			func(*http.Server, *repository.EmployeeRepository) {},
+			config.SetupLogger,
 			router.CreateEmployeeRoutes,
 			router.CreateDomainRoutes,
 			router.CreateSkillRoutes,
@@ -45,7 +47,8 @@ func CreateApp() fx.Option {
 			router.CreateVacancyRoutes,
 			router.CreateCVRoutes,
 			router.CreateProjectRoutes,
-			config.SetupLogger,
+			router.CreateResponsibilityRoutes,
+			func(*http.Server, *repository.EmployeeRepository) {},
 		),
 	)
 }
