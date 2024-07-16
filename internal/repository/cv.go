@@ -144,3 +144,72 @@ func (repo *CVRepository) DeleteProject(schema schemas.CVProject) error {
 	_, err := repo.db.Exec(q, schema.Id)
 	return err
 }
+
+func (repo *CVRepository) GetProjectsResponsibilities(id int) (schemes []schemas.CVProjectResponsibility, err error) {
+	q := `SELECT id, cv_project_id, responsibility_id, priority
+	FROM project_responsibilities
+	WHERE cv_project_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.CVProjectResponsibility
+		err = rows.Scan(
+			&schema.Id,
+			&schema.CVProjectId,
+			&schema.ResponsibilityId,
+			&schema.Priority,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *CVRepository) CreateProjectResponsibility(schema schemas.CVProjectResponsibility) (new_id int, err error) {
+	q := `INSERT INTO project_responsibilities(cv_project_id, responsibility_id, priority) VALUES($1, $2, $3) RETURNING id`
+
+	new_id = 0
+	err = repo.db.QueryRow(
+		q, schema.CVProjectId, schema.ResponsibilityId, schema.Priority,
+	).Scan(&new_id)
+	if err != nil {
+		return 0, err
+	}
+
+	return new_id, nil
+}
+
+func (repo *CVRepository) UpdateProjectResponsibility(schema schemas.CVProjectResponsibility) error {
+	q := `UPDATE project_responsibilities SET
+    cv_project_id = $1, responsibility_id = $2, priority = $3
+    WHERE id = $4`
+	_, err := repo.db.Exec(
+		q,
+		schema.CVProjectId,
+		schema.ResponsibilityId,
+		schema.Priority,
+		schema.Id,
+	)
+	return err
+}
+
+func (repo *CVRepository) DeleteProjectResponsibility(schema schemas.CVProjectResponsibility) error {
+	q := `DELETE FROM project_responsibilities WHERE id = $1`
+	_, err := repo.db.Exec(q, schema.Id)
+	return err
+}
