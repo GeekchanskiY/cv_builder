@@ -71,3 +71,76 @@ func (repo *CVRepository) Get(id int) (schema schemas.CV, err error) {
 	err = row.Scan(&schema.Id, &schema.VacancyId, &schema.EmployeeId, &schema.IsReal)
 	return schema, err
 }
+
+func (repo *CVRepository) GetProjects(id int) (schemes []schemas.CVProject, err error) {
+	q := `SELECT id, cv_id, project_id, company_id, end_time, start_time
+	FROM cv_projects
+	WHERE cv_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.CVProject
+		err = rows.Scan(
+			&schema.Id,
+			&schema.CVId,
+			&schema.ProjectId,
+			&schema.CompanyId,
+			&schema.EndTime,
+			&schema.StartTime,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *CVRepository) CreateProject(schema schemas.CVProject) (new_id int, err error) {
+	q := `INSERT INTO cv_projects(cv_id, project_id, company_id, end_time, start_time) VALUES($1, $2, $3, $4, $5) RETURNING id`
+
+	new_id = 0
+	err = repo.db.QueryRow(
+		q, schema.CVId, schema.ProjectId, schema.CompanyId, schema.EndTime, schema.StartTime,
+	).Scan(&new_id)
+	if err != nil {
+		return 0, err
+	}
+
+	return new_id, nil
+}
+
+func (repo *CVRepository) UpdateProject(schema schemas.CVProject) error {
+	q := `UPDATE cv_projects SET
+    cv_id = $1, project_id = $2, company_id = $3, end_time = $4, start_time = $5
+    WHERE id = $6`
+	_, err := repo.db.Exec(
+		q,
+		schema.CVId,
+		schema.ProjectId,
+		schema.CompanyId,
+		schema.EndTime,
+		schema.StartTime,
+		schema.Id,
+	)
+	return err
+}
+
+func (repo *CVRepository) DeleteProject(schema schemas.CVProject) error {
+	q := `DELETE FROM cv_projects WHERE id = $1`
+	_, err := repo.db.Exec(q, schema.Id)
+	return err
+}
