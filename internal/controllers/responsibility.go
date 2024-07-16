@@ -230,12 +230,104 @@ func (c *ResponsibilityController) DeleteConflict(w http.ResponseWriter, r *http
 		return
 	}
 
-	b, err := json.Marshal(conflict)
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (c *ResponsibilityController) GetSynonyms(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	var schemes []schemas.ResponsibilitySynonym
+	resp_id, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid id"))
+		return
+	}
+
+	schemes, err = c.responsibilityRepo.GetSynonyms(resp_id)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Invalid id"))
+		return
+	}
+
+	b, err := json.Marshal(schemes)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(b)
+}
+
+func (c *ResponsibilityController) CreateSynonym(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.ResponsibilitySynonym{}
+
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	uid, err := c.responsibilityRepo.CreateSynonym(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	if uid != 0 {
+		schema.Id = uid
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *ResponsibilityController) UpdateSynonym(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.ResponsibilitySynonym{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.responsibilityRepo.UpdateSynonym(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write(b)
+}
+
+func (c *ResponsibilityController) DeleteSynonym(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	schema := schemas.ResponsibilitySynonym{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = c.responsibilityRepo.DeleteSynonym(schema)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-	w.Write(b)
 }
