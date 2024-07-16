@@ -104,7 +104,7 @@ create table if not exists responsibility_conflicts(
     priority int
 );
 
-create table if not exists cv_project(
+create table if not exists cv_projects(
     id serial primary key,
     cv_id int references cvs(id),
     project_id int references projects(id),
@@ -115,7 +115,7 @@ create table if not exists cv_project(
 
 create table if not exists project_responsibilities(
     id serial primary key,
-    cv_project_id int references cv_project(id),
+    cv_project_id int references cv_projects(id),
     responsibility_id int references responsibilities(id),
     priority int
 );
