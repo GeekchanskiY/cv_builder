@@ -23,7 +23,7 @@ type CVProject struct {
 }
 
 // Responsibility that will be used in CV
-type CVProjectRespobsibility struct {
+type CVProjectResponsibility struct {
 	Id               int `json:"id"`
 	ResponsibilityId int `json:"responsibility_id"`
 	CVProjectId      int `json:"cv_project_id"`
