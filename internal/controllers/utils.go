@@ -45,7 +45,15 @@ func CreateUtilsController(
 func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	var err error
 	var projects []schemas.Project
+	var domains []schemas.Domain
+
 	projects, err = c.projectRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	domains, err = c.domainRepo.GetAll()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
@@ -53,6 +61,7 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 
 	var data = schemas.FullDatabaseData{
 		Projects: projects,
+		Domains:  domains,
 	}
 
 	b, err := json.Marshal(data)
@@ -61,10 +70,10 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
 	w.WriteHeader(http.StatusOK)
 }
