@@ -37,6 +37,7 @@ func CreateApp() fx.Option {
 			controllers.CreateCVController,
 			controllers.CreateProjectController,
 			controllers.CreateResponsibilityController,
+			controllers.CreateUtilsController,
 		),
 		fx.Invoke(
 			config.SetupLogger,
