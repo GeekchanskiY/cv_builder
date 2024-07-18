@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"net/http"
 	"strconv"
 
@@ -14,43 +15,47 @@ type CompanyController struct {
 	companyRepo *repository.CompanyRepository
 }
 
-func CreateComapnyController(repo *repository.CompanyRepository) *CompanyController {
+func CreateCompanyController(repo *repository.CompanyRepository) *CompanyController {
 	return &CompanyController{
 		companyRepo: repo,
 	}
 }
 
-func (c *CompanyController) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *CompanyController) GetAll(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	companies, err := c.companyRepo.GetAll()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
+
 	b, err := json.Marshal(companies)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
 
-func (c *CompanyController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *CompanyController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	company := schemas.Company{}
 
 	err := json.NewDecoder(r.Body).Decode(&company)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	uid, err := c.companyRepo.Create(company)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
@@ -60,40 +65,47 @@ func (c *CompanyController) Create(w http.ResponseWriter, r *http.Request, p htt
 
 	b, err := json.Marshal(company)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *CompanyController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	comapny := schemas.Company{}
-	err := json.NewDecoder(r.Body).Decode(&comapny)
+func (c *CompanyController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	company := schemas.Company{}
+	err := json.NewDecoder(r.Body).Decode(&company)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	err = c.companyRepo.Update(comapny)
+	err = c.companyRepo.Update(company)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	b, err := json.Marshal(comapny)
+	b, err := json.Marshal(company)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *CompanyController) Delete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *CompanyController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	company := schemas.Company{}
 	err := json.NewDecoder(r.Body).Decode(&company)
 	if err != nil {
@@ -107,38 +119,33 @@ func (c *CompanyController) Delete(w http.ResponseWriter, r *http.Request, p htt
 		return
 	}
 
-	b, err := json.Marshal(company)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
 	w.WriteHeader(http.StatusNoContent)
-	w.Write(b)
 }
 
-func (c *CompanyController) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *CompanyController) Get(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 	var company schemas.Company
-	comapny_id, err := strconv.Atoi(p.ByName("id"))
+	companyId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid employee id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	company, err = c.companyRepo.Get(int(comapny_id))
+	company, err = c.companyRepo.Get(companyId)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid employee id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(company)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
-	w.Write(b)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
 }
