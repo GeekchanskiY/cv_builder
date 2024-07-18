@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"net/http"
 	"strconv"
 
@@ -20,36 +21,40 @@ func CreateEmployeeController(repo *repository.EmployeeRepository) *EmployeeCont
 	}
 }
 
-func (c *EmployeeController) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) GetAll(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	employees, err := c.employeeRepo.GetAll()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 	b, err := json.Marshal(employees)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
-	w.Write(b)
 
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
-func (c *EmployeeController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	employee := schemas.Employee{}
 
 	err := json.NewDecoder(r.Body).Decode(&employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	uid, err := c.employeeRepo.Create(employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
@@ -57,86 +62,92 @@ func (c *EmployeeController) Create(w http.ResponseWriter, r *http.Request, p ht
 		employee.Id = uid
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	b, err := json.Marshal(employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
-	w.Write(b)
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 
 }
 
-func (c *EmployeeController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	employee := schemas.Employee{}
 	err := json.NewDecoder(r.Body).Decode(&employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.employeeRepo.Update(employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	b, err := json.Marshal(employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
-	w.Write(b)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
 }
 
-func (c *EmployeeController) Delete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	employee := schemas.Employee{}
 	err := json.NewDecoder(r.Body).Decode(&employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.employeeRepo.Delete(employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-	b, err := json.Marshal(employee)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	w.Write(b)
 }
 
-func (c *EmployeeController) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *EmployeeController) Get(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 	var employee schemas.Employee
-	employee_id, err := strconv.Atoi(p.ByName("id"))
+	employeeId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid employee id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	employee, err = c.employeeRepo.Get(int(employee_id))
+	employee, err = c.employeeRepo.Get(employeeId)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid employee id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(employee)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
-	w.Write(b)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
 }
