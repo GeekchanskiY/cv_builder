@@ -8,7 +8,7 @@ import (
 	database "github.com/GeekchanskiY/cv_builder/internal/db"
 	"github.com/GeekchanskiY/cv_builder/internal/repository"
 	"github.com/GeekchanskiY/cv_builder/internal/router"
-	server "github.com/GeekchanskiY/cv_builder/internal/server"
+	"github.com/GeekchanskiY/cv_builder/internal/server"
 
 	"go.uber.org/fx"
 )
