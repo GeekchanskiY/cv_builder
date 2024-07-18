@@ -32,7 +32,7 @@ func CreateApp() fx.Option {
 			controllers.CreateEmployeeController,
 			controllers.CreateDomainController,
 			controllers.CreateSkillController,
-			controllers.CreateComapnyController,
+			controllers.CreateCompanyController,
 			controllers.CreateVacancyController,
 			controllers.CreateCVController,
 			controllers.CreateProjectController,
