@@ -12,7 +12,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	config "github.com/GeekchanskiY/cv_builder/internal/config"
+	"github.com/GeekchanskiY/cv_builder/internal/config"
 )
 
 var (
@@ -52,14 +52,14 @@ func Connect() (*sql.DB, error) {
 		_, filename, _, _ := runtime.Caller(0)
 		configDir := filepath.Dir(filename)
 
-		migrations_path := filepath.Join(configDir, "/migrations")
-		log.Println("Reading migrations from: " + migrations_path)
-		dir, err := os.Open(migrations_path)
+		migrationsPath := filepath.Join(configDir, "/migrations")
+		log.Println("Reading migrations from: " + migrationsPath)
+		dir, err := os.Open(migrationsPath)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
 		}
-		defer dir.Close()
+
 		files, err := dir.Readdir(0)
 		if err != nil {
 			fmt.Println("Error:", err)
@@ -69,24 +69,25 @@ func Connect() (*sql.DB, error) {
 			files[i], files[j] = files[j], files[i]
 		}
 		for _, file := range files {
-
-			// log.Panicln("Running migration: " + file.Name())
 			tmp := strings.Split(file.Name(), ".")
 			if tmp[len(tmp)-1] == "sql" {
-				sql_data, err := os.ReadFile(filepath.Join(migrations_path, file.Name()))
+				sqlData, err := os.ReadFile(filepath.Join(migrationsPath, file.Name()))
 				if err != nil {
 					panic(err)
 				}
 				log.Println("Running migration: " + file.Name())
 
-				_, err = connection.Exec(string(sql_data))
+				_, err = connection.Exec(string(sqlData))
 				if err != nil {
 					log.Panicln(err)
 				}
-
 			}
 		}
 		log.Println("Connected to database")
+		err = dir.Close()
+		if err != nil {
+			log.Panicln(err)
+		}
 	},
 	)
 	return connection, err
