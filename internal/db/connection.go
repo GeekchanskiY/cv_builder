@@ -65,9 +65,12 @@ func Connect() (*sql.DB, error) {
 			fmt.Println("Error:", err)
 			return
 		}
+
+		// Reverse list to save correct migrations order
 		for i, j := 0, len(files)-1; i < j; i, j = i+1, j-1 {
 			files[i], files[j] = files[j], files[i]
 		}
+
 		for _, file := range files {
 			tmp := strings.Split(file.Name(), ".")
 			if tmp[len(tmp)-1] == "sql" {
