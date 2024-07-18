@@ -49,6 +49,7 @@ func CreateApp() fx.Option {
 			router.CreateCVRoutes,
 			router.CreateProjectRoutes,
 			router.CreateResponsibilityRoutes,
+			router.CreateUtilRoutes,
 			func(*http.Server, *repository.EmployeeRepository) {},
 		),
 	)

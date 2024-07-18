@@ -1,7 +1,10 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/GeekchanskiY/cv_builder/internal/repository"
+	"github.com/GeekchanskiY/cv_builder/internal/schemas"
+	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
@@ -39,6 +42,29 @@ func CreateUtilsController(
 	}
 }
 
-func (c *UtilsController) ExportJSON(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	var err error
+	var projects []schemas.Project
+	projects, err = c.projectRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
 
+	var data = schemas.FullDatabaseData{
+		Projects: projects,
+	}
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
