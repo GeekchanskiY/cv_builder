@@ -137,3 +137,66 @@ func (repo *VacanciesRepository) UpdateSkill(schema schemas.VacancySkill) error 
 	)
 	return err
 }
+
+func (repo *VacanciesRepository) GetDomains(id int) (schemes []schemas.VacancyDomain, err error) {
+	q := `SELECT id, vacancy_id, domain_id, priority FROM vacancy_domains
+	WHERE vacancy_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.VacancyDomain
+		err = rows.Scan(&schema.Id, &schema.VacancyId, &schema.DomainId, &schema.Priority)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *VacanciesRepository) AddDomain(schema schemas.VacancyDomain) (new_id int, err error) {
+	q := `INSERT INTO vacancy_domains(vacancy_id, domain_id, priority) VALUES($1, $2, $3) returning id`
+	err = repo.db.QueryRow(q, schema.VacancyId, schema.DomainId, schema.Priority).Scan(&new_id)
+	if err != nil {
+		log.Println("Error creating schema in repository: ", err)
+
+		return 0, err
+	}
+
+	return new_id, nil
+
+}
+
+func (repo *VacanciesRepository) DeleteDomain(schema schemas.VacancyDomain) (err error) {
+	q := `DELETE FROM vacancy_domains WHERE id = $1`
+	_, err = repo.db.Exec(q, schema.Id)
+	return err
+}
+
+func (repo *VacanciesRepository) UpdateDomain(schema schemas.VacancyDomain) error {
+	q := `UPDATE vacancy_domains SET vacancy_id = $1, domain_id = $2, priority = $3 WHERE id = $4`
+	_, err := repo.db.Exec(
+		q,
+		schema.VacancyId,
+		schema.DomainId,
+		schema.Priority,
+		schema.Id,
+	)
+	return err
+}
