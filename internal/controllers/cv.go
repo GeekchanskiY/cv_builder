@@ -24,12 +24,12 @@ func CreateCVController(repo *repository.CVRepository) *CVController {
 func (c *CVController) GetAll(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	schemes, err := c.cvRepo.GetAll()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 	b, err := json.Marshal(schemes)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
