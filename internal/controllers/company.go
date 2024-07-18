@@ -148,4 +148,6 @@ func (c *CompanyController) Get(w http.ResponseWriter, _ *http.Request, p httpro
 		utils.HandleInternalError(w, err)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 }

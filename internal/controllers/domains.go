@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"net/http"
 	"strconv"
 
@@ -20,37 +21,40 @@ func CreateDomainController(repo *repository.DomainRepository) *DomainController
 	}
 }
 
-func (c *DomainController) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) GetAll(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	domains, err := c.domainRepo.GetAll()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 	b, err := json.Marshal(domains)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
 
-func (c *DomainController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	domain := schemas.Domain{}
 
 	err := json.NewDecoder(r.Body).Decode(&domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	uid, err := c.domainRepo.Create(domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
@@ -60,88 +64,90 @@ func (c *DomainController) Create(w http.ResponseWriter, r *http.Request, p http
 
 	b, err := json.Marshal(domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+	}
+
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *DomainController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	domain := schemas.Domain{}
 	err := json.NewDecoder(r.Body).Decode(&domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.domainRepo.Update(domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *DomainController) Delete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	domain := schemas.Domain{}
 	err := json.NewDecoder(r.Body).Decode(&domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.domainRepo.Delete(domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	b, err := json.Marshal(domain)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-	w.Write(b)
 }
 
-func (c *DomainController) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *DomainController) Get(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 	var domain schemas.Domain
-	domain_id, err := strconv.Atoi(p.ByName("id"))
+	domainId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	domain, err = c.domainRepo.Get(int(domain_id))
+	domain, err = c.domainRepo.Get(domainId)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(domain)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+	}
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
