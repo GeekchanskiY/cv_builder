@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"log"
 	"net/http"
 	"strconv"
@@ -21,38 +22,40 @@ func CreateVacancyController(repo *repository.VacanciesRepository) *VacancyContr
 	}
 }
 
-func (c *VacancyController) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) GetAll(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	domains, err := c.vacancyRepo.GetAll()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 	b, err := json.Marshal(domains)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 
 }
 
-func (c *VacancyController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	schema := schemas.Vacancy{}
 
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	uid, err := c.vacancyRepo.Create(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
@@ -60,42 +63,51 @@ func (c *VacancyController) Create(w http.ResponseWriter, r *http.Request, p htt
 		schema.Id = uid
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
-	w.Write(b)
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 
 }
 
-func (c *VacancyController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	schema := schemas.Vacancy{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.vacancyRepo.Update(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *VacancyController) Delete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	schema := schemas.Vacancy{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
@@ -109,127 +121,103 @@ func (c *VacancyController) Delete(w http.ResponseWriter, r *http.Request, p htt
 		return
 	}
 
-	b, err := json.Marshal(schema)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
 	w.WriteHeader(http.StatusNoContent)
-	w.Write(b)
 }
 
-func (c *VacancyController) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) Get(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 	var schema schemas.Vacancy
-	vacancy_id, err := strconv.Atoi(p.ByName("id"))
+	vacancyId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid vacancy id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	schema, err = c.vacancyRepo.Get(int(vacancy_id))
+	schema, err = c.vacancyRepo.Get(vacancyId)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid vacancy id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
 
-func (c *VacancyController) GetSkills(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) GetSkills(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	var schemes []schemas.VacancySkill
-	vacancy_id, err := strconv.Atoi(p.ByName("id"))
+	vacancyId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	schemes, err = c.vacancyRepo.GetSkills(int(vacancy_id))
+	schemes, err = c.vacancyRepo.GetSkills(vacancyId)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid skill id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(schemes)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
 
-func (c *VacancyController) DeleteSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) DeleteSkill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	schema := schemas.VacancySkill{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil || schema.Id == 0 {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid skill id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.vacancyRepo.DeleteSkill(schema)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("No such skill in this vacancy"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-	w.Write([]byte("Skill deleted from vacancy"))
 }
 
-func (c *VacancyController) AddSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *VacancyController) AddSkill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	schema := schemas.VacancySkill{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid data provided"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	_, err = c.vacancyRepo.AddSkill(schema)
+	newId, err := c.vacancyRepo.AddSkill(schema)
 
-	if err != nil {
+	if err != nil || newId == 0 {
 		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Cant add skill to this vacancy"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("Skill added to vacancy"))
-}
-
-func (c *VacancyController) UpdateSkill(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	schema := schemas.VacancySkill{}
-	err := json.NewDecoder(r.Body).Decode(&schema)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = c.vacancyRepo.UpdateSkill(schema)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	schema.Id = newId
 
 	b, err := json.Marshal(schema)
 	if err != nil {
@@ -237,6 +225,38 @@ func (c *VacancyController) UpdateSkill(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
+}
+
+func (c *VacancyController) UpdateSkill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.VacancySkill{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	err = c.vacancyRepo.UpdateSkill(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }
