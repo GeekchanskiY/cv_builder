@@ -12,10 +12,3 @@ type ProjectDomain struct {
 	ProjectId int    `json:"project_id"`
 	Comments  string `json:"comments"`
 }
-
-type ProjectRespobsibility struct {
-	Id               int `json:"id"`
-	ResponsibilityId int `json:"responsibility_id"`
-	ProjectId        int `json:"project_id"`
-	Priority         int `json:"priority"`
-}
