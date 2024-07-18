@@ -260,3 +260,110 @@ func (c *VacancyController) UpdateSkill(w http.ResponseWriter, r *http.Request, 
 
 	w.WriteHeader(http.StatusCreated)
 }
+
+func (c *VacancyController) GetDomains(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+	var schemes []schemas.VacancyDomain
+	vacancyId, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	schemes, err = c.vacancyRepo.GetDomains(vacancyId)
+
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(schemes)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func (c *VacancyController) DeleteDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.VacancyDomain{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil || schema.Id == 0 {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	err = c.vacancyRepo.DeleteDomain(schema)
+
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (c *VacancyController) AddDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.VacancyDomain{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	newId, err := c.vacancyRepo.AddDomain(schema)
+
+	if err != nil || newId == 0 {
+		log.Println(err)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	schema.Id = newId
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+}
+
+func (c *VacancyController) UpdateDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.VacancyDomain{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	err = c.vacancyRepo.UpdateDomain(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+}
