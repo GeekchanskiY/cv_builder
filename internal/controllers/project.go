@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"net/http"
 	"strconv"
 
@@ -20,37 +21,40 @@ func CreateProjectController(repo *repository.ProjectRepository) *ProjectControl
 	}
 }
 
-func (c *ProjectController) GetAll(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) GetAll(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	schemes, err := c.projectRepo.GetAll()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 	b, err := json.Marshal(schemes)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
 
-func (c *ProjectController) Create(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	schema := schemas.Project{}
 
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	uid, err := c.projectRepo.Create(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
@@ -60,133 +64,138 @@ func (c *ProjectController) Create(w http.ResponseWriter, r *http.Request, p htt
 
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *ProjectController) Update(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	schema := schemas.Project{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.projectRepo.Update(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *ProjectController) Delete(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	schema := schemas.Project{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.projectRepo.Delete(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	b, err := json.Marshal(schema)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-	w.Write(b)
 }
 
-func (c *ProjectController) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) Get(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 
 	var schema schemas.Project
-	schema_id, err := strconv.Atoi(p.ByName("id"))
+	schemaId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	schema, err = c.projectRepo.Get(int(schema_id))
+	schema, err = c.projectRepo.Get(schemaId)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid domain id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
 
-func (c *ProjectController) GetDomains(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) GetDomains(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	var schemes []schemas.ProjectDomain
-	schema_id, err := strconv.Atoi(p.ByName("id"))
+	schemaId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
-	schemes, err = c.projectRepo.GetDomains(schema_id)
+	schemes, err = c.projectRepo.GetDomains(schemaId)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Invalid id"))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(schemes)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(b)
 }
 
-func (c *ProjectController) CreateDomains(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) CreateDomains(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	schema := schemas.ProjectDomain{}
 
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	uid, err := c.projectRepo.CreateDomains(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
 		return
 	}
 
@@ -196,58 +205,59 @@ func (c *ProjectController) CreateDomains(w http.ResponseWriter, r *http.Request
 
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *ProjectController) UpdateDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) UpdateDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	schema := schemas.ProjectDomain{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.projectRepo.UpdateDomains(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	b, err := json.Marshal(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write(b)
 }
 
-func (c *ProjectController) DeleteDomain(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (c *ProjectController) DeleteDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	schema := schemas.ProjectDomain{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	err = c.projectRepo.DeleteDomains(schema)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	b, err := json.Marshal(schema)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		utils.HandleInternalError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-	w.Write(b)
 }
