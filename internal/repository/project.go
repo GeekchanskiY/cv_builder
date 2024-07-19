@@ -169,6 +169,42 @@ func (repo *ProjectRepository) GetAllDomains() (schemes []schemas.ProjectDomain,
 	return schemes, nil
 }
 
+func (repo *ProjectRepository) GetAllDomainsReadable() (schemes []schemas.ProjectDomainReadable, err error) {
+	q := `SELECT p.name, d.name, comments 
+	FROM project_domains pd
+	JOIN projects p ON pd.project_id = p.id
+	JOIN domains d on d.id = pd.domain_id`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var schema schemas.ProjectDomainReadable
+		err = rows.Scan(
+			&schema.ProjectName,
+			&schema.DomainName,
+			&schema.Comments,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	if err := rows.Close(); err != nil {
+		return schemes, err
+	}
+	return schemes, nil
+}
+
 func (repo *ProjectRepository) CreateDomains(schema schemas.ProjectDomain) (newId int, err error) {
 	q := `INSERT INTO project_domains(project_id, domain_id, comments) VALUES($1, $2, $3) RETURNING id`
 
