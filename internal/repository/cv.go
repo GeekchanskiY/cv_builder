@@ -18,9 +18,9 @@ func CreateCVRepository(db *sql.DB) *CVRepository {
 }
 
 func (repo *CVRepository) Create(schema schemas.CV) (int, error) {
-	q := `INSERT INTO cvs(vacancy_id, employee_id, is_real) VALUES($1, $2, $3) RETURNING id`
+	q := `INSERT INTO cvs(name, vacancy_id, employee_id, is_real) VALUES($1, $2, $3, $4) RETURNING id`
 	newId := 0
-	err := repo.db.QueryRow(q, schema.VacancyId, schema.EmployeeId, schema.IsReal).Scan(&newId)
+	err := repo.db.QueryRow(q, schema.Name, schema.VacancyId, schema.EmployeeId, schema.IsReal).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating cv in cv repository: ", err)
 		return 0, err
@@ -30,8 +30,8 @@ func (repo *CVRepository) Create(schema schemas.CV) (int, error) {
 }
 
 func (repo *CVRepository) CreateIfNotExists(schema schemas.CV) (created bool, err error) {
-	q := `INSERT INTO cvs(vacancy_id, employee_id, is_real) 
-	SELECT $1, $2, $3
+	q := `INSERT INTO cvs(name, vacancy_id, employee_id, is_real) 
+	SELECT $1, $2, $3, $4
 	WHERE 
 	    NOT EXISTS (SELECT 1 FROM cvs WHERE vacancy_id = $1 AND employee_id = $2)`
 
@@ -51,8 +51,8 @@ func (repo *CVRepository) CreateIfNotExists(schema schemas.CV) (created bool, er
 }
 
 func (repo *CVRepository) Update(schema schemas.CV) error {
-	q := `UPDATE cvs SET vacancy_id = $1, employee_id = $2, is_real = $3 WHERE id = $4`
-	_, err := repo.db.Exec(q, schema.VacancyId, schema.EmployeeId, schema.IsReal, schema.Id)
+	q := `UPDATE cvs SET name=$1, vacancy_id = $2, employee_id = $3, is_real = $4 WHERE id = $5`
+	_, err := repo.db.Exec(q, schema.Name, schema.VacancyId, schema.EmployeeId, schema.IsReal, schema.Id)
 	return err
 }
 
@@ -62,7 +62,7 @@ func (repo *CVRepository) Delete(schema schemas.CV) error {
 }
 
 func (repo *CVRepository) GetAll() (schemes []schemas.CV, err error) {
-	q := `SELECT id, vacancy_id, employee_id, is_real FROM cvs`
+	q := `SELECT id, name, vacancy_id, employee_id, is_real FROM cvs`
 	rows, err := repo.db.Query(q)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func (repo *CVRepository) GetAll() (schemes []schemas.CV, err error) {
 
 	for rows.Next() {
 		var schema schemas.CV
-		err = rows.Scan(&schema.Id, &schema.VacancyId, &schema.EmployeeId, &schema.IsReal)
+		err = rows.Scan(&schema.Id, &schema.Name, &schema.VacancyId, &schema.EmployeeId, &schema.IsReal)
 		if err != nil {
 			return nil, err
 		}
@@ -92,9 +92,9 @@ func (repo *CVRepository) GetAll() (schemes []schemas.CV, err error) {
 }
 
 func (repo *CVRepository) Get(id int) (schema schemas.CV, err error) {
-	q := `SELECT id, vacancy_id, employee_id, is_real FROM cvs WHERE id = $1`
+	q := `SELECT id, name, vacancy_id, employee_id, is_real FROM cvs WHERE id = $1`
 	row := repo.db.QueryRow(q, id)
-	err = row.Scan(&schema.Id, &schema.VacancyId, &schema.EmployeeId, &schema.IsReal)
+	err = row.Scan(&schema.Id, &schema.Name, &schema.VacancyId, &schema.EmployeeId, &schema.IsReal)
 	return schema, err
 }
 

@@ -3,9 +3,19 @@ package schemas
 import "time"
 
 type CV struct {
-	Id         int `json:"id"`
-	VacancyId  int `json:"vacancy_id"`
-	EmployeeId int `json:"employee_id"`
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	VacancyId  int    `json:"vacancy_id"`
+	EmployeeId int    `json:"employee_id"`
+
+	// Need to confirm real employee experience
+	IsReal bool `json:"is_real"`
+}
+
+type CVReadable struct {
+	Name         string `json:"name"`
+	VacancyName  string `json:"vacancy_name"`
+	EmployeeName string `json:"employee_name"`
 
 	// Need to confirm real employee experience
 	IsReal bool `json:"is_real"`

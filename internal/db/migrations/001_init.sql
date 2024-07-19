@@ -38,6 +38,7 @@ create table if not exists vacancies (
 
 create table if not exists cvs (
     id serial primary key,
+    name varchar(255) not null unique,
     vacancy_id int references vacancies(id),
     employee_id int references employees(id),
     is_real boolean
