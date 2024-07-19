@@ -109,6 +109,42 @@ func (repo *CVRepository) GetProjects(id int) (schemes []schemas.CVProject, err 
 	return schemes, nil
 }
 
+func (repo *CVRepository) GetAllProjects() (schemes []schemas.CVProject, err error) {
+	q := `SELECT id, cv_id, project_id, company_id, end_time, start_time
+	FROM cv_projects`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.CVProject
+		err = rows.Scan(
+			&schema.Id,
+			&schema.CVId,
+			&schema.ProjectId,
+			&schema.CompanyId,
+			&schema.EndTime,
+			&schema.StartTime,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
 func (repo *CVRepository) CreateProject(schema schemas.CVProject) (new_id int, err error) {
 	q := `INSERT INTO cv_projects(cv_id, project_id, company_id, end_time, start_time) VALUES($1, $2, $3, $4, $5) RETURNING id`
 
@@ -151,6 +187,40 @@ func (repo *CVRepository) GetProjectsResponsibilities(id int) (schemes []schemas
 	WHERE cv_project_id = $1`
 
 	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.CVProjectResponsibility
+		err = rows.Scan(
+			&schema.Id,
+			&schema.CVProjectId,
+			&schema.ResponsibilityId,
+			&schema.Priority,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *CVRepository) GetAllProjectResponsibilities() (schemes []schemas.CVProjectResponsibility, err error) {
+	q := `SELECT id, cv_project_id, responsibility_id, priority
+	FROM project_responsibilities`
+
+	rows, err := repo.db.Query(q)
 
 	if err != nil {
 		return nil, err

@@ -76,10 +76,41 @@ func (repo *VacanciesRepository) Get(id int) (schema schemas.Vacancy, err error)
 }
 
 func (repo *VacanciesRepository) GetSkills(id int) (vacancySkills []schemas.VacancySkill, err error) {
-	q := `SELECT vs.id, vs.skill_id, vs.vacancy_id, vs.priority FROM vacancy_skills vs
-	WHERE vs.vacancy_id = $1`
+	q := `SELECT id, skill_id, vacancy_id, priority FROM vacancy_skills
+	WHERE vacancy_id = $1`
 
 	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var vacancySkill schemas.VacancySkill
+		err = rows.Scan(&vacancySkill.Id, &vacancySkill.SkillId, &vacancySkill.VacancyId, &vacancySkill.Priority)
+		if err != nil {
+			return nil, err
+		}
+		vacancySkills = append(vacancySkills, vacancySkill)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return vacancySkills, err
+	}
+
+	return vacancySkills, nil
+}
+
+func (repo *VacanciesRepository) GetAllSkills() (vacancySkills []schemas.VacancySkill, err error) {
+	q := `SELECT id, skill_id, vacancy_id, priority FROM vacancy_skills`
+
+	rows, err := repo.db.Query(q)
 
 	if err != nil {
 		return nil, err
@@ -143,6 +174,37 @@ func (repo *VacanciesRepository) GetDomains(id int) (schemes []schemas.VacancyDo
 	WHERE vacancy_id = $1`
 
 	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.VacancyDomain
+		err = rows.Scan(&schema.Id, &schema.VacancyId, &schema.DomainId, &schema.Priority)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *VacanciesRepository) GetAllDomains() (schemes []schemas.VacancyDomain, err error) {
+	q := `SELECT id, vacancy_id, domain_id, priority FROM vacancy_domains`
+
+	rows, err := repo.db.Query(q)
 
 	if err != nil {
 		return nil, err

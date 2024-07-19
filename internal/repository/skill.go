@@ -116,6 +116,37 @@ func (repo *SkillRepository) GetConflicts(id int) (conflicts []schemas.SkillConf
 	return conflicts, nil
 }
 
+func (repo *SkillRepository) GetAllConflicts() (conflicts []schemas.SkillConflict, err error) {
+	q := `SELECT id, skill_1_id, skill_2_id, comment, priority 
+	FROM skill_conflicts`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var conflict schemas.SkillConflict
+		if err := rows.Scan(&conflict.Id, &conflict.Skill1Id, &conflict.Skill2Id, &conflict.Comment, &conflict.Priority); err != nil {
+			return nil, err
+		}
+		conflicts = append(conflicts, conflict)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return conflicts, err
+	}
+
+	return conflicts, nil
+}
+
 func (repo *SkillRepository) CreateConflict(conflict schemas.SkillConflict) (new_id int, err error) {
 	q := `INSERT INTO skill_conflicts(skill_1_id, skill_2_id, comment, priority) VALUES($1, $2, $3, $4) RETURNING id`
 
@@ -156,6 +187,41 @@ func (repo *SkillRepository) GetDomains(id int) (skillDomains []schemas.SkillDom
 	WHERE skill_id = $1`
 
 	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var skillDomain schemas.SkillDomain
+		err = rows.Scan(
+			&skillDomain.Id,
+			&skillDomain.SkillId,
+			&skillDomain.DomainId,
+			&skillDomain.Comments,
+			&skillDomain.Priority,
+		)
+		if err != nil {
+			return nil, err
+		}
+		skillDomains = append(skillDomains, skillDomain)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return skillDomains, err
+	}
+
+	return skillDomains, nil
+}
+
+func (repo *SkillRepository) GetAllDomains() (skillDomains []schemas.SkillDomain, err error) {
+	q := `SELECT id, skill_id, domain_id, comments, priority 
+	FROM skill_domains`
+
+	rows, err := repo.db.Query(q)
 
 	if err != nil {
 		return nil, err

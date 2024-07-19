@@ -110,6 +110,37 @@ func (repo *ResponsibilityRepository) GetConflicts(id int) (conflicts []schemas.
 	return conflicts, nil
 }
 
+func (repo *ResponsibilityRepository) GetAllConflicts() (conflicts []schemas.ResponsibilityConflict, err error) {
+	q := `SELECT id, responsibility_1_id, responsibility_2_id, comment, priority 
+	FROM responsibility_conflicts`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var conflict schemas.ResponsibilityConflict
+		if err := rows.Scan(&conflict.Id, &conflict.Responsibility1Id, &conflict.Responsibility2Id, &conflict.Comment, &conflict.Priority); err != nil {
+			return nil, err
+		}
+		conflicts = append(conflicts, conflict)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return conflicts, err
+	}
+
+	return conflicts, nil
+}
+
 func (repo *ResponsibilityRepository) CreateConflict(conflict schemas.ResponsibilityConflict) (new_id int, err error) {
 	q := `INSERT INTO responsibility_conflicts(responsibility_1_id, responsibility_2_id, comment, priority) VALUES($1, $2, $3, $4) RETURNING id`
 
@@ -150,6 +181,37 @@ func (repo *ResponsibilityRepository) GetSynonyms(id int) (schemes []schemas.Res
 	WHERE responsibility_id = $1`
 
 	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var schema schemas.ResponsibilitySynonym
+		if err := rows.Scan(&schema.Id, &schema.ResponsibilityId, &schema.Name); err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *ResponsibilityRepository) GetAllSynonyms() (schemes []schemas.ResponsibilitySynonym, err error) {
+	q := `SELECT id, responsibility_id, name
+	FROM responsibility_synonyms`
+
+	rows, err := repo.db.Query(q)
 
 	if err != nil {
 		return nil, err
