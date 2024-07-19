@@ -59,9 +59,114 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
+	companies, err := c.companyRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	cvs, err := c.cvRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	cvProjects, err := c.cvRepo.GetAllProjects()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	cvProjectResponsibilities, err := c.cvRepo.GetAllProjectResponsibilities()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	employees, err := c.employeeRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	projectDomains, err := c.projectRepo.GetAllDomains()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	responsibilities, err := c.responsibilityRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	responsibilityConflicts, err := c.responsibilityRepo.GetAllConflicts()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	responsibilitySynonyms, err := c.responsibilityRepo.GetAllSynonyms()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	skills, err := c.skillRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	skillDomains, err := c.skillRepo.GetAllDomains()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	skillConflicts, err := c.skillRepo.GetAllConflicts()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	vacancies, err := c.vacancyRepo.GetAll()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	vacancySkills, err := c.vacancyRepo.GetAllSkills()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	vacancyDomains, err := c.vacancyRepo.GetAllDomains()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
 	var data = schemas.FullDatabaseData{
-		Projects: projects,
-		Domains:  domains,
+		Projects:                  projects,
+		Domains:                   domains,
+		Companies:                 companies,
+		CVs:                       cvs,
+		CVProjects:                cvProjects,
+		CVProjectResponsibilities: cvProjectResponsibilities,
+		Employees:                 employees,
+		ProjectDomains:            projectDomains,
+		Responsibilities:          responsibilities,
+		ResponsibilitySynonyms:    responsibilitySynonyms,
+		ResponsibilityConflicts:   responsibilityConflicts,
+		Skills:                    skills,
+		SkillDomains:              skillDomains,
+		SkillConflicts:            skillConflicts,
+		Vacancies:                 vacancies,
+		VacancyDomains:            vacancyDomains,
+		VacancySkills:             vacancySkills,
 	}
 
 	b, err := json.Marshal(data)
