@@ -49,10 +49,6 @@ func (repo *CompanyRepository) CreateIfNotExists(company schemas.Company) (creat
 		return false, err
 	}
 
-	if r == nil {
-		return false, err
-	}
-
 	if i, _ := r.RowsAffected(); i != 0 {
 		return true, nil
 	}
