@@ -30,6 +30,27 @@ func (repo *EmployeeRepository) Create(employee schemas.Employee) (newId int, er
 	return newId, nil
 }
 
+func (repo *EmployeeRepository) CreateIfNotExists(schema schemas.Employee) (created bool, err error) {
+	q := `INSERT INTO employees(name, about_me, image_url, real_experience) 
+	SELECT CAST($1 AS VARCHAR), $2, $3, $4
+	WHERE 
+	    NOT EXISTS (SELECT 1 FROM employees WHERE name = $1)`
+
+	r, err := repo.db.Exec(q, schema.Name, schema.AboutMe, schema.ImageUrl, schema.RealExperience)
+
+	if err != nil {
+		log.Println("Error creating employee: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *EmployeeRepository) Update(employee schemas.Employee) error {
 	q := `UPDATE employees SET name = $1, about_me = $2, image_url = $3, real_experience = $4 WHERE id = $5`
 	_, err := repo.db.Exec(q, employee.Name, employee.AboutMe, employee.ImageUrl, employee.RealExperience, employee.Id)

@@ -8,7 +8,7 @@ type FullDatabaseData struct {
 	Domains                   []Domain                  `json:"domains"`
 	Employees                 []Employee                `json:"employees"`
 	Projects                  []Project                 `json:"projects"`
-	ProjectDomains            []ProjectDomain           `json:"project_domains"`
+	ProjectDomains            []ProjectDomainReadable   `json:"project_domains"`
 	Responsibilities          []Responsibility          `json:"responsibilities"`
 	ResponsibilityConflicts   []ResponsibilityConflict  `json:"responsibility_conflicts"`
 	ResponsibilitySynonyms    []ResponsibilitySynonym   `json:"responsibility_synonyms"`

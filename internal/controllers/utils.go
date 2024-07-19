@@ -91,11 +91,11 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
-	projectDomains, err := c.projectRepo.GetAllDomains()
-	if err != nil {
-		utils.HandleInternalError(w, err)
-		return
-	}
+	//projectDomains, err := c.projectRepo.GetAllDomains()
+	//if err != nil {
+	//	utils.HandleInternalError(w, err)
+	//	return
+	//}
 
 	responsibilities, err := c.responsibilityRepo.GetAll()
 	if err != nil {
@@ -159,16 +159,16 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		CVProjects:                cvProjects,
 		CVProjectResponsibilities: cvProjectResponsibilities,
 		Employees:                 employees,
-		ProjectDomains:            projectDomains,
-		Responsibilities:          responsibilities,
-		ResponsibilitySynonyms:    responsibilitySynonyms,
-		ResponsibilityConflicts:   responsibilityConflicts,
-		Skills:                    skills,
-		SkillDomains:              skillDomains,
-		SkillConflicts:            skillConflicts,
-		Vacancies:                 vacancies,
-		VacancyDomains:            vacancyDomains,
-		VacancySkills:             vacancySkills,
+		// ProjectDomains:            projectDomains,
+		Responsibilities:        responsibilities,
+		ResponsibilitySynonyms:  responsibilitySynonyms,
+		ResponsibilityConflicts: responsibilityConflicts,
+		Skills:                  skills,
+		SkillDomains:            skillDomains,
+		SkillConflicts:          skillConflicts,
+		Vacancies:               vacancies,
+		VacancyDomains:          vacancyDomains,
+		VacancySkills:           vacancySkills,
 	}
 
 	b, err := json.Marshal(data)
@@ -224,10 +224,49 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	for _, employee := range data.Employees {
+		created, err = c.employeeRepo.CreateIfNotExists(employee)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if created {
+			createdItems++
+		}
+	}
+
+	for _, project := range data.Projects {
+		created, err = c.projectRepo.CreateIfNotExists(project)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if created {
+			createdItems++
+		}
+	}
+
+	for _, projectDomain := range data.ProjectDomains {
+		created, err = c.projectRepo.CreateDomainsIfNotExists(projectDomain)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if created {
+			createdItems++
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write([]byte(fmt.Sprintf("Import completed. New items: %d", createdItems)))
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }

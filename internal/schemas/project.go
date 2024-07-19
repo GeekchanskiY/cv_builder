@@ -12,3 +12,9 @@ type ProjectDomain struct {
 	ProjectId int    `json:"project_id"`
 	Comments  string `json:"comments"`
 }
+
+type ProjectDomainReadable struct {
+	DomainName  string `json:"domain_name"`
+	ProjectName string `json:"project_name"`
+	Comments    string `json:"comments"`
+}

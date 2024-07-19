@@ -29,6 +29,27 @@ func (repo *ProjectRepository) Create(schema schemas.Project) (int, error) {
 	return newId, nil
 }
 
+func (repo *ProjectRepository) CreateIfNotExists(schema schemas.Project) (created bool, err error) {
+	q := `INSERT INTO projects(name, description) 
+	SELECT CAST($1 AS VARCHAR), $2
+	WHERE 
+	    NOT EXISTS (SELECT 1 FROM projects WHERE name = $1)`
+
+	r, err := repo.db.Exec(q, schema.Name, schema.Description)
+
+	if err != nil {
+		log.Println("Error creating project: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *ProjectRepository) Update(schema schemas.Project) error {
 	_, err := repo.db.Exec("UPDATE projects SET name = $1, description = $2 WHERE id = $3",
 		schema.Name, schema.Description, schema.Id)
@@ -160,6 +181,35 @@ func (repo *ProjectRepository) CreateDomains(schema schemas.ProjectDomain) (newI
 	}
 
 	return newId, nil
+}
+
+func (repo *ProjectRepository) CreateDomainsIfNotExists(schema schemas.ProjectDomainReadable) (created bool, err error) {
+	q := `INSERT INTO project_domains(project_id, domain_id, comments) 
+	SELECT p.id, d.id, $3
+	FROM projects p
+	JOIN domains d ON d.name = $2::text
+	WHERE 
+	    p.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM project_domains pd
+		WHERE pd.project_id = p.id
+		AND pd.domain_id = d.id 
+		);`
+
+	r, err := repo.db.Exec(q, schema.ProjectName, schema.DomainName, schema.Comments)
+
+	if err != nil {
+		log.Println("Error creating project domain: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
 }
 
 func (repo *ProjectRepository) UpdateDomains(schema schemas.ProjectDomain) error {
