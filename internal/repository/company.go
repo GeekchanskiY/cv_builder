@@ -38,8 +38,7 @@ func (repo *CompanyRepository) CreateIfNotExists(company schemas.Company) (creat
 	q := `INSERT INTO companies(name, description, homepage, is_trusted) 
 	SELECT CAST($1 AS VARCHAR) AS name, $2 AS description, $3 AS homepage, $4 AS is_trusted
 	WHERE 
-	    NOT EXISTS (SELECT 1 FROM companies WHERE name = $1)
-	RETURNING id`
+	    NOT EXISTS (SELECT 1 FROM companies WHERE name = $1)`
 
 	r, err := repo.db.Exec(q, company.Name, company.Description, company.Homepage, company.IsTrusted)
 
