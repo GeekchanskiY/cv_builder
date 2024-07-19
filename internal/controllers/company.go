@@ -34,13 +34,12 @@ func (c *CompanyController) GetAll(w http.ResponseWriter, _ *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *CompanyController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -69,12 +68,12 @@ func (c *CompanyController) Create(w http.ResponseWriter, r *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CompanyController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -97,12 +96,12 @@ func (c *CompanyController) Update(w http.ResponseWriter, r *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CompanyController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -143,11 +142,11 @@ func (c *CompanyController) Get(w http.ResponseWriter, _ *http.Request, p httpro
 		utils.HandleInternalError(w, err)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
