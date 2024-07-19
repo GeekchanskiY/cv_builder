@@ -19,14 +19,35 @@ func CreateCVRepository(db *sql.DB) *CVRepository {
 
 func (repo *CVRepository) Create(schema schemas.CV) (int, error) {
 	q := `INSERT INTO cvs(vacancy_id, employee_id, is_real) VALUES($1, $2, $3) RETURNING id`
-	new_id := 0
-	err := repo.db.QueryRow(q, schema.VacancyId, schema.EmployeeId, schema.IsReal).Scan(&new_id)
+	newId := 0
+	err := repo.db.QueryRow(q, schema.VacancyId, schema.EmployeeId, schema.IsReal).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating cv in cv repository: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
+}
+
+func (repo *CVRepository) CreateIfNotExists(schema schemas.CV) (created bool, err error) {
+	q := `INSERT INTO cvs(vacancy_id, employee_id, is_real) 
+	SELECT $1, $2, $3
+	WHERE 
+	    NOT EXISTS (SELECT 1 FROM cvs WHERE vacancy_id = $1 AND employee_id = $2)`
+
+	r, err := repo.db.Exec(q, schema.VacancyId, schema.EmployeeId, schema.IsReal)
+
+	if err != nil {
+		log.Println("Error creating cv: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
 }
 
 func (repo *CVRepository) Update(schema schemas.CV) error {
@@ -46,7 +67,12 @@ func (repo *CVRepository) GetAll() (schemes []schemas.CV, err error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.CV
@@ -83,7 +109,12 @@ func (repo *CVRepository) GetProjects(id int) (schemes []schemas.CVProject, err 
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println()
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.CVProject
@@ -119,7 +150,12 @@ func (repo *CVRepository) GetAllProjects() (schemes []schemas.CVProject, err err
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.CVProject
@@ -145,18 +181,17 @@ func (repo *CVRepository) GetAllProjects() (schemes []schemas.CVProject, err err
 	return schemes, nil
 }
 
-func (repo *CVRepository) CreateProject(schema schemas.CVProject) (new_id int, err error) {
+func (repo *CVRepository) CreateProject(schema schemas.CVProject) (newId int, err error) {
 	q := `INSERT INTO cv_projects(cv_id, project_id, company_id, end_time, start_time) VALUES($1, $2, $3, $4, $5) RETURNING id`
 
-	new_id = 0
 	err = repo.db.QueryRow(
 		q, schema.CVId, schema.ProjectId, schema.CompanyId, schema.EndTime, schema.StartTime,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *CVRepository) UpdateProject(schema schemas.CVProject) error {
@@ -192,7 +227,12 @@ func (repo *CVRepository) GetProjectsResponsibilities(id int) (schemes []schemas
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.CVProjectResponsibility
@@ -226,7 +266,12 @@ func (repo *CVRepository) GetAllProjectResponsibilities() (schemes []schemas.CVP
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.CVProjectResponsibility
@@ -250,18 +295,17 @@ func (repo *CVRepository) GetAllProjectResponsibilities() (schemes []schemas.CVP
 	return schemes, nil
 }
 
-func (repo *CVRepository) CreateProjectResponsibility(schema schemas.CVProjectResponsibility) (new_id int, err error) {
+func (repo *CVRepository) CreateProjectResponsibility(schema schemas.CVProjectResponsibility) (newId int, err error) {
 	q := `INSERT INTO project_responsibilities(cv_project_id, responsibility_id, priority) VALUES($1, $2, $3) RETURNING id`
 
-	new_id = 0
 	err = repo.db.QueryRow(
 		q, schema.CVProjectId, schema.ResponsibilityId, schema.Priority,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *CVRepository) UpdateProjectResponsibility(schema schemas.CVProjectResponsibility) error {

@@ -18,15 +18,15 @@ func CreateDomainRepository(db *sql.DB) *DomainRepository {
 }
 
 func (repo *DomainRepository) Create(domain schemas.Domain) (int, error) {
-	new_id := 0
+	newId := 0
 	q := `INSERT INTO domains(name, description) VALUES($1, $2) RETURNING id`
-	err := repo.db.QueryRow(q, domain.Name, domain.Description).Scan(&new_id)
+	err := repo.db.QueryRow(q, domain.Name, domain.Description).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating domain in domain repository: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *DomainRepository) Update(domain schemas.Domain) error {
@@ -46,7 +46,12 @@ func (repo *DomainRepository) GetAll() (domains []schemas.Domain, err error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 	for rows.Next() {
 		var domain schemas.Domain
 		err = rows.Scan(&domain.Id, &domain.Name, &domain.Description)

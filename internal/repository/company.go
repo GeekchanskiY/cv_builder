@@ -18,10 +18,10 @@ func CreateCompanyRepository(db *sql.DB) *CompanyRepository {
 }
 
 func (repo *CompanyRepository) Create(company schemas.Company) (int, error) {
-	new_id := 0
+	newId := 0
 	q := `INSERT INTO companies(name, description, homepage, is_trusted) VALUES($1, $2, $3, $4) RETURNING id`
 
-	err := repo.db.QueryRow(q, company.Name, company.Description, company.Homepage, company.IsTrusted).Scan(&new_id)
+	err := repo.db.QueryRow(q, company.Name, company.Description, company.Homepage, company.IsTrusted).Scan(&newId)
 
 	if err != nil {
 		log.Println("Error creating company in company repository: ", err)
@@ -29,7 +29,7 @@ func (repo *CompanyRepository) Create(company schemas.Company) (int, error) {
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *CompanyRepository) CreateIfNotExists(company schemas.Company) (created bool, err error) {

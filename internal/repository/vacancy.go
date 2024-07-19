@@ -19,15 +19,15 @@ func CreateVacanciesRepository(db *sql.DB) *VacanciesRepository {
 
 func (repo *VacanciesRepository) Create(schema schemas.Vacancy) (int, error) {
 	q := `INSERT INTO vacancies(name, company_id, link, description, published_at, experience) VALUES($1, $2, $3, $4, $5, $6) RETURNING id`
-	new_id := 0
-	err := repo.db.QueryRow(q, schema.Name, schema.CompanyId, schema.Link, schema.Description, schema.PublishedAt, schema.Experience).Scan(&new_id)
+	newId := 0
+	err := repo.db.QueryRow(q, schema.Name, schema.CompanyId, schema.Link, schema.Description, schema.PublishedAt, schema.Experience).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating schema in repository: ", err)
 
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return newId, nil
 }
 
 func (repo *VacanciesRepository) Update(schema schemas.Vacancy) error {
@@ -48,8 +48,13 @@ func (repo *VacanciesRepository) GetAll() (schemasArr []schemas.Vacancy, err err
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 	for rows.Next() {
 		var schema schemas.Vacancy
 		if err := rows.Scan(&schema.Id, &schema.Name, &schema.CompanyId, &schema.Link, &schema.Description, &schema.PublishedAt, &schema.Experience); err != nil {
@@ -85,7 +90,12 @@ func (repo *VacanciesRepository) GetSkills(id int) (vacancySkills []schemas.Vaca
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var vacancySkill schemas.VacancySkill
@@ -116,7 +126,12 @@ func (repo *VacanciesRepository) GetAllSkills() (vacancySkills []schemas.Vacancy
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var vacancySkill schemas.VacancySkill
@@ -138,16 +153,16 @@ func (repo *VacanciesRepository) GetAllSkills() (vacancySkills []schemas.Vacancy
 	return vacancySkills, nil
 }
 
-func (repo *VacanciesRepository) AddSkill(schema schemas.VacancySkill) (new_id int, err error) {
+func (repo *VacanciesRepository) AddSkill(schema schemas.VacancySkill) (newId int, err error) {
 	q := `INSERT INTO vacancy_skills(vacancy_id, skill_id, priority) VALUES($1, $2, $3) returning id`
-	err = repo.db.QueryRow(q, schema.VacancyId, schema.SkillId, schema.Priority).Scan(&new_id)
+	err = repo.db.QueryRow(q, schema.VacancyId, schema.SkillId, schema.Priority).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating schema in repository: ", err)
 
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 
 }
 
@@ -179,7 +194,12 @@ func (repo *VacanciesRepository) GetDomains(id int) (schemes []schemas.VacancyDo
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.VacancyDomain
@@ -210,7 +230,12 @@ func (repo *VacanciesRepository) GetAllDomains() (schemes []schemas.VacancyDomai
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.VacancyDomain
@@ -232,16 +257,16 @@ func (repo *VacanciesRepository) GetAllDomains() (schemes []schemas.VacancyDomai
 	return schemes, nil
 }
 
-func (repo *VacanciesRepository) AddDomain(schema schemas.VacancyDomain) (new_id int, err error) {
+func (repo *VacanciesRepository) AddDomain(schema schemas.VacancyDomain) (newId int, err error) {
 	q := `INSERT INTO vacancy_domains(vacancy_id, domain_id, priority) VALUES($1, $2, $3) returning id`
-	err = repo.db.QueryRow(q, schema.VacancyId, schema.DomainId, schema.Priority).Scan(&new_id)
+	err = repo.db.QueryRow(q, schema.VacancyId, schema.DomainId, schema.Priority).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating schema in repository: ", err)
 
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 
 }
 

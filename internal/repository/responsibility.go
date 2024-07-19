@@ -17,17 +17,17 @@ func CreateResponsibilityRepository(db *sql.DB) *ResponsibilityRepository {
 	}
 }
 
-func (repo *ResponsibilityRepository) Create(schema schemas.Responsibility) (new_id int, err error) {
+func (repo *ResponsibilityRepository) Create(schema schemas.Responsibility) (newId int, err error) {
 	q := `INSERT INTO responsibilities(name, priority, skill_id, experience, comments) VALUES($1, $2, $3, $4, $5) RETURNING id`
 	err = repo.db.QueryRow(
 		q, schema.Name, schema.Priority, schema.SkillId, schema.Experience, schema.Comments,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating responsibility: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *ResponsibilityRepository) Update(schema schemas.Responsibility) error {
@@ -89,7 +89,12 @@ func (repo *ResponsibilityRepository) GetConflicts(id int) (conflicts []schemas.
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var conflict schemas.ResponsibilityConflict
@@ -120,7 +125,12 @@ func (repo *ResponsibilityRepository) GetAllConflicts() (conflicts []schemas.Res
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var conflict schemas.ResponsibilityConflict
@@ -141,19 +151,18 @@ func (repo *ResponsibilityRepository) GetAllConflicts() (conflicts []schemas.Res
 	return conflicts, nil
 }
 
-func (repo *ResponsibilityRepository) CreateConflict(conflict schemas.ResponsibilityConflict) (new_id int, err error) {
+func (repo *ResponsibilityRepository) CreateConflict(conflict schemas.ResponsibilityConflict) (newId int, err error) {
 	q := `INSERT INTO responsibility_conflicts(responsibility_1_id, responsibility_2_id, comment, priority) VALUES($1, $2, $3, $4) RETURNING id`
 
-	new_id = 0
 	err = repo.db.QueryRow(
 		q, conflict.Responsibility1Id, conflict.Responsibility2Id, conflict.Comment, conflict.Priority,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating skillConflict in skillConflict repository: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *ResponsibilityRepository) UpdateConflict(conflict schemas.ResponsibilityConflict) error {
@@ -186,7 +195,12 @@ func (repo *ResponsibilityRepository) GetSynonyms(id int) (schemes []schemas.Res
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.ResponsibilitySynonym
@@ -217,7 +231,12 @@ func (repo *ResponsibilityRepository) GetAllSynonyms() (schemes []schemas.Respon
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.ResponsibilitySynonym
@@ -238,19 +257,18 @@ func (repo *ResponsibilityRepository) GetAllSynonyms() (schemes []schemas.Respon
 	return schemes, nil
 }
 
-func (repo *ResponsibilityRepository) CreateSynonym(schema schemas.ResponsibilitySynonym) (new_id int, err error) {
+func (repo *ResponsibilityRepository) CreateSynonym(schema schemas.ResponsibilitySynonym) (newId int, err error) {
 	q := `INSERT INTO responsibility_synonyms(responsibility_id, name) VALUES($1, $2) RETURNING id`
 
-	new_id = 0
 	err = repo.db.QueryRow(
 		q, schema.ResponsibilityId, schema.Name,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating responsibility synonym: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *ResponsibilityRepository) UpdateSynonym(schema schemas.ResponsibilitySynonym) error {

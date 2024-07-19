@@ -18,11 +18,11 @@ func CreateSkillRepository(db *sql.DB) *SkillRepository {
 }
 
 func (repo *SkillRepository) Create(skill schemas.Skill) (int, error) {
-	new_id := 0
+	newId := 0
 	err := repo.db.QueryRow(
 		"INSERT INTO skills(name, description, parent_id) VALUES($1, $2, $3) RETURNING id",
 		skill.Name, skill.Description, skill.ParentId,
-	).Scan(&new_id)
+	).Scan(&newId)
 
 	if err != nil {
 		log.Println("Error creating skill in skill repository: ", err)
@@ -39,7 +39,7 @@ func (repo *SkillRepository) Create(skill schemas.Skill) (int, error) {
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return newId, nil
 }
 
 func (repo *SkillRepository) Update(skill schemas.Skill) error {
@@ -57,7 +57,13 @@ func (repo *SkillRepository) GetAll() (skills []schemas.Skill, err error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var skill schemas.Skill
@@ -95,7 +101,12 @@ func (repo *SkillRepository) GetConflicts(id int) (conflicts []schemas.SkillConf
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var conflict schemas.SkillConflict
@@ -126,7 +137,12 @@ func (repo *SkillRepository) GetAllConflicts() (conflicts []schemas.SkillConflic
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var conflict schemas.SkillConflict
@@ -147,19 +163,18 @@ func (repo *SkillRepository) GetAllConflicts() (conflicts []schemas.SkillConflic
 	return conflicts, nil
 }
 
-func (repo *SkillRepository) CreateConflict(conflict schemas.SkillConflict) (new_id int, err error) {
+func (repo *SkillRepository) CreateConflict(conflict schemas.SkillConflict) (newId int, err error) {
 	q := `INSERT INTO skill_conflicts(skill_1_id, skill_2_id, comment, priority) VALUES($1, $2, $3, $4) RETURNING id`
 
-	new_id = 0
 	err = repo.db.QueryRow(
 		q, conflict.Skill1Id, conflict.Skill2Id, conflict.Comment, conflict.Priority,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating skillConflict in skillConflict repository: ", err)
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return newId, nil
 }
 
 func (repo *SkillRepository) UpdateConflict(conflict schemas.SkillConflict) error {
@@ -192,7 +207,12 @@ func (repo *SkillRepository) GetDomains(id int) (skillDomains []schemas.SkillDom
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var skillDomain schemas.SkillDomain
@@ -227,7 +247,12 @@ func (repo *SkillRepository) GetAllDomains() (skillDomains []schemas.SkillDomain
 		return nil, err
 	}
 
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var skillDomain schemas.SkillDomain
@@ -252,19 +277,18 @@ func (repo *SkillRepository) GetAllDomains() (skillDomains []schemas.SkillDomain
 	return skillDomains, nil
 }
 
-func (repo *SkillRepository) CreateDomains(skillDomain schemas.SkillDomain) (new_id int, err error) {
+func (repo *SkillRepository) CreateDomains(skillDomain schemas.SkillDomain) (newId int, err error) {
 	q := `INSERT INTO skill_domains(skill_id, domain_id, comments, priority) VALUES($1, $2, $3, $4) RETURNING id`
 
-	new_id = 0
 	err = repo.db.QueryRow(
 		q, skillDomain.SkillId, skillDomain.DomainId, skillDomain.Comments, skillDomain.Priority,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating skillDomain in skillDomain repository: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *SkillRepository) UpdateDomains(skillDomain schemas.SkillDomain) error {

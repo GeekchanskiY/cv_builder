@@ -18,15 +18,15 @@ func CreateProjectRepository(db *sql.DB) *ProjectRepository {
 }
 
 func (repo *ProjectRepository) Create(schema schemas.Project) (int, error) {
-	new_id := 0
+	newId := 0
 	err := repo.db.QueryRow("INSERT INTO projects(name, description) VALUES($1, $2) RETURNING id",
-		schema.Name, schema.Description).Scan(&new_id)
+		schema.Name, schema.Description).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating project in repository: ", err)
 		return 0, err
 	}
 
-	return int(new_id), nil
+	return newId, nil
 }
 
 func (repo *ProjectRepository) Update(schema schemas.Project) error {
@@ -45,7 +45,12 @@ func (repo *ProjectRepository) GetAll() (schemes []schemas.Project, err error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var schema schemas.Project
@@ -143,19 +148,18 @@ func (repo *ProjectRepository) GetAllDomains() (schemes []schemas.ProjectDomain,
 	return schemes, nil
 }
 
-func (repo *ProjectRepository) CreateDomains(schema schemas.ProjectDomain) (new_id int, err error) {
+func (repo *ProjectRepository) CreateDomains(schema schemas.ProjectDomain) (newId int, err error) {
 	q := `INSERT INTO project_domains(project_id, domain_id, comments) VALUES($1, $2, $3) RETURNING id`
 
-	new_id = 0
 	err = repo.db.QueryRow(
 		q, schema.ProjectId, schema.DomainId, schema.Comments,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating projectDomain in repository: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *ProjectRepository) UpdateDomains(schema schemas.ProjectDomain) error {

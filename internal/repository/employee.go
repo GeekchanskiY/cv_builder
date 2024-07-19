@@ -17,17 +17,17 @@ func CreateEmployeeRepository(db *sql.DB) *EmployeeRepository {
 	}
 }
 
-func (repo *EmployeeRepository) Create(employee schemas.Employee) (new_id int, err error) {
+func (repo *EmployeeRepository) Create(employee schemas.Employee) (newId int, err error) {
 	q := `INSERT INTO employees(name, about_me, image_url, real_experience) VALUES($1, $2, $3, $4) RETURNING id`
 	err = repo.db.QueryRow(
 		q, employee.Name, employee.AboutMe, employee.ImageUrl, employee.RealExperience,
-	).Scan(&new_id)
+	).Scan(&newId)
 	if err != nil {
 		log.Println("Error creating employee in employee repository: ", err)
 		return 0, err
 	}
 
-	return new_id, nil
+	return newId, nil
 }
 
 func (repo *EmployeeRepository) Update(employee schemas.Employee) error {
@@ -49,7 +49,12 @@ func (repo *EmployeeRepository) GetAll() ([]schemas.Employee, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var employee schemas.Employee
