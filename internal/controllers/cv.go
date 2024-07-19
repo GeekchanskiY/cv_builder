@@ -33,12 +33,12 @@ func (c *CVController) GetAll(w http.ResponseWriter, _ *http.Request, _ httprout
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *CVController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -67,12 +67,12 @@ func (c *CVController) Create(w http.ResponseWriter, r *http.Request, _ httprout
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CVController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -96,12 +96,12 @@ func (c *CVController) Update(w http.ResponseWriter, r *http.Request, _ httprout
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CVController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -143,13 +143,12 @@ func (c *CVController) Get(w http.ResponseWriter, _ *http.Request, p httprouter.
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *CVController) GetProjects(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
@@ -173,12 +172,12 @@ func (c *CVController) GetProjects(w http.ResponseWriter, _ *http.Request, p htt
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *CVController) CreateProjects(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -206,12 +205,12 @@ func (c *CVController) CreateProjects(w http.ResponseWriter, r *http.Request, _ 
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CVController) UpdateProject(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -234,12 +233,12 @@ func (c *CVController) UpdateProject(w http.ResponseWriter, r *http.Request, _ h
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CVController) DeleteProject(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -280,12 +279,12 @@ func (c *CVController) GetProjectResponsibilities(w http.ResponseWriter, _ *http
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *CVController) CreateProjectsResponsibilities(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -313,13 +312,12 @@ func (c *CVController) CreateProjectsResponsibilities(w http.ResponseWriter, r *
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
-
 }
 
 func (c *CVController) UpdateProjectResponsibility(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -342,12 +340,12 @@ func (c *CVController) UpdateProjectResponsibility(w http.ResponseWriter, r *htt
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *CVController) DeleteProjectResponsibility(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

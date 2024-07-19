@@ -32,12 +32,13 @@ func (c *ResponsibilityController) GetAll(w http.ResponseWriter, _ *http.Request
 		utils.HandleInternalError(w, err)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *ResponsibilityController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -65,14 +66,13 @@ func (c *ResponsibilityController) Create(w http.ResponseWriter, r *http.Request
 		utils.HandleInternalError(w, err)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
-
 }
 
 func (c *ResponsibilityController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -95,13 +95,13 @@ func (c *ResponsibilityController) Update(w http.ResponseWriter, r *http.Request
 		utils.HandleInternalError(w, err)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ResponsibilityController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -142,13 +142,13 @@ func (c *ResponsibilityController) Get(w http.ResponseWriter, _ *http.Request, p
 		utils.HandleInternalError(w, err)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *ResponsibilityController) GetConflicts(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
@@ -172,12 +172,12 @@ func (c *ResponsibilityController) GetConflicts(w http.ResponseWriter, _ *http.R
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *ResponsibilityController) CreateConflict(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -205,13 +205,12 @@ func (c *ResponsibilityController) CreateConflict(w http.ResponseWriter, r *http
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ResponsibilityController) UpdateConflict(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -234,13 +233,12 @@ func (c *ResponsibilityController) UpdateConflict(w http.ResponseWriter, r *http
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ResponsibilityController) DeleteConflict(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -281,13 +279,13 @@ func (c *ResponsibilityController) GetSynonyms(w http.ResponseWriter, _ *http.Re
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *ResponsibilityController) CreateSynonym(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -315,13 +313,13 @@ func (c *ResponsibilityController) CreateSynonym(w http.ResponseWriter, r *http.
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
+
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ResponsibilityController) UpdateSynonym(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -344,13 +342,12 @@ func (c *ResponsibilityController) UpdateSynonym(w http.ResponseWriter, r *http.
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ResponsibilityController) DeleteSynonym(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

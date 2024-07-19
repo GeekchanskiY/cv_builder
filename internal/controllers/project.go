@@ -33,13 +33,12 @@ func (c *ProjectController) GetAll(w http.ResponseWriter, _ *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *ProjectController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -68,12 +67,12 @@ func (c *ProjectController) Create(w http.ResponseWriter, r *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ProjectController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -97,13 +96,12 @@ func (c *ProjectController) Update(w http.ResponseWriter, r *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ProjectController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -145,13 +143,12 @@ func (c *ProjectController) Get(w http.ResponseWriter, _ *http.Request, p httpro
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *ProjectController) GetDomains(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
@@ -175,13 +172,12 @@ func (c *ProjectController) GetDomains(w http.ResponseWriter, _ *http.Request, p
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *ProjectController) CreateDomains(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -209,12 +205,12 @@ func (c *ProjectController) CreateDomains(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ProjectController) UpdateDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -237,12 +233,12 @@ func (c *ProjectController) UpdateDomain(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	_, err = w.Write(b)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *ProjectController) DeleteDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {

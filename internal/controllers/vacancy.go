@@ -34,13 +34,11 @@ func (c *VacancyController) GetAll(w http.ResponseWriter, _ *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
-
 }
 
 func (c *VacancyController) Create(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -69,13 +67,11 @@ func (c *VacancyController) Create(w http.ResponseWriter, r *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
-
 }
 
 func (c *VacancyController) Update(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -99,12 +95,11 @@ func (c *VacancyController) Update(w http.ResponseWriter, r *http.Request, _ htt
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *VacancyController) Delete(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -146,12 +141,11 @@ func (c *VacancyController) Get(w http.ResponseWriter, _ *http.Request, p httpro
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *VacancyController) GetSkills(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
@@ -175,12 +169,11 @@ func (c *VacancyController) GetSkills(w http.ResponseWriter, _ *http.Request, p 
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *VacancyController) DeleteSkill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -225,12 +218,11 @@ func (c *VacancyController) AddSkill(w http.ResponseWriter, r *http.Request, _ h
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *VacancyController) UpdateSkill(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -253,12 +245,11 @@ func (c *VacancyController) UpdateSkill(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *VacancyController) GetDomains(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
@@ -282,12 +273,11 @@ func (c *VacancyController) GetDomains(w http.ResponseWriter, _ *http.Request, p
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *VacancyController) DeleteDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -332,12 +322,11 @@ func (c *VacancyController) AddDomain(w http.ResponseWriter, r *http.Request, _ 
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (c *VacancyController) UpdateDomain(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -360,10 +349,9 @@ func (c *VacancyController) UpdateDomain(w http.ResponseWriter, r *http.Request,
 		return
 	}
 
+	w.WriteHeader(http.StatusCreated)
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusCreated)
 }
