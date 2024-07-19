@@ -91,11 +91,11 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
-	//projectDomains, err := c.projectRepo.GetAllDomains()
-	//if err != nil {
-	//	utils.HandleInternalError(w, err)
-	//	return
-	//}
+	projectDomains, err := c.projectRepo.GetAllDomainsReadable()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
 
 	responsibilities, err := c.responsibilityRepo.GetAll()
 	if err != nil {
@@ -159,16 +159,16 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		CVProjects:                cvProjects,
 		CVProjectResponsibilities: cvProjectResponsibilities,
 		Employees:                 employees,
-		// ProjectDomains:            projectDomains,
-		Responsibilities:        responsibilities,
-		ResponsibilitySynonyms:  responsibilitySynonyms,
-		ResponsibilityConflicts: responsibilityConflicts,
-		Skills:                  skills,
-		SkillDomains:            skillDomains,
-		SkillConflicts:          skillConflicts,
-		Vacancies:               vacancies,
-		VacancyDomains:          vacancyDomains,
-		VacancySkills:           vacancySkills,
+		ProjectDomains:            projectDomains,
+		Responsibilities:          responsibilities,
+		ResponsibilitySynonyms:    responsibilitySynonyms,
+		ResponsibilityConflicts:   responsibilityConflicts,
+		Skills:                    skills,
+		SkillDomains:              skillDomains,
+		SkillConflicts:            skillConflicts,
+		Vacancies:                 vacancies,
+		VacancyDomains:            vacancyDomains,
+		VacancySkills:             vacancySkills,
 	}
 
 	b, err := json.Marshal(data)
@@ -177,12 +177,12 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	if _, err = w.Write(b); err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 }
 
 func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
