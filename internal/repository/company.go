@@ -32,6 +32,34 @@ func (repo *CompanyRepository) Create(company schemas.Company) (int, error) {
 	return new_id, nil
 }
 
+func (repo *CompanyRepository) CreateIfNotExists(company schemas.Company) (created bool, err error) {
+	// Cast is required
+	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
+	q := `INSERT INTO companies(name, description, homepage, is_trusted) 
+	SELECT CAST($1 AS VARCHAR) AS name, $2 AS description, $3 AS homepage, $4 AS is_trusted
+	WHERE 
+	    NOT EXISTS (SELECT 1 FROM companies WHERE name = $1)
+	RETURNING id`
+
+	r, err := repo.db.Exec(q, company.Name, company.Description, company.Homepage, company.IsTrusted)
+
+	if err != nil {
+		log.Println("Error creating company in company repository: ", err)
+
+		return false, err
+	}
+
+	if r == nil {
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *CompanyRepository) Update(company schemas.Company) error {
 	q := `UPDATE companies SET name = $1, description = $2, homepage = $3, is_trusted = $4 WHERE id = $5`
 	_, err := repo.db.Exec(q, company.Name, company.Description, company.Homepage, company.IsTrusted, company.Id)
@@ -49,7 +77,12 @@ func (repo *CompanyRepository) GetAll() (companies []schemas.Company, err error)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
 
 	for rows.Next() {
 		var company schemas.Company
