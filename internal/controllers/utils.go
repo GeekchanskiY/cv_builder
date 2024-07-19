@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/GeekchanskiY/cv_builder/internal/repository"
 	"github.com/GeekchanskiY/cv_builder/internal/schemas"
 	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"github.com/julienschmidt/httprouter"
+	"log"
 	"net/http"
 )
 
@@ -177,6 +179,40 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 
 	w.Header().Set("Content-Type", "application/json")
 	if _, err = w.Write(b); err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	data := schemas.FullDatabaseData{}
+
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	// Used to count new items
+	var created bool
+	var createdItems int
+
+	for _, company := range data.Companies {
+		created, err = c.companyRepo.CreateIfNotExists(company)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if created {
+			createdItems++
+		}
+	}
+
+	_, err = w.Write([]byte(fmt.Sprintf("Import completed. New items: %d", createdItems)))
+	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
