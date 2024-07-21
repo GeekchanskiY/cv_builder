@@ -32,10 +32,19 @@ type CVProject struct {
 	EndTime   time.Time `json:"end_time"`
 }
 
-// Responsibility that will be used in CV
-type CVProjectResponsibility struct {
+// CVService is used to build imaginary architecture to insert all data without conflicts
+type CVService struct {
+	Id          int    `json:"id"`
+	CVProjectId int    `json:"cv_project_id"`
+	Name        string `json:"name"`
+}
+
+// CVServiceResponsibility is used to add responsibility to the CVService => to CV actually
+type CVServiceResponsibility struct {
 	Id               int `json:"id"`
+	CVServiceId      int `json:"cv_service_id"`
 	ResponsibilityId int `json:"responsibility_id"`
-	CVProjectId      int `json:"cv_project_id"`
-	Priority         int `json:"priority"`
+
+	// Order used to keep the same order of cv responsibilities between document generations
+	Order int `json:"order"`
 }
