@@ -114,13 +114,18 @@ create table if not exists cv_projects(
     start_time date
 );
 
-create table if not exists project_responsibilities(
+create table if not exists cv_services(
     id serial primary key,
     cv_project_id int references cv_projects(id),
-    responsibility_id int references responsibilities(id),
-    priority int
+    name varchar(255)
 );
 
+create table if not exists cv_service_responsibilities(
+    id serial primary key,
+    cv_service_id int references cv_projects(id),
+    responsibility_id int references responsibilities(id),
+    order_num int
+);
 
 create table if not exists vacancy_domains(
     id serial primary key,

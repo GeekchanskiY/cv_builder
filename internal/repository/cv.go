@@ -216,7 +216,7 @@ func (repo *CVRepository) DeleteProject(schema schemas.CVProject) error {
 	return err
 }
 
-func (repo *CVRepository) GetProjectsResponsibilities(id int) (schemes []schemas.CVProjectResponsibility, err error) {
+func (repo *CVRepository) GetCVServices(id int) (schemes []schemas.CVService, err error) {
 	q := `SELECT id, cv_project_id, responsibility_id, priority
 	FROM project_responsibilities
 	WHERE cv_project_id = $1`
