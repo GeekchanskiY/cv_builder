@@ -258,15 +258,15 @@ func (c *CVController) DeleteProject(w http.ResponseWriter, r *http.Request, _ h
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (c *CVController) GetProjectResponsibilities(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-	var schemes []schemas.CVProjectResponsibility
-	cvProjectId, err := strconv.Atoi(p.ByName("id"))
+func (c *CVController) GetCVService(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+	var schemes []schemas.CVService
+	cvServiceId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	schemes, err = c.cvRepo.GetProjectsResponsibilities(cvProjectId)
+	schemes, err = c.cvRepo.GetCVServices(cvServiceId)
 
 	if err != nil {
 		utils.HandleInternalError(w, err)
@@ -287,8 +287,8 @@ func (c *CVController) GetProjectResponsibilities(w http.ResponseWriter, _ *http
 	}
 }
 
-func (c *CVController) CreateProjectsResponsibilities(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	schema := schemas.CVProjectResponsibility{}
+func (c *CVController) CreateCVService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.CVService{}
 
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
@@ -296,7 +296,7 @@ func (c *CVController) CreateProjectsResponsibilities(w http.ResponseWriter, r *
 		return
 	}
 
-	uid, err := c.cvRepo.CreateProjectResponsibility(schema)
+	uid, err := c.cvRepo.CreateCVService(schema)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
@@ -320,15 +320,15 @@ func (c *CVController) CreateProjectsResponsibilities(w http.ResponseWriter, r *
 	}
 }
 
-func (c *CVController) UpdateProjectResponsibility(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	schema := schemas.CVProjectResponsibility{}
+func (c *CVController) UpdateCVService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.CVService{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	err = c.cvRepo.UpdateProjectResponsibility(schema)
+	err = c.cvRepo.UpdateCVService(schema)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
@@ -348,15 +348,15 @@ func (c *CVController) UpdateProjectResponsibility(w http.ResponseWriter, r *htt
 	}
 }
 
-func (c *CVController) DeleteProjectResponsibility(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	schema := schemas.CVProjectResponsibility{}
+func (c *CVController) DeleteCVService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.CVService{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	err = c.cvRepo.DeleteProjectResponsibility(schema)
+	err = c.cvRepo.DeleteCVService(schema)
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
