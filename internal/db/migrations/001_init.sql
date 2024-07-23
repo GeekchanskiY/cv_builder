@@ -117,7 +117,8 @@ create table if not exists cv_projects(
 create table if not exists cv_services(
     id serial primary key,
     cv_project_id int references cv_projects(id),
-    name varchar(255)
+    name varchar(255),
+    order_num int
 );
 
 create table if not exists cv_service_responsibilities(
