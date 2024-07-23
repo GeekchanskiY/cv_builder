@@ -37,6 +37,7 @@ type CVService struct {
 	Id          int    `json:"id"`
 	CVProjectId int    `json:"cv_project_id"`
 	Name        string `json:"name"`
+	OrderNum    int    `json:"order_num"`
 }
 
 // CVServiceResponsibility is used to add responsibility to the CVService => to CV actually
