@@ -79,7 +79,7 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
-	cvProjectResponsibilities, err := c.cvRepo.GetAllProjectResponsibilities()
+	cvServices, err := c.cvRepo.GetAllCVServices()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
@@ -152,23 +152,23 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 	}
 
 	var data = schemas.FullDatabaseData{
-		Projects:                  projects,
-		Domains:                   domains,
-		Companies:                 companies,
-		CVs:                       cvs,
-		CVProjects:                cvProjects,
-		CVProjectResponsibilities: cvProjectResponsibilities,
-		Employees:                 employees,
-		ProjectDomains:            projectDomains,
-		Responsibilities:          responsibilities,
-		ResponsibilitySynonyms:    responsibilitySynonyms,
-		ResponsibilityConflicts:   responsibilityConflicts,
-		Skills:                    skills,
-		SkillDomains:              skillDomains,
-		SkillConflicts:            skillConflicts,
-		Vacancies:                 vacancies,
-		VacancyDomains:            vacancyDomains,
-		VacancySkills:             vacancySkills,
+		Projects:                projects,
+		Domains:                 domains,
+		Companies:               companies,
+		CVs:                     cvs,
+		CVProjects:              cvProjects,
+		CVServices:              cvServices,
+		Employees:               employees,
+		ProjectDomains:          projectDomains,
+		Responsibilities:        responsibilities,
+		ResponsibilitySynonyms:  responsibilitySynonyms,
+		ResponsibilityConflicts: responsibilityConflicts,
+		Skills:                  skills,
+		SkillDomains:            skillDomains,
+		SkillConflicts:          skillConflicts,
+		Vacancies:               vacancies,
+		VacancyDomains:          vacancyDomains,
+		VacancySkills:           vacancySkills,
 	}
 
 	b, err := json.Marshal(data)
