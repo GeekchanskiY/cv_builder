@@ -310,6 +310,47 @@ func (repo *SkillRepository) GetAllDomains() (skillDomains []schemas.SkillDomain
 	return skillDomains, nil
 }
 
+func (repo *SkillRepository) GetAllDomainsReadable() (skillDomains []schemas.SkillDomainReadable, err error) {
+	q := `SELECT s.name, d.name, sd.comments, sd.priority 
+	FROM skill_domains sd
+	join skills s on sd.skill_id = s.id
+	join domains d on sd.domain_id = d.id`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var skillDomain schemas.SkillDomainReadable
+		err = rows.Scan(
+			&skillDomain.SkillName,
+			&skillDomain.DomainName,
+			&skillDomain.Comments,
+			&skillDomain.Priority,
+		)
+		if err != nil {
+			return nil, err
+		}
+		skillDomains = append(skillDomains, skillDomain)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return skillDomains, err
+	}
+
+	return skillDomains, nil
+}
+
 func (repo *SkillRepository) CreateDomains(skillDomain schemas.SkillDomain) (newId int, err error) {
 	q := `INSERT INTO skill_domains(skill_id, domain_id, comments, priority) VALUES($1, $2, $3, $4) RETURNING id`
 
