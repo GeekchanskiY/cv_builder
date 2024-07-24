@@ -204,6 +204,44 @@ func (repo *ResponsibilityRepository) GetAllConflicts() (conflicts []schemas.Res
 	return conflicts, nil
 }
 
+func (repo *ResponsibilityRepository) GetAllConflictsReadable() (conflicts []schemas.ResponsibilityConflictReadable, err error) {
+	q := `SELECT r1.name, r2.name, rs.comment, rs.priority 
+	FROM responsibility_conflicts rs
+	JOIN responsibilities r1 ON r1.id = rs.responsibility_1_id
+	JOIN responsibilities r2 ON r2.id = rs.responsibility_2_id`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var conflict schemas.ResponsibilityConflictReadable
+		if err := rows.Scan(&conflict.Responsibility1Name, &conflict.Responsibility2Name, &conflict.Comment, &conflict.Priority); err != nil {
+			return nil, err
+		}
+		conflicts = append(conflicts, conflict)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return conflicts, err
+	}
+
+	return conflicts, nil
+}
+
 func (repo *ResponsibilityRepository) CreateConflict(conflict schemas.ResponsibilityConflict) (newId int, err error) {
 	q := `INSERT INTO responsibility_conflicts(responsibility_1_id, responsibility_2_id, comment, priority) VALUES($1, $2, $3, $4) RETURNING id`
 
