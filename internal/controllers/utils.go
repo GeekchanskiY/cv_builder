@@ -67,30 +67,6 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
-	cvs, err := c.cvRepo.GetAll()
-	if err != nil {
-		utils.HandleInternalError(w, err)
-		return
-	}
-
-	cvProjects, err := c.cvRepo.GetAllProjects()
-	if err != nil {
-		utils.HandleInternalError(w, err)
-		return
-	}
-
-	cvServices, err := c.cvRepo.GetAllCVServices()
-	if err != nil {
-		utils.HandleInternalError(w, err)
-		return
-	}
-
-	cvServiceResponsibilities, err := c.cvRepo.GetAllCVServiceResponsibilities()
-	if err != nil {
-		utils.HandleInternalError(w, err)
-		return
-	}
-
 	employees, err := c.employeeRepo.GetAll()
 	if err != nil {
 		utils.HandleInternalError(w, err)
@@ -158,24 +134,20 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 	}
 
 	var data = schemas.FullDatabaseData{
-		Projects:                  projects,
-		Domains:                   domains,
-		Companies:                 companies,
-		CVs:                       cvs,
-		CVProjects:                cvProjects,
-		CVServices:                cvServices,
-		CVServiceResponsibilities: cvServiceResponsibilities,
-		Employees:                 employees,
-		ProjectDomains:            projectDomains,
-		Responsibilities:          responsibilities,
-		ResponsibilitySynonyms:    responsibilitySynonyms,
-		ResponsibilityConflicts:   responsibilityConflicts,
-		Skills:                    skills,
-		SkillDomains:              skillDomains,
-		SkillConflicts:            skillConflicts,
-		Vacancies:                 vacancies,
-		VacancyDomains:            vacancyDomains,
-		VacancySkills:             vacancySkills,
+		Projects:                projects,
+		Domains:                 domains,
+		Companies:               companies,
+		Employees:               employees,
+		ProjectDomains:          projectDomains,
+		Responsibilities:        responsibilities,
+		ResponsibilitySynonyms:  responsibilitySynonyms,
+		ResponsibilityConflicts: responsibilityConflicts,
+		Skills:                  skills,
+		SkillDomains:            skillDomains,
+		SkillConflicts:          skillConflicts,
+		Vacancies:               vacancies,
+		VacancyDomains:          vacancyDomains,
+		VacancySkills:           vacancySkills,
 	}
 
 	b, err := json.Marshal(data)
@@ -193,6 +165,7 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 }
 
 func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	// No point in importing new CVs. Firstly - unsafe. Secondly - it's easier to recreate them.
 	data := schemas.FullDatabaseData{}
 
 	err := json.NewDecoder(r.Body).Decode(&data)
@@ -218,14 +191,12 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
-	for _, cv := range data.CVs {
-		created, err = c.cvRepo.CreateIfNotExists(cv)
-
+	for _, domain := range data.Domains {
+		created, err = c.domainRepo.CreateIfNotExists(domain)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
-
 		if created {
 			createdItems++
 		}
