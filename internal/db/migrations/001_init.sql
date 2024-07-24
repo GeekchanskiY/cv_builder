@@ -123,7 +123,7 @@ create table if not exists cv_services(
 
 create table if not exists cv_service_responsibilities(
     id serial primary key,
-    cv_service_id int references cv_projects(id),
+    cv_service_id int references cv_services(id),
     responsibility_id int references responsibilities(id),
     order_num int
 );
