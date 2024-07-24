@@ -29,6 +29,29 @@ func (repo *DomainRepository) Create(domain schemas.Domain) (int, error) {
 	return newId, nil
 }
 
+func (repo *DomainRepository) CreateIfNotExists(schema schemas.Domain) (created bool, err error) {
+	// Cast is required
+	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
+	q := `INSERT INTO domains(name, description) 
+	SELECT CAST($1 AS VARCHAR) AS name, $2 AS description
+	WHERE 
+	    NOT EXISTS (SELECT 1 FROM companies WHERE name = $1)`
+
+	r, err := repo.db.Exec(q, schema.Name, schema.Description)
+
+	if err != nil {
+		log.Println("Error creating domain in domain repository: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *DomainRepository) Update(domain schemas.Domain) error {
 	q := `UPDATE domains SET name = $1, description = $2 WHERE id = $3`
 	_, err := repo.db.Exec(q, domain.Name, domain.Description, domain.Id)
