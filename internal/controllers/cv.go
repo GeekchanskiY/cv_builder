@@ -364,3 +364,110 @@ func (c *CVController) DeleteCVService(w http.ResponseWriter, r *http.Request, _
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+func (c *CVController) GetCVServiceResponsibility(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+	var schemes []schemas.CVServiceResponsibility
+	schemaID, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	schemes, err = c.cvRepo.GetCVServiceResponsibilities(schemaID)
+
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(schemes)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+}
+
+func (c *CVController) CreateCVServiceResponsibility(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.CVServiceResponsibility{}
+
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	uid, err := c.cvRepo.CreateCVServiceResponsibility(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if uid != 0 {
+		schema.Id = uid
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+}
+
+func (c *CVController) UpdateCVServiceResponsibility(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.CVServiceResponsibility{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	err = c.cvRepo.UpdateCVServiceResponsibility(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+}
+
+func (c *CVController) DeleteCVServiceResponsibility(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.CVServiceResponsibility{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	err = c.cvRepo.DeleteCVServiceResponsibility(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
