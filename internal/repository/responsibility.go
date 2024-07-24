@@ -310,6 +310,42 @@ func (repo *ResponsibilityRepository) GetAllSynonyms() (schemes []schemas.Respon
 	return schemes, nil
 }
 
+func (repo *ResponsibilityRepository) GetAllSynonymsReadable() (schemes []schemas.ResponsibilitySynonymReadable, err error) {
+	q := `SELECT r.name, rs.name
+	FROM responsibility_synonyms rs JOIN responsibilities r on rs.responsibility_id = r.id`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var schema schemas.ResponsibilitySynonymReadable
+		if err := rows.Scan(&schema.ResponsibilityName, &schema.Name); err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
 func (repo *ResponsibilityRepository) CreateSynonym(schema schemas.ResponsibilitySynonym) (newId int, err error) {
 	q := `INSERT INTO responsibility_synonyms(responsibility_id, name) VALUES($1, $2) RETURNING id`
 
