@@ -84,6 +84,39 @@ func (repo *SkillRepository) GetAll() (skills []schemas.Skill, err error) {
 	return skills, nil
 }
 
+func (repo *SkillRepository) GetAllReadable() (skills []schemas.SkillReadable, err error) {
+	q := `SELECT s1.name, s1.description, s2.name FROM skills s1 left join skills s2 on s2.id = s1.parent_id`
+	rows, err := repo.db.Query(q)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var skill schemas.SkillReadable
+		if err := rows.Scan(&skill.Name, &skill.Description, &skill.ParentName); err != nil {
+			return nil, err
+		}
+		skills = append(skills, skill)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return skills, err
+	}
+
+	return skills, nil
+}
+
 func (repo *SkillRepository) Get(id int) (skill schemas.Skill, err error) {
 	row := repo.db.QueryRow("SELECT id, name, description, parent_id FROM skills WHERE id = $1", id)
 	err = row.Scan(&skill.Id, &skill.Name, &skill.Description, &skill.ParentId)
