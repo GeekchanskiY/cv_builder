@@ -327,3 +327,115 @@ func (repo *CVRepository) DeleteCVService(schema schemas.CVService) error {
 	_, err := repo.db.Exec(q, schema.Id)
 	return err
 }
+
+func (repo *CVRepository) GetCVServiceResponsibilities(id int) (schemes []schemas.CVServiceResponsibility, err error) {
+	q := `SELECT id, cv_service_id, responsibility_id, order_num
+	FROM cv_service_responsibilities
+	WHERE cv_service_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var schema schemas.CVServiceResponsibility
+		err = rows.Scan(
+			&schema.Id,
+			&schema.CVServiceId,
+			&schema.ResponsibilityId,
+			&schema.OrderNum,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *CVRepository) GetAllCVServiceResponsibilities() (schemes []schemas.CVServiceResponsibility, err error) {
+	q := `SELECT id, cv_service_id, responsibility_id, order_num
+	FROM cv_service_responsibilities`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var schema schemas.CVServiceResponsibility
+		err = rows.Scan(
+			&schema.Id,
+			&schema.CVServiceId,
+			&schema.ResponsibilityId,
+			&schema.OrderNum,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *CVRepository) CreateCVServiceResponsibility(schema schemas.CVServiceResponsibility) (newId int, err error) {
+	q := `INSERT INTO cv_service_responsibilities(cv_service_id, responsibility_id, order_num) VALUES($1, $2, $3) RETURNING id`
+
+	err = repo.db.QueryRow(
+		q, schema.CVServiceId, schema.ResponsibilityId, schema.OrderNum,
+	).Scan(&newId)
+	if err != nil {
+		return 0, err
+	}
+
+	return newId, nil
+}
+
+func (repo *CVRepository) UpdateCVServiceResponsibility(schema schemas.CVServiceResponsibility) error {
+	q := `UPDATE cv_service_responsibilities SET
+    cv_service_id = $1, responsibility_id = $2, order_num = $3
+    WHERE id = $4`
+	_, err := repo.db.Exec(
+		q,
+		schema.CVServiceId,
+		schema.ResponsibilityId,
+		schema.OrderNum,
+		schema.Id,
+	)
+	return err
+}
+
+func (repo *CVRepository) DeleteCVServiceResponsibility(schema schemas.CVServiceResponsibility) error {
+	q := `DELETE FROM cv_service_responsibilities WHERE id = $1`
+	_, err := repo.db.Exec(q, schema.Id)
+	return err
+}
