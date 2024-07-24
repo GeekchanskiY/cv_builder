@@ -85,6 +85,12 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
+	cvServiceResponsibilities, err := c.cvRepo.GetAllCVServiceResponsibilities()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
 	employees, err := c.employeeRepo.GetAll()
 	if err != nil {
 		utils.HandleInternalError(w, err)
@@ -152,23 +158,24 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 	}
 
 	var data = schemas.FullDatabaseData{
-		Projects:                projects,
-		Domains:                 domains,
-		Companies:               companies,
-		CVs:                     cvs,
-		CVProjects:              cvProjects,
-		CVServices:              cvServices,
-		Employees:               employees,
-		ProjectDomains:          projectDomains,
-		Responsibilities:        responsibilities,
-		ResponsibilitySynonyms:  responsibilitySynonyms,
-		ResponsibilityConflicts: responsibilityConflicts,
-		Skills:                  skills,
-		SkillDomains:            skillDomains,
-		SkillConflicts:          skillConflicts,
-		Vacancies:               vacancies,
-		VacancyDomains:          vacancyDomains,
-		VacancySkills:           vacancySkills,
+		Projects:                  projects,
+		Domains:                   domains,
+		Companies:                 companies,
+		CVs:                       cvs,
+		CVProjects:                cvProjects,
+		CVServices:                cvServices,
+		CVServiceResponsibilities: cvServiceResponsibilities,
+		Employees:                 employees,
+		ProjectDomains:            projectDomains,
+		Responsibilities:          responsibilities,
+		ResponsibilitySynonyms:    responsibilitySynonyms,
+		ResponsibilityConflicts:   responsibilityConflicts,
+		Skills:                    skills,
+		SkillDomains:              skillDomains,
+		SkillConflicts:            skillConflicts,
+		Vacancies:                 vacancies,
+		VacancyDomains:            vacancyDomains,
+		VacancySkills:             vacancySkills,
 	}
 
 	b, err := json.Marshal(data)
