@@ -30,6 +30,29 @@ func (repo *ResponsibilityRepository) Create(schema schemas.Responsibility) (new
 	return newId, nil
 }
 
+func (repo *ResponsibilityRepository) CreateIfNotExists(schema schemas.ResponsibilityReadable) (created bool, err error) {
+	// Cast is required
+	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
+	q := `INSERT INTO responsibilities(name, priority, skill_id, experience, comments) 
+	SELECT r.name, r.priority, s.id, r.experience, r.comments
+	FROM responsibilities r
+	JOIN skills s ON s.name = $3::text;`
+
+	r, err := repo.db.Exec(q, schema.Name, schema.Priority, schema.SkillName, schema.Experience, schema.Comments)
+
+	if err != nil {
+		log.Println("Error creating responsibility: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *ResponsibilityRepository) Update(schema schemas.Responsibility) error {
 	q := `UPDATE responsibilities SET name = $1, priority = $2, skill_id = $3, experience = $4, comments = $5 WHERE id = $6`
 	_, err := repo.db.Exec(q, schema.Name, schema.Priority, schema.SkillId, schema.Experience, schema.Comments, schema.Id)
@@ -53,6 +76,36 @@ func (repo *ResponsibilityRepository) GetAll() (schemes []schemas.Responsibility
 		var schema schemas.Responsibility
 		err = rows.Scan(
 			&schema.Id, &schema.Name, &schema.Priority, &schema.SkillId, &schema.Experience, &schema.Comments,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err = rows.Err(); err != nil {
+		return schemes, err
+	}
+
+	if err = rows.Close(); err != nil {
+		return schemes, err
+	}
+
+	return schemes, err
+}
+
+func (repo *ResponsibilityRepository) GetAllReadable() (schemes []schemas.ResponsibilityReadable, err error) {
+	q := `SELECT r.name, r.priority, s.name, r.experience, r.comments FROM responsibilities r
+	JOIN skills s ON s.id = r.skill_id`
+	rows, err := repo.db.Query(q)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var schema schemas.ResponsibilityReadable
+		err = rows.Scan(
+			&schema.Name, &schema.Priority, &schema.SkillName, &schema.Experience, &schema.Comments,
 		)
 		if err != nil {
 			return nil, err
