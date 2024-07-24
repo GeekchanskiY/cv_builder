@@ -74,6 +74,39 @@ func (repo *VacanciesRepository) GetAll() (schemasArr []schemas.Vacancy, err err
 	return schemasArr, nil
 }
 
+func (repo *VacanciesRepository) GetAllReadable() (schemasArr []schemas.VacancyReadable, err error) {
+	q := `SELECT v.name, c.name, v.link, v.description, v.published_at, v.experience FROM vacancies v
+	join companies c on v.company_id = c.id`
+	rows, err := repo.db.Query(q)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+	for rows.Next() {
+		var schema schemas.VacancyReadable
+		if err := rows.Scan(&schema.Name, &schema.CompanyName, &schema.Link, &schema.Description, &schema.PublishedAt, &schema.Experience); err != nil {
+			return nil, err
+		}
+		schemasArr = append(schemasArr, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemasArr, err
+	}
+
+	return schemasArr, nil
+}
+
 func (repo *VacanciesRepository) Get(id int) (schema schemas.Vacancy, err error) {
 	row := repo.db.QueryRow("SELECT id, name, company_id, link, description, published_at, experience FROM vacancies WHERE id = $1", id)
 	err = row.Scan(&schema.Id, &schema.Name, &schema.CompanyId, &schema.Link, &schema.Description, &schema.PublishedAt, &schema.Experience)
