@@ -47,5 +47,5 @@ type CVServiceResponsibility struct {
 	ResponsibilityId int `json:"responsibility_id"`
 
 	// Order used to keep the same order of cv responsibilities between document generations
-	Order int `json:"order"`
+	OrderNum int `json:"order_num"`
 }
