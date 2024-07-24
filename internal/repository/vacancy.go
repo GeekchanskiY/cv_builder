@@ -186,6 +186,44 @@ func (repo *VacanciesRepository) GetAllSkills() (vacancySkills []schemas.Vacancy
 	return vacancySkills, nil
 }
 
+func (repo *VacanciesRepository) GetAllSkillsReadable() (vacancySkills []schemas.VacancySkillReadable, err error) {
+	q := `SELECT s.name, v.name, vs.priority FROM vacancy_skills vs
+	join skills s on vs.skill_id = s.id
+	join vacancies v on vs.id = v.id`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var vacancySkill schemas.VacancySkillReadable
+		err = rows.Scan(&vacancySkill.SkillName, &vacancySkill.VacancyName, &vacancySkill.Priority)
+		if err != nil {
+			return nil, err
+		}
+		vacancySkills = append(vacancySkills, vacancySkill)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return vacancySkills, err
+	}
+
+	return vacancySkills, nil
+}
+
 func (repo *VacanciesRepository) AddSkill(schema schemas.VacancySkill) (newId int, err error) {
 	q := `INSERT INTO vacancy_skills(vacancy_id, skill_id, priority) VALUES($1, $2, $3) returning id`
 	err = repo.db.QueryRow(q, schema.VacancyId, schema.SkillId, schema.Priority).Scan(&newId)
@@ -273,6 +311,44 @@ func (repo *VacanciesRepository) GetAllDomains() (schemes []schemas.VacancyDomai
 	for rows.Next() {
 		var schema schemas.VacancyDomain
 		err = rows.Scan(&schema.Id, &schema.VacancyId, &schema.DomainId, &schema.Priority)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
+func (repo *VacanciesRepository) GetAllDomainsReadable() (schemes []schemas.VacancyDomainReadable, err error) {
+	q := `SELECT v.name, d.name, priority FROM vacancy_domains vs
+	join vacancies v on v.id = vs.vacancy_id
+	join domains d on d.id = vs.domain_id`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var schema schemas.VacancyDomainReadable
+		err = rows.Scan(&schema.VacancyName, &schema.DomainName, &schema.Priority)
 		if err != nil {
 			return nil, err
 		}
