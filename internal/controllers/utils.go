@@ -79,55 +79,55 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
-	responsibilities, err := c.responsibilityRepo.GetAll()
+	responsibilities, err := c.responsibilityRepo.GetAllReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	responsibilityConflicts, err := c.responsibilityRepo.GetAllConflicts()
+	responsibilityConflicts, err := c.responsibilityRepo.GetAllConflictsReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	responsibilitySynonyms, err := c.responsibilityRepo.GetAllSynonyms()
+	responsibilitySynonyms, err := c.responsibilityRepo.GetAllSynonymsReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	skills, err := c.skillRepo.GetAll()
+	skills, err := c.skillRepo.GetAllReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	skillDomains, err := c.skillRepo.GetAllDomains()
+	skillDomains, err := c.skillRepo.GetAllDomainsReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	skillConflicts, err := c.skillRepo.GetAllConflicts()
+	skillConflicts, err := c.skillRepo.GetAllConflictsReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	vacancies, err := c.vacancyRepo.GetAll()
+	vacancies, err := c.vacancyRepo.GetAllReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	vacancySkills, err := c.vacancyRepo.GetAllSkills()
+	vacancySkills, err := c.vacancyRepo.GetAllSkillsReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
 	}
 
-	vacancyDomains, err := c.vacancyRepo.GetAllDomains()
+	vacancyDomains, err := c.vacancyRepo.GetAllDomainsReadable()
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
@@ -240,6 +240,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 			createdItems++
 		}
 	}
+
+	//for _, responsibility := range data.Responsibilities {
+	//	created, err := c.responsibilityRepo.CreateIfNotExists(responsibility)
+	//}
 
 	w.WriteHeader(http.StatusOK)
 	_, err = w.Write([]byte(fmt.Sprintf("Import completed. New items: %d", createdItems)))
