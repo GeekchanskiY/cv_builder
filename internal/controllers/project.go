@@ -257,3 +257,110 @@ func (c *ProjectController) DeleteDomain(w http.ResponseWriter, r *http.Request,
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+func (c *ProjectController) GetServices(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+	var schemes []schemas.ProjectService
+	schemaId, err := strconv.Atoi(p.ByName("id"))
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	schemes, err = c.projectRepo.GetServices(schemaId)
+
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(schemes)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+}
+
+func (c *ProjectController) CreateService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.ProjectService{}
+
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	uid, err := c.projectRepo.CreateService(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	if uid != 0 {
+		schema.Id = uid
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+}
+
+func (c *ProjectController) UpdateService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.ProjectService{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	err = c.projectRepo.UpdateService(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	b, err := json.Marshal(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	_, err = w.Write(b)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+}
+
+func (c *ProjectController) DeleteService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	schema := schemas.ProjectDomain{}
+	err := json.NewDecoder(r.Body).Decode(&schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	err = c.projectRepo.DeleteDomains(schema)
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
