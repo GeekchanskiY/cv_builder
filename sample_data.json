@@ -1,0 +1,232 @@
+{
+  "companies": [
+    {
+      "name": "Innowise Group",
+      "description": "Software development outstaff/outsource company.",
+      "homepage": "https://innowise.com/",
+      "is_trusted": true
+    },
+    {
+      "name": "Betera",
+      "description": "Gambling company. Belarusian version of Parimatch",
+      "homepage": "https://pm.by/",
+      "is_trusted": false
+    },
+    {
+      "name": "EPAM",
+      "description": "American IT company, founded in Belarus in 1993. Currently practices outsource and outstaff development",
+      "homepage": "https://www.epam.com/",
+      "is_trusted": true
+    },
+    {
+      "name": "Itransition",
+      "description": "Itransition is a top-rated software engineering company with a pool of 3000 seasoned developers. Get the solution that meets your expectations.",
+      "homepage": "https://www.itransition.com/",
+      "is_trusted": false
+    },
+    {
+      "name": "Wargaming/Lesta",
+      "description": "Game development studio",
+      "homepage": "https://eu.wargaming.net/",
+      "is_trusted": false
+    },
+    {
+      "name": "LeverX Group",
+      "description": "SAP Center of expertise certified partner",
+      "homepage": "https://leverx.com/",
+      "is_trusted": false
+    },
+    {
+      "name": "Andersen",
+      "description": "Large international outstaff development company",
+      "homepage": "https://andersenlab.com/",
+      "is_trusted": false
+    }
+  ],
+  "domains": [
+    {
+      "name": "backend development",
+      "description": "general backend development specifications"
+    },
+    {
+      "name": "frontend development",
+      "description": "general frontend development specifications"
+    },
+    {
+      "name": "devOPS",
+      "description": "general devOPS specification"
+    },
+    {
+      "name": "secOPS",
+      "description": "general decOPS specification"
+    },
+    {
+      "name": "database development",
+      "description": "general database deveiopment specification"
+    },
+    {
+      "name": "IoT",
+      "description": "Internet of things"
+    },
+    {
+      "name": "healthcare",
+      "description": "development of healthcare and just medicine equipment"
+    },
+    {
+      "name": "gambling",
+      "description": "development of gambling entertainment stuff"
+    },
+    {
+      "name": "CRM",
+      "description": "development of crm systems"
+    },
+    {
+      "name": "CMS",
+      "description": "development of cms systems"
+    },
+    {
+      "name": "logistics",
+      "description": "development of systems to improve logistics of supplies performance"
+    },
+    {
+      "name": "VFX",
+      "description": "VFX development"
+    },
+    {
+      "name": "gamedev",
+      "description": "game development"
+    }
+  ],
+  "employees": [
+    {
+      "name": "Nikita Shabanov",
+      "about_me": "stuff",
+      "image_url": "",
+      "real_experience": 1
+    },
+    {
+      "name": "Dmitry Astrouski",
+      "about_me": "stuff",
+      "image_url": "",
+      "real_experience": 5
+    }
+  ],
+  "projects": [
+    {
+      "name": "CRM system",
+      "description": "Application software for organizations, developed to automate customer interaction strategies, aiming to increase sales, optimize marketing, and improve customer service by storing information about customers and their relationship history, establishing and refining business processes, and subsequent analysis of results."
+    },
+    {
+      "name": "Remote job search app",
+      "description": "A remote job search app that allows users to find job vacancies in various industries that offer remote work options. The app scrapes websites with job postings and extracts relevant information such as job title, job description, company name, location, and application requirements."
+    },
+    {
+      "name": "Cosmetics analog search service",
+      "description": "A remote job search app that allows users to find job vacancies in various industries that offer remote work options. The app scrapes websites with job postings and extracts relevant information such as job title, job description, company name, location, and application requirements."
+    },
+    {
+      "name": "Logistics service for workwear distributor",
+      "description": "Application with lots of integrations for a workwear distributor. Allows to improve logistics of supplies, manage employees and their business, manage maps and build routes"
+    },
+    {
+      "name": "VFX assets storage and integration",
+      "description": "Service for integration of the ShotGrid cloud asset storage into the Houdini and Maya, and various optimizations for their rendering. Contains complex math and physics algorhytms, and improved resulting performance for almost 5 times."
+    }
+  ],
+  "project_domains": [
+    {
+      "domain_name": "VFX",
+      "project_name": "VFX assets storage and integration",
+      "comments": "project works with lots of vfx tools"
+    }
+  ],
+  "responsibilities": [
+    {
+      "name": "vfx tools optimization",
+      "priority": 5,
+      "skill_name": "VFX",
+      "experience": 5,
+      "comments": "vfx tools optimization"
+    }
+  ],
+  "responsibility_conflicts": [
+    {
+      "responsibility_1_name": "vfx tools optimization",
+      "responsibility_2_name": "vfx tools optimization",
+      "comment": "test2",
+      "priority": 10
+    }
+  ],
+  "responsibility_synonyms": [
+    {
+      "responsibility_name": "vfx tools optimization",
+      "name": "complex optimization"
+    },
+    {
+      "responsibility_name": "optimization 2",
+      "name": "complex optimization"
+    }
+  ],
+  "skills": [
+    {
+      "name": "VFX",
+      "description": "working with VFX tools like Autodesk, Blender, etc.",
+      "parent_name": null
+    },
+    {
+      "name": "Rendering optimization",
+      "description": "optimize render of VFX tool",
+      "parent_name": "VFX"
+    },
+    {
+      "name": "3ds max",
+      "description": "working with 3ds max",
+      "parent_name": "VFX"
+    },
+    {
+      "name": "blender",
+      "description": "working with blender",
+      "parent_name": "VFX"
+    }
+  ],
+  "skill_domains": [
+    {
+      "domain_name": "VFX",
+      "skill_name": "VFX",
+      "comments": "",
+      "priority": 10
+    }
+  ],
+  "skill_conflicts": [
+    {
+      "skill_1_name": "blender",
+      "skill_2_name": "3ds max",
+      "comment": "these applications do the same things. It's way not too useful to use them both in the same project",
+      "priority": 5
+    }
+  ],
+  "vacancies": [
+    {
+      "name": "Senior python software engineer at Innowise group",
+      "company_name": "Innowise Group",
+      "link": "https://innowise.com/careers/",
+      "description": "Do everything you want, but NOT python development. Good luck!",
+      "published_at": "2024-12-07T13:00:00Z",
+      "experience": 0
+    }
+  ],
+  "vacancy_domains": [
+    {
+      "vacancy_name": "Senior python software engineer at Innowise group",
+      "domain_name": "backend development",
+      "priority": 10
+    }
+  ],
+  "vacancy_skills": [
+    {
+      "vacancy_name": "Senior python software engineer at Innowise group",
+      "skill_name": "blender",
+      "priority": 3
+    }
+  ]
+}
