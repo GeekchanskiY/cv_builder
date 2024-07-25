@@ -34,7 +34,7 @@ func (repo *ResponsibilityRepository) CreateIfNotExists(schema schemas.Responsib
 	// Cast is required
 	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
 	q := `INSERT INTO responsibilities(name, priority, skill_id, experience, comments) 
-	SELECT r.name, r.priority, s.id, r.experience, r.comments
+	SELECT CAST($1 AS VARCHAR), $2, s.id, $4, $5
 	FROM responsibilities r
 	JOIN skills s ON s.name = $3::text;`
 
