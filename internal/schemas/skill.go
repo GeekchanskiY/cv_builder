@@ -8,9 +8,9 @@ type Skill struct {
 }
 
 type SkillReadable struct {
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
-	ParentName  *string `json:"parent_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	ParentName  string `json:"parent_name"`
 }
 
 type SkillConflict struct {
