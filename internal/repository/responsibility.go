@@ -35,7 +35,13 @@ func (repo *ResponsibilityRepository) CreateIfNotExists(schema schemas.Responsib
 	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
 	q := `INSERT INTO responsibilities(name, priority, skill_id, experience, comments) 
 	SELECT CAST($1 AS VARCHAR), $2, s.id, $4, $5
-	FROM skills s where s.name = $3::text;`
+	FROM skills s 
+	WHERE s.name = $3::text
+	AND NOT EXISTS(
+	    select 1
+	    FROM responsibilities r
+	    WHERE r.name = CAST($1 AS VARCHAR)
+	);`
 
 	r, err := repo.db.Exec(q, schema.Name, schema.Priority, schema.SkillName, schema.Experience, schema.Comments)
 
