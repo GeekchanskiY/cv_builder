@@ -35,7 +35,7 @@ func (repo *DomainRepository) CreateIfNotExists(schema schemas.Domain) (created 
 	q := `INSERT INTO domains(name, description) 
 	SELECT CAST($1 AS VARCHAR) AS name, $2 AS description
 	WHERE 
-	    NOT EXISTS (SELECT 1 FROM companies WHERE name = $1)`
+	    NOT EXISTS (SELECT 1 FROM domains WHERE name = $1)`
 
 	r, err := repo.db.Exec(q, schema.Name, schema.Description)
 
