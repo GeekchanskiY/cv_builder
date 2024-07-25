@@ -228,7 +228,7 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 	}
 
 	for _, skillConflict := range data.SkillConflicts {
-		created, err := c.skillRepo.CreateConflictIfNotExists(skillConflict)
+		created, err = c.skillRepo.CreateConflictIfNotExists(skillConflict)
 		if err != nil {
 			log.Println(err)
 			continue
@@ -239,7 +239,7 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 	}
 
 	for _, skillDomain := range data.SkillDomains {
-		created, err := c.skillRepo.CreateDomainIfNotExists(skillDomain)
+		created, err = c.skillRepo.CreateDomainIfNotExists(skillDomain)
 		if err != nil {
 			log.Println(err)
 			continue
@@ -250,7 +250,18 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 	}
 
 	for _, responsibility := range data.Responsibilities {
-		created, err := c.responsibilityRepo.CreateIfNotExists(responsibility)
+		created, err = c.responsibilityRepo.CreateIfNotExists(responsibility)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if created {
+			createdItems++
+		}
+	}
+
+	for _, responsibilityConflict := range data.ResponsibilityConflicts {
+		created, err = c.responsibilityRepo.CreateConflictIfNotExists(responsibilityConflict)
 		if err != nil {
 			log.Println(err)
 			continue

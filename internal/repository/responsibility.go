@@ -256,6 +256,35 @@ func (repo *ResponsibilityRepository) CreateConflict(conflict schemas.Responsibi
 	return newId, nil
 }
 
+func (repo *ResponsibilityRepository) CreateConflictIfNotExists(schema schemas.ResponsibilityConflictReadable) (created bool, err error) {
+	q := `INSERT INTO responsibility_conflicts(responsibility_1_id, responsibility_2_id, comment, priority) 
+	SELECT r1.id, r2.id, $3, $4
+	FROM responsibilities r1
+	JOIN responsibilities r2 ON r2.name = $2::text
+	WHERE 
+	    r1.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM responsibility_conflicts rc
+		WHERE rc.responsibility_1_id = r1.id
+		AND rc.responsibility_2_id = r2.id 
+		);`
+
+	r, err := repo.db.Exec(q, schema.Responsibility1Name, schema.Responsibility2Name, schema.Comment, schema.Priority)
+
+	if err != nil {
+		log.Println("Error creating responsibility conflict: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *ResponsibilityRepository) UpdateConflict(conflict schemas.ResponsibilityConflict) error {
 	q := `UPDATE responsibility_conflicts SET responsibility_1_id = $1, responsibility_2_id = $2, comment = $3, priority = $4 WHERE id = $5`
 	_, err := repo.db.Exec(
