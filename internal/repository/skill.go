@@ -269,6 +269,35 @@ func (repo *SkillRepository) CreateConflict(conflict schemas.SkillConflict) (new
 	return newId, nil
 }
 
+func (repo *SkillRepository) CreateConflictIfNotExists(schema schemas.SkillConflictReadable) (created bool, err error) {
+	q := `INSERT INTO skill_conflicts(skill_1_id, skill_2_id, comment, priority) 
+	SELECT s1.id, s2.id, $3, $4
+	FROM skills s1
+	JOIN skills s2 ON s2.name = $2::text
+	WHERE 
+	    s1.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM skill_conflicts sc
+		WHERE sc.skill_1_id = s1.id
+		AND sc.skill_2_id = s2.id 
+		);`
+
+	r, err := repo.db.Exec(q, schema.Skill1Name, schema.Skill2Name, schema.Comment, schema.Priority)
+
+	if err != nil {
+		log.Println("Error creating skill conflict: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *SkillRepository) UpdateConflict(conflict schemas.SkillConflict) error {
 	q := `UPDATE skill_conflicts SET skill_1_id = $1, skill_2_id = $2, comment = $3, priority = $4 WHERE id = $5`
 	_, err := repo.db.Exec(
