@@ -42,6 +42,27 @@ func (repo *SkillRepository) Create(skill schemas.Skill) (int, error) {
 	return newId, nil
 }
 
+func (repo *SkillRepository) CreateIfNotExists(schema schemas.SkillReadable) (created bool, err error) {
+	// Cast is required
+	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
+	q := `INSERT INTO skills(name, description, parent_id) 
+	SELECT CAST($1 AS VARCHAR) AS name, $2 AS description, (SELECT id from skills where name = CAST($3 AS VARCHAR))`
+
+	r, err := repo.db.Exec(q, schema.Name, schema.Description, schema.ParentName)
+
+	if err != nil {
+		log.Println("Error creating skill in skill repository: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *SkillRepository) Update(skill schemas.Skill) error {
 	_, err := repo.db.Exec("UPDATE skills SET name = $1, description = $2, parent_id = $3 WHERE id = $4", skill.Name, skill.Description, skill.ParentId, skill.Id)
 	return err
