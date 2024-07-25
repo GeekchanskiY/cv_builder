@@ -46,7 +46,12 @@ func (repo *SkillRepository) CreateIfNotExists(schema schemas.SkillReadable) (cr
 	// Cast is required
 	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
 	q := `INSERT INTO skills(name, description, parent_id) 
-	SELECT CAST($1 AS VARCHAR) AS name, $2 AS description, (SELECT id from skills where name = CAST($3 AS VARCHAR))`
+	SELECT CAST($1 AS VARCHAR) AS name, $2 AS description, (SELECT id from skills where name = CAST($3 AS VARCHAR))
+	WHERE NOT EXISTS(
+		select 1
+		FROM skills
+		WHERE name = CAST($1 AS VARCHAR)
+	);`
 
 	r, err := repo.db.Exec(q, schema.Name, schema.Description, schema.ParentName)
 
