@@ -32,12 +32,12 @@ type CVProject struct {
 	EndTime   time.Time `json:"end_time"`
 }
 
-// CVService is used to build imaginary architecture to insert all data without conflicts
-type CVService struct {
-	Id          int    `json:"id"`
-	CVProjectId int    `json:"cv_project_id"`
-	Name        string `json:"name"`
-	OrderNum    int    `json:"order_num"`
+// CVProjectService is used to build imaginary architecture to insert all data without conflicts
+type CVProjectService struct {
+	Id               int `json:"id"`
+	CVProjectId      int `json:"cv_project_id"`
+	ProjectServiceId int `json:"project_service_id"`
+	OrderNum         int `json:"order_num"`
 }
 
 // CVServiceResponsibility is used to add responsibility to the CVService => to CV actually
