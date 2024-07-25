@@ -176,7 +176,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 
 	// Used to count new items
 	var created bool
-	var createdItems int
+	var createdItems = 0
+	var createdTotal = 0
+
+	log.Println("Import process started")
 
 	for _, company := range data.Companies {
 		created, err = c.companyRepo.CreateIfNotExists(company)
@@ -191,6 +194,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("Companies: provided %d, created: %d", len(data.Companies), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	for _, domain := range data.Domains {
 		created, err = c.domainRepo.CreateIfNotExists(domain)
 		if err != nil {
@@ -201,6 +208,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 			createdItems++
 		}
 	}
+
+	log.Printf("Domains: provided %d, created: %d", len(data.Domains), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
 
 	for _, employee := range data.Employees {
 		created, err = c.employeeRepo.CreateIfNotExists(employee)
@@ -215,6 +226,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("Employees: provided %d, created: %d", len(data.Employees), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	for _, skill := range data.Skills {
 		created, err = c.skillRepo.CreateIfNotExists(skill)
 
@@ -227,6 +242,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("Skills: provided %d, created: %d", len(data.Skills), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	for _, skillConflict := range data.SkillConflicts {
 		created, err = c.skillRepo.CreateConflictIfNotExists(skillConflict)
 		if err != nil {
@@ -237,6 +256,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 			createdItems++
 		}
 	}
+
+	log.Printf("SkillConflicts: provided %d, created: %d", len(data.SkillConflicts), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
 
 	for _, skillDomain := range data.SkillDomains {
 		created, err = c.skillRepo.CreateDomainIfNotExists(skillDomain)
@@ -249,6 +272,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("SkillDomains: provided %d, created: %d", len(data.SkillDomains), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	for _, responsibility := range data.Responsibilities {
 		created, err = c.responsibilityRepo.CreateIfNotExists(responsibility)
 		if err != nil {
@@ -259,6 +286,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 			createdItems++
 		}
 	}
+
+	log.Printf("Responsibilities: provided %d, created: %d", len(data.Responsibilities), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
 
 	for _, responsibilityConflict := range data.ResponsibilityConflicts {
 		created, err = c.responsibilityRepo.CreateConflictIfNotExists(responsibilityConflict)
@@ -271,6 +302,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("ResponsibilityConflicts: provided %d, created: %d", len(data.ResponsibilityConflicts), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	for _, responsibilitySynonym := range data.ResponsibilitySynonyms {
 		created, err = c.responsibilityRepo.CreateSynonymIfNotExists(responsibilitySynonym)
 		if err != nil {
@@ -281,6 +316,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 			createdItems++
 		}
 	}
+
+	log.Printf("ResponsibilitySynonyms: provided %d, created: %d", len(data.ResponsibilitySynonyms), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
 
 	for _, project := range data.Projects {
 		created, err = c.projectRepo.CreateIfNotExists(project)
@@ -295,6 +334,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("Projects: provided %d, created: %d", len(data.Projects), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	for _, projectDomain := range data.ProjectDomains {
 		created, err = c.projectRepo.CreateDomainsIfNotExists(projectDomain)
 
@@ -307,6 +350,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 			createdItems++
 		}
 	}
+
+	log.Printf("ProjectDomains: provided %d, created: %d", len(data.ProjectDomains), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
 
 	for _, vacancy := range data.Vacancies {
 		created, err = c.vacancyRepo.CreateIfNotExists(vacancy)
@@ -321,6 +368,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("Vacancies: provided %d, created: %d", len(data.Vacancies), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	for _, vacancyDomain := range data.VacancyDomains {
 		created, err = c.vacancyRepo.CreateDomainIfNotExists(vacancyDomain)
 
@@ -333,6 +384,10 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 			createdItems++
 		}
 	}
+
+	log.Printf("VacancyDomains: provided %d, created: %d", len(data.VacancyDomains), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
 
 	for _, vacancySkill := range data.VacancySkills {
 		created, err = c.vacancyRepo.CreateSkillIfNotExists(vacancySkill)
@@ -347,8 +402,12 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	log.Printf("VacancySkills: provided %d, created: %d", len(data.VacancySkills), createdItems)
+	createdTotal += createdItems
+	createdItems = 0
+
 	w.WriteHeader(http.StatusOK)
-	_, err = w.Write([]byte(fmt.Sprintf("Import completed. New items: %d", createdItems)))
+	_, err = w.Write([]byte(fmt.Sprintf("Import completed. New items: %d", createdTotal)))
 	if err != nil {
 		utils.HandleInternalError(w, err)
 		return
