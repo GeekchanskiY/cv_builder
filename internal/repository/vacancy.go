@@ -400,6 +400,35 @@ func (repo *VacanciesRepository) AddDomain(schema schemas.VacancyDomain) (newId 
 
 }
 
+func (repo *VacanciesRepository) CreateDomainIfNotExists(schema schemas.VacancyDomainReadable) (created bool, err error) {
+	q := `INSERT INTO vacancy_domains(vacancy_id, domain_id, priority) 
+	SELECT v.id, d.id, $3
+	FROM vacancies v
+	JOIN domains d ON d.name = $2::text
+	WHERE 
+	    v.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM vacancy_domains vd
+		WHERE vd.vacancy_id = v.id
+		AND vd.domain_id = d.id 
+		);`
+
+	r, err := repo.db.Exec(q, schema.VacancyName, schema.DomainName, schema.Priority)
+
+	if err != nil {
+		log.Println("Error creating vacancy domain: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *VacanciesRepository) DeleteDomain(schema schemas.VacancyDomain) (err error) {
 	q := `DELETE FROM vacancy_domains WHERE id = $1`
 	_, err = repo.db.Exec(q, schema.Id)
