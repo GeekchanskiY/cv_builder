@@ -6,7 +6,6 @@ delete from cvs cascade;
 delete from domains cascade;
 delete from employees cascade;
 delete from project_domains cascade;
-delete from project_responsibilities cascade;
 delete from projects cascade;
 delete from responsibilities cascade;
 delete from responsibility_conflicts cascade;
