@@ -18,3 +18,16 @@ type ProjectDomainReadable struct {
 	ProjectName string `json:"project_name"`
 	Comments    string `json:"comments"`
 }
+
+type ProjectService struct {
+	Id          int    `json:"id"`
+	ProjectId   int    `json:"project_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type ProjectServiceReadable struct {
+	ProjectName string `json:"project_name"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
