@@ -427,6 +427,33 @@ func (repo *ResponsibilityRepository) CreateSynonym(schema schemas.Responsibilit
 	return newId, nil
 }
 
+func (repo *ResponsibilityRepository) CreateSynonymIfNotExists(schema schemas.ResponsibilitySynonymReadable) (created bool, err error) {
+	q := `INSERT INTO responsibility_synonyms(responsibility_id, name) 
+	SELECT r.id, $2
+	FROM responsibilities r
+	WHERE 
+	    r.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM responsibility_synonyms rs
+		WHERE rs.responsibility_id = r.id
+		);`
+
+	r, err := repo.db.Exec(q, schema.ResponsibilityName, schema.Name)
+
+	if err != nil {
+		log.Println("Error creating responsibility conflict: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *ResponsibilityRepository) UpdateSynonym(schema schemas.ResponsibilitySynonym) error {
 	q := `UPDATE responsibility_synonyms SET responsibility_id = $1, name = $2 WHERE id = $3`
 	_, err := repo.db.Exec(

@@ -271,6 +271,17 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	for _, responsibilitySynonym := range data.ResponsibilitySynonyms {
+		created, err = c.responsibilityRepo.CreateSynonymIfNotExists(responsibilitySynonym)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if created {
+			createdItems++
+		}
+	}
+
 	for _, project := range data.Projects {
 		created, err = c.projectRepo.CreateIfNotExists(project)
 
