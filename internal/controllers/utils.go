@@ -217,7 +217,18 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 
 	for _, skill := range data.Skills {
 		created, err = c.skillRepo.CreateIfNotExists(skill)
-		log.Println(skill.Name)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if created {
+			createdItems++
+		}
+	}
+
+	for _, skillConflict := range data.SkillConflicts {
+		created, err := c.skillRepo.CreateConflictIfNotExists(skillConflict)
 		if err != nil {
 			log.Println(err)
 			continue
