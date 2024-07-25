@@ -30,6 +30,27 @@ func (repo *VacanciesRepository) Create(schema schemas.Vacancy) (int, error) {
 	return newId, nil
 }
 
+func (repo *VacanciesRepository) CreateIfNotExists(schema schemas.VacancyReadable) (created bool, err error) {
+	q := `INSERT INTO vacancies(name, company_id, link, description, published_at, experience) 
+	SELECT CAST($1 AS VARCHAR), (select id from companies where name = $2), $3, $4, $5, $6
+	WHERE 
+	    NOT EXISTS (SELECT 1 FROM vacancies WHERE name = $1)`
+
+	r, err := repo.db.Exec(q, schema.Name, schema.CompanyName, schema.Link, schema.Description, schema.PublishedAt, schema.Experience)
+
+	if err != nil {
+		log.Println("Error creating vacancy: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *VacanciesRepository) Update(schema schemas.Vacancy) error {
 	q := `UPDATE vacancies SET name = $1, company_id = $2, link = $3, description = $4, published_at = $5, experience = $6 WHERE id = $7`
 	_, err := repo.db.Exec(q, schema.Name, schema.CompanyId, schema.Link, schema.Description, schema.PublishedAt, schema.Experience, schema.Id)
