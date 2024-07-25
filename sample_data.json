@@ -169,24 +169,129 @@
   ],
   "skills": [
     {
-      "name": "VFX",
-      "description": "working with VFX tools like Autodesk, Blender, etc.",
+      "name": "Python development",
+      "description": "working with python",
       "parent_name": null
     },
     {
-      "name": "Rendering optimization",
-      "description": "optimize render of VFX tool",
-      "parent_name": "VFX"
+      "name": "Python package management",
+      "description": "working with python package managers",
+      "parent_name": "Python development"
     },
     {
-      "name": "3ds max",
-      "description": "working with 3ds max",
-      "parent_name": "VFX"
+      "name": "Python package management - PyPI",
+      "description": "working with python package managers",
+      "parent_name": "Python package management"
     },
     {
-      "name": "blender",
-      "description": "working with blender",
-      "parent_name": "VFX"
+      "name": "Python package management - Pip",
+      "description": "working with python package managers",
+      "parent_name": "Python package management"
+    },
+    {
+      "name": "Python package management - Conda",
+      "description": "working with python package managers",
+      "parent_name": "Python package management"
+    },
+    {
+      "name": "Python package management - Poetry",
+      "description": "working with python package managers",
+      "parent_name": "Python package management"
+    },
+    {
+      "name": "Python testing",
+      "description": "testing in python",
+      "parent_name": "Python development"
+    },
+    {
+      "name": "Python testing - doctest",
+      "description": "testing in python",
+      "parent_name": "Python testing"
+    },
+    {
+      "name": "Python testing - nose",
+      "description": "testing in python",
+      "parent_name": "Python testing"
+    },
+    {
+      "name": "Python testing - pytest",
+      "description": "testing in python",
+      "parent_name": "Python testing"
+    },
+    {
+      "name": "Python testing - unittest",
+      "description": "testing in python",
+      "parent_name": "Python testing"
+    },
+    {
+      "name": "Python web development",
+      "description": "web development in python",
+      "parent_name": "Python development"
+    },
+    {
+      "name": "Python Django",
+      "description": "python web development with django",
+      "parent_name": "Python web development"
+    },
+    {
+      "name": "Python Django - signals",
+      "description": "Using signals in django",
+      "parent_name": "Python Django"
+    },
+    {
+      "name": "Python Django - setup",
+      "description": "setting up django application, with configuring apps, config files, connections, etc.",
+      "parent_name": "Python Django"
+    },
+    {
+      "name": "Python Django - admin",
+      "description": "Using complex admin panels in django",
+      "parent_name": "Python Django"
+    },
+    {
+      "name": "Python Django - ORM",
+      "description": "Using Django ORM in django",
+      "parent_name": "Python Django"
+    },
+    {
+      "name": "Python Django - templates",
+      "description": "Using Django templates in django",
+      "parent_name": "Python Django"
+    },
+    {
+      "name": "Python Django - DRF",
+      "description": "Using Django Rest Framework in django",
+      "parent_name": "Python Django"
+    },
+    {
+      "name": "Python Django - DRF - Serializers",
+      "description": "Using Django Rest Framework serializers",
+      "parent_name": "Python Django - DRF"
+    },
+    {
+      "name": "Python Django - DRF - Viewsets",
+      "description": "Using Django Rest Framework serializers",
+      "parent_name": "Python Django - DRF"
+    },
+    {
+      "name": "Python FastAPI",
+      "description": "python web development with FastAPI",
+      "parent_name": "Python web development"
+    },
+    {
+      "name": "Python Flask",
+      "description": "python web development with Flask",
+      "parent_name": "Python web development"
+    },
+    {
+      "name": "Python Tornado",
+      "description": "python web development with Tornado",
+      "parent_name": "Python web development"
+    },
+    {
+      "name": "Python Sanic",
+      "description": "python web development with Sanic",
+      "parent_name": "Python web development"
     }
   ],
   "skill_domains": [
