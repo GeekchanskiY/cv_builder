@@ -453,6 +453,35 @@ func (repo *SkillRepository) CreateDomains(skillDomain schemas.SkillDomain) (new
 	return newId, nil
 }
 
+func (repo *SkillRepository) CreateDomainIfNotExists(schema schemas.SkillDomainReadable) (created bool, err error) {
+	q := `INSERT INTO skill_domains(skill_id, domain_id, comments, priority) 
+	SELECT s.id, d.id, $3, $4
+	FROM skills s
+	JOIN domains d ON d.name = $2::text
+	WHERE 
+	    s.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM skill_domains sd
+		WHERE sd.skill_id = s.id
+		AND sd.domain_id = d.id 
+		);`
+
+	r, err := repo.db.Exec(q, schema.SkillName, schema.DomainName, schema.Comments, schema.Priority)
+
+	if err != nil {
+		log.Println("Error creating skill domain: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *SkillRepository) UpdateDomains(skillDomain schemas.SkillDomain) error {
 	q := `UPDATE skill_domains SET skill_id = $1, domain_id = $2, comments = $3, priority = $4 WHERE id = $5`
 	_, err := repo.db.Exec(

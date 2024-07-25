@@ -238,6 +238,17 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	for _, skillDomain := range data.SkillDomains {
+		created, err := c.skillRepo.CreateDomainIfNotExists(skillDomain)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		if created {
+			createdItems++
+		}
+	}
+
 	for _, project := range data.Projects {
 		created, err = c.projectRepo.CreateIfNotExists(project)
 
