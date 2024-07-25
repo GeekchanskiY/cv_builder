@@ -321,6 +321,19 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
+	for _, vacancyDomain := range data.VacancyDomains {
+		created, err = c.vacancyRepo.CreateDomainIfNotExists(vacancyDomain)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if created {
+			createdItems++
+		}
+	}
+
 	w.WriteHeader(http.StatusOK)
 	_, err = w.Write([]byte(fmt.Sprintf("Import completed. New items: %d", createdItems)))
 	if err != nil {
