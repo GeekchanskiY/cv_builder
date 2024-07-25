@@ -26,6 +26,15 @@ create table if not exists projects(
     description text
 );
 
+/* We can create a same project with different prefix,
+   which will be the same, but with different architecture for example */
+create table if not exists project_services(
+    id serial primary key,
+    project_id int references projects(id),
+    name varchar(255),
+    description text
+);
+
 create table if not exists vacancies (
     id serial primary key,
     name varchar(255) not null unique,
@@ -114,16 +123,16 @@ create table if not exists cv_projects(
     start_time date
 );
 
-create table if not exists cv_services(
+create table if not exists cv_project_services(
     id serial primary key,
     cv_project_id int references cv_projects(id),
-    name varchar(255),
+    project_service_id int references project_services(id),
     order_num int
 );
 
 create table if not exists cv_service_responsibilities(
     id serial primary key,
-    cv_service_id int references cv_services(id),
+    cv_service_id int references cv_project_services(id),
     responsibility_id int references responsibilities(id),
     order_num int
 );
