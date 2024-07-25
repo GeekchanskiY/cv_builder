@@ -265,3 +265,169 @@ func (repo *ProjectRepository) DeleteDomains(schema schemas.ProjectDomain) error
 	_, err := repo.db.Exec(q, schema.Id)
 	return err
 }
+
+func (repo *ProjectRepository) GetServices(id int) (schemes []schemas.ProjectService, err error) {
+	q := `SELECT id, project_id, name, description
+	FROM project_services
+	WHERE project_id = $1`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var schema schemas.ProjectService
+		err = rows.Scan(
+			&schema.Id,
+			&schema.ProjectId,
+			&schema.Name,
+			&schema.Description,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	if err := rows.Close(); err != nil {
+		return schemes, err
+	}
+	return schemes, nil
+}
+
+func (repo *ProjectRepository) GetAllServices() (schemes []schemas.ProjectService, err error) {
+	q := `SELECT id, project_id, name, description 
+	FROM project_services`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var schema schemas.ProjectService
+		err = rows.Scan(
+			&schema.Id,
+			&schema.ProjectId,
+			&schema.Name,
+			&schema.Description,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	if err := rows.Close(); err != nil {
+		return schemes, err
+	}
+	return schemes, nil
+}
+
+func (repo *ProjectRepository) GetAllServicesReadable() (schemes []schemas.ProjectServiceReadable, err error) {
+	q := `SELECT p.name, ps.name, ps.description 
+	FROM project_services ps
+	JOIN projects p ON ps.project_id = p.id`
+
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var schema schemas.ProjectServiceReadable
+		err = rows.Scan(
+			&schema.ProjectName,
+			&schema.Name,
+			&schema.Description,
+		)
+		if err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+
+		return schemes, err
+	}
+
+	if err := rows.Close(); err != nil {
+		return schemes, err
+	}
+	return schemes, nil
+}
+
+func (repo *ProjectRepository) CreateService(schema schemas.ProjectService) (newId int, err error) {
+	q := `INSERT INTO project_services(project_id, name, description) VALUES($1, $2, $3) RETURNING id`
+
+	err = repo.db.QueryRow(
+		q, schema.ProjectId, schema.Name, schema.Description,
+	).Scan(&newId)
+	if err != nil {
+		log.Println("Error creating projectService in repository: ", err)
+		return 0, err
+	}
+
+	return newId, nil
+}
+
+func (repo *ProjectRepository) CreateServiceIfNotExists(schema schemas.ProjectServiceReadable) (created bool, err error) {
+	q := `INSERT INTO project_services(project_id, name, description) 
+	SELECT p.id, $2, $3
+	FROM projects p
+	WHERE 
+	    p.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM project_services ps
+		WHERE ps.project_id = p.id
+		AND ps.name = $2
+		);`
+
+	r, err := repo.db.Exec(q, schema.ProjectName, schema.Name, schema.Description)
+
+	if err != nil {
+		log.Println("Error creating project domain: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func (repo *ProjectRepository) UpdateService(schema schemas.ProjectService) error {
+	q := `UPDATE project_services SET project_id = $1, name = $2, description = $3 WHERE id = $4`
+	_, err := repo.db.Exec(
+		q,
+		schema.ProjectId,
+		schema.Name,
+		schema.Description,
+		schema.Id,
+	)
+	return err
+}
+
+func (repo *ProjectRepository) DeleteService(schema schemas.ProjectService) error {
+	q := `DELETE FROM project_services WHERE id = $1`
+	_, err := repo.db.Exec(q, schema.Id)
+	return err
+}
