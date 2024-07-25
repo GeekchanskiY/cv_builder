@@ -258,6 +258,35 @@ func (repo *VacanciesRepository) AddSkill(schema schemas.VacancySkill) (newId in
 
 }
 
+func (repo *VacanciesRepository) CreateSkillIfNotExists(schema schemas.VacancySkillReadable) (created bool, err error) {
+	q := `INSERT INTO vacancy_skills(vacancy_id, skill_id, priority) 
+	SELECT v.id, s.id, $3
+	FROM vacancies v
+	JOIN skills s ON s.name = $2::text
+	WHERE 
+	    v.name = $1::text 
+	    AND NOT EXISTS (
+		SELECT 1 
+		FROM vacancy_skills vs
+		WHERE vs.vacancy_id = v.id
+		AND vs.skill_id = s.id 
+		);`
+
+	r, err := repo.db.Exec(q, schema.VacancyName, schema.SkillName, schema.Priority)
+
+	if err != nil {
+		log.Println("Error creating vacancy skill: ", err)
+
+		return false, err
+	}
+
+	if i, _ := r.RowsAffected(); i != 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (repo *VacanciesRepository) DeleteSkill(schema schemas.VacancySkill) (err error) {
 	q := `DELETE FROM vacancy_skills WHERE id = $1`
 	_, err = repo.db.Exec(q, schema.Id)
