@@ -216,9 +216,9 @@ func (repo *CVRepository) DeleteProject(schema schemas.CVProject) error {
 	return err
 }
 
-func (repo *CVRepository) GetCVServices(id int) (schemes []schemas.CVService, err error) {
-	q := `SELECT id, cv_project_id, name, order_num
-	FROM cv_services
+func (repo *CVRepository) GetCVServices(id int) (schemes []schemas.CVProjectService, err error) {
+	q := `SELECT id, cv_project_id, project_service_id, order_num
+	FROM cv_project_services
 	WHERE cv_project_id = $1`
 
 	rows, err := repo.db.Query(q, id)
@@ -235,11 +235,11 @@ func (repo *CVRepository) GetCVServices(id int) (schemes []schemas.CVService, er
 	}(rows)
 
 	for rows.Next() {
-		var schema schemas.CVService
+		var schema schemas.CVProjectService
 		err = rows.Scan(
 			&schema.Id,
 			&schema.CVProjectId,
-			&schema.Name,
+			&schema.ProjectServiceId,
 			&schema.OrderNum,
 		)
 		if err != nil {
@@ -256,9 +256,9 @@ func (repo *CVRepository) GetCVServices(id int) (schemes []schemas.CVService, er
 	return schemes, nil
 }
 
-func (repo *CVRepository) GetAllCVServices() (schemes []schemas.CVService, err error) {
-	q := `SELECT id, cv_project_id, name, order_num
-	FROM cv_services`
+func (repo *CVRepository) GetAllCVServices() (schemes []schemas.CVProjectService, err error) {
+	q := `SELECT id, cv_project_id, project_service_id, order_num
+	FROM cv_project_services`
 
 	rows, err := repo.db.Query(q)
 
@@ -274,11 +274,11 @@ func (repo *CVRepository) GetAllCVServices() (schemes []schemas.CVService, err e
 	}(rows)
 
 	for rows.Next() {
-		var schema schemas.CVService
+		var schema schemas.CVProjectService
 		err = rows.Scan(
 			&schema.Id,
 			&schema.CVProjectId,
-			&schema.Name,
+			&schema.ProjectServiceId,
 			&schema.OrderNum,
 		)
 		if err != nil {
@@ -295,11 +295,11 @@ func (repo *CVRepository) GetAllCVServices() (schemes []schemas.CVService, err e
 	return schemes, nil
 }
 
-func (repo *CVRepository) CreateCVService(schema schemas.CVService) (newId int, err error) {
-	q := `INSERT INTO cv_services(cv_project_id, name, order_num) VALUES($1, $2, $3) RETURNING id`
+func (repo *CVRepository) CreateCVService(schema schemas.CVProjectService) (newId int, err error) {
+	q := `INSERT INTO cv_project_services(cv_project_id, project_service_id, order_num) VALUES($1, $2, $3) RETURNING id`
 
 	err = repo.db.QueryRow(
-		q, schema.CVProjectId, schema.Name, schema.OrderNum,
+		q, schema.CVProjectId, schema.ProjectServiceId, schema.OrderNum,
 	).Scan(&newId)
 	if err != nil {
 		return 0, err
@@ -308,22 +308,22 @@ func (repo *CVRepository) CreateCVService(schema schemas.CVService) (newId int, 
 	return newId, nil
 }
 
-func (repo *CVRepository) UpdateCVService(schema schemas.CVService) error {
-	q := `UPDATE cv_services SET
-    cv_project_id = $1, name = $2, order_num = $3
+func (repo *CVRepository) UpdateCVService(schema schemas.CVProjectService) error {
+	q := `UPDATE cv_project_services SET
+    cv_project_id = $1, project_service_id = $2, order_num = $3
     WHERE id = $4`
 	_, err := repo.db.Exec(
 		q,
 		schema.CVProjectId,
-		schema.Name,
+		schema.ProjectServiceId,
 		schema.OrderNum,
 		schema.Id,
 	)
 	return err
 }
 
-func (repo *CVRepository) DeleteCVService(schema schemas.CVService) error {
-	q := `DELETE FROM cv_services WHERE id = $1`
+func (repo *CVRepository) DeleteCVService(schema schemas.CVProjectService) error {
+	q := `DELETE FROM cv_project_services WHERE id = $1`
 	_, err := repo.db.Exec(q, schema.Id)
 	return err
 }
