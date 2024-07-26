@@ -56,7 +56,7 @@ func (c *CVBuilderController) Build(w http.ResponseWriter, r *http.Request, _ ht
 			return
 		}
 		w.WriteHeader(http.StatusOK)
-		_, err = w.Write([]byte("build queued, new CV ID: " + strconv.Itoa(cv)))
+		_, err = w.Write([]byte("build queued, new CV build status id: " + strconv.Itoa(cv)))
 		if err != nil {
 			log.Println("Error writing response")
 		}
