@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/GeekchanskiY/cv_builder/internal/repository"
 	"github.com/GeekchanskiY/cv_builder/internal/schemas/requests"
 	"github.com/GeekchanskiY/cv_builder/internal/usecases"
 	"github.com/GeekchanskiY/cv_builder/internal/utils"
@@ -13,35 +12,14 @@ import (
 )
 
 type CVBuilderController struct {
-	projectRepo        *repository.ProjectRepository
-	domainRepo         *repository.DomainRepository
-	cvRepo             *repository.CVRepository
-	employeeRepo       *repository.EmployeeRepository
-	companyRepo        *repository.CompanyRepository
-	responsibilityRepo *repository.ResponsibilityRepository
-	skillRepo          *repository.SkillRepository
-	vacancyRepo        *repository.VacanciesRepository
+	useCase *usecases.CVBuilderUseCase
 }
 
 func CreateCVBuilderController(
-	projectRepo *repository.ProjectRepository,
-	domainRepo *repository.DomainRepository,
-	cvRepo *repository.CVRepository,
-	employeeRepo *repository.EmployeeRepository,
-	companyRepo *repository.CompanyRepository,
-	responsibilityRepo *repository.ResponsibilityRepository,
-	skillRepo *repository.SkillRepository,
-	vacancyRepo *repository.VacanciesRepository,
+	useCase *usecases.CVBuilderUseCase,
 ) *CVBuilderController {
 	return &CVBuilderController{
-		projectRepo:        projectRepo,
-		domainRepo:         domainRepo,
-		cvRepo:             cvRepo,
-		employeeRepo:       employeeRepo,
-		companyRepo:        companyRepo,
-		responsibilityRepo: responsibilityRepo,
-		skillRepo:          skillRepo,
-		vacancyRepo:        vacancyRepo,
+		useCase: useCase,
 	}
 }
 
@@ -58,7 +36,7 @@ func (c *CVBuilderController) Build(w http.ResponseWriter, r *http.Request, _ ht
 	cvChan := make(chan int)
 
 	// Running building a CV
-	go usecases.BuildCV(requestData.EmployeeID, requestData.VacancyID, cvChan)
+	go c.useCase.BuildCV(requestData.EmployeeID, requestData.VacancyID, cvChan)
 	newId := <-cvChan
 	log.Println(requestData)
 

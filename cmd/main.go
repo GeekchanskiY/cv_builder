@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/GeekchanskiY/cv_builder/internal/usecases"
 	"net/http"
 
 	"github.com/GeekchanskiY/cv_builder/internal/config"
@@ -28,6 +29,8 @@ func CreateApp() fx.Option {
 			repository.CreateCVRepository,
 			repository.CreateProjectRepository,
 			repository.CreateResponsibilityRepository,
+
+			usecases.CreateCVBuilderUseCase,
 
 			controllers.CreateEmployeeController,
 			controllers.CreateDomainController,
