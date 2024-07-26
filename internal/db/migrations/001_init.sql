@@ -148,7 +148,8 @@ create table if not exists vacancy_domains(
 create table if not exists cv_build_statuses(
     id serial primary key,
     cv_id int references cvs(id),
-    status VARCHAR(16) NOT NULL CHECK ( status IN ('ready', 'building', 'queued')),
+    status VARCHAR(16) NOT NULL CHECK ( status IN ('ready', 'building', 'queued', 'failed')),
+    logs text,
     start_time timestamp,
     end_time timestamp
 );
