@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/GeekchanskiY/cv_builder/internal/schemas/requests"
 	"github.com/GeekchanskiY/cv_builder/internal/usecases"
 	"github.com/GeekchanskiY/cv_builder/internal/utils"
@@ -32,6 +33,16 @@ func (c *CVBuilderController) Build(w http.ResponseWriter, r *http.Request, _ ht
 	err = json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
 		utils.HandleInternalError(w, err)
+		return
+	}
+
+	invalidFields := requestData.Validate()
+	if len(invalidFields) > 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		_, err = w.Write([]byte(fmt.Sprintf("Invalid request body: %s", invalidFields)))
+		if err != nil {
+			log.Println("Error writing response")
+		}
 		return
 	}
 
