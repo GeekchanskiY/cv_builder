@@ -92,6 +92,50 @@ func (repo *ProjectRepository) GetAll() (schemes []schemas.Project, err error) {
 	return schemes, nil
 }
 
+func (repo *ProjectRepository) GetMicroservicesByDomains(domainIds []int) (schemes []schemas.Project, err error) {
+	q := `SELECT p.id, p.name, p.description
+	FROM projects p
+	JOIN project_services ps ON ps.project_id = p.id
+	JOIN project_domains pd ON pd.project_id = p.id
+	WHERE pd.domain_id = ANY($1)
+	ORDER BY (
+		SELECT COUNT(*) from project_domains pdd 
+		                where pdd.project_id = p.id
+		                and pdd.domain_id IN ($1)
+	)
+	`
+	rows, err := repo.db.Query(q)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var schema schemas.Project
+		if err := rows.Scan(&schema.Id, &schema.Name, &schema.Description); err != nil {
+			return nil, err
+		}
+		schemes = append(schemes, schema)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return schemes, err
+	}
+
+	return schemes, nil
+}
+
 func (repo *ProjectRepository) Get(id int) (schema schemas.Project, err error) {
 	row := repo.db.QueryRow("SELECT id, name, description FROM projects WHERE id = $1", id)
 	err = row.Scan(&schema.Id, &schema.Name, &schema.Description)

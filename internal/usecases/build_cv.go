@@ -191,7 +191,11 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID, microservices int, cvC
 
 	// searching for projects
 	var projects []schemas.Project
-	for i := 0; i < projectsAmount; i++ {
+	for i := 0; i < microserviceProjectsAmount; i++ {
+		log.Println(projects)
+	}
+
+	for i := 0; i < monolithProjectsAmount; i++ {
 		log.Println(projects)
 	}
 
