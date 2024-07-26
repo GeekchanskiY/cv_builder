@@ -130,6 +130,7 @@ create table if not exists cv_project_services(
     order_num int
 );
 
+/* cv_service_id wasn't changed to do not rewrite some parts of code */
 create table if not exists cv_service_responsibilities(
     id serial primary key,
     cv_service_id int references cv_project_services(id),
