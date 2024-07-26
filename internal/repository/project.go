@@ -276,7 +276,7 @@ func (repo *ProjectRepository) CreateDomainsIfNotExists(schema schemas.ProjectDo
 		WHERE pd.project_id = p.id
 		AND pd.domain_id = d.id 
 		);`
-
+	log.Println(schema)
 	r, err := repo.db.Exec(q, schema.ProjectName, schema.DomainName, schema.Comments)
 
 	if err != nil {
@@ -432,7 +432,7 @@ func (repo *ProjectRepository) CreateService(schema schemas.ProjectService) (new
 
 func (repo *ProjectRepository) CreateServiceIfNotExists(schema schemas.ProjectServiceReadable) (created bool, err error) {
 	q := `INSERT INTO project_services(project_id, name, description) 
-	SELECT p.id, $2, $3
+	SELECT p.id, $2::text, $3::text
 	FROM projects p
 	WHERE 
 	    p.name = $1::text 
@@ -442,15 +442,13 @@ func (repo *ProjectRepository) CreateServiceIfNotExists(schema schemas.ProjectSe
 		WHERE ps.project_id = p.id
 		AND ps.name = $2
 		);`
-
 	r, err := repo.db.Exec(q, schema.ProjectName, schema.Name, schema.Description)
 
 	if err != nil {
-		log.Println("Error creating project domain: ", err)
+		log.Println("Error creating project service: ", err)
 
 		return false, err
 	}
-
 	if i, _ := r.RowsAffected(); i != 0 {
 		return true, nil
 	}

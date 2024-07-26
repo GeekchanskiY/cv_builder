@@ -376,7 +376,7 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 		}
 	}
 
-	log.Printf("ProjectServices: provided %d, created: %d", len(data.ProjectDomains), createdItems)
+	log.Printf("ProjectServices: provided %d, created: %d", len(data.ProjectServices), createdItems)
 
 	createdTotal += createdItems
 	createdItems = 0
