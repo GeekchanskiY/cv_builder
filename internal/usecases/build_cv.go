@@ -87,8 +87,8 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
 	// Generation new CV base
 	newCV := schemas.CV{
 		Name:       nameString,
-		VacancyId:  vacancyID,
-		EmployeeId: employeeID,
+		VacancyId:  vacancyData.Id,
+		EmployeeId: employeeData.Id,
 		IsReal:     false,
 	}
 	cvId, err := uc.cvRepo.Create(newCV)
@@ -120,22 +120,35 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
 	// returning cv build status id for further creation
 	cvChan <- cvStatusId
 
-	// Getting required data
-	requiredSkills, err := uc.vacancyRepo.GetSkills(vacancyData.Id)
+	// Getting basic required data
+	requiredVacancySkills, err := uc.vacancyRepo.GetSkills(vacancyData.Id)
 	if err != nil {
 		log.Println("Error getting required skills")
 		return
 	}
-	log.Println(fmt.Sprintf("Required Skills: %d", len(requiredSkills)))
+	log.Println(fmt.Sprintf("Required skills in vacancy: %d", len(requiredVacancySkills)))
 
-	requiredDomains, err := uc.vacancyRepo.GetDomains(vacancyData.Id)
+	requiredVacancyDomains, err := uc.vacancyRepo.GetDomains(vacancyData.Id)
 	if err != nil {
 		log.Println("Error getting required domains")
 		return
 	}
-	log.Println(fmt.Sprintf("Required domains: %d", len(requiredDomains)))
+	log.Println(fmt.Sprintf("Required domains in vacancy: %d", len(requiredVacancyDomains)))
 
-	log.Println(employeeData)
-	log.Println(vacancyData)
+	// Getting all child skills from tree and adding them to the single array
+	var predictedSkills []schemas.Skill
+	for _, vacancySkill := range requiredVacancySkills {
+		predictedSkillsPart, err := uc.skillRepo.GetAllChildrenSkills(vacancySkill.SkillId)
+		if err != nil {
+			log.Println(fmt.Sprintf("Error getting children skills for skill: %d", vacancySkill.SkillId))
+			continue
+		}
+		for _, skill := range predictedSkillsPart {
+			predictedSkills = append(predictedSkills, skill)
+		}
+	}
+
+	log.Println(fmt.Sprintf("Amount of skills to work with: %d", len(predictedSkills)))
+
 	log.Println("CV Build Process finished")
 }
