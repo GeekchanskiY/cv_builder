@@ -258,8 +258,8 @@ func (c *CVController) DeleteProject(w http.ResponseWriter, r *http.Request, _ h
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (c *CVController) GetCVService(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
-	var schemes []schemas.CVService
+func (c *CVController) GetCVProjectService(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+	var schemes []schemas.CVProjectService
 	cvServiceId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
 		utils.HandleInternalError(w, err)
@@ -288,7 +288,7 @@ func (c *CVController) GetCVService(w http.ResponseWriter, _ *http.Request, p ht
 }
 
 func (c *CVController) CreateCVService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	schema := schemas.CVService{}
+	schema := schemas.CVProjectService{}
 
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
@@ -321,7 +321,7 @@ func (c *CVController) CreateCVService(w http.ResponseWriter, r *http.Request, _
 }
 
 func (c *CVController) UpdateCVService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	schema := schemas.CVService{}
+	schema := schemas.CVProjectService{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
 		utils.HandleInternalError(w, err)
@@ -349,7 +349,7 @@ func (c *CVController) UpdateCVService(w http.ResponseWriter, r *http.Request, _
 }
 
 func (c *CVController) DeleteCVService(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	schema := schemas.CVService{}
+	schema := schemas.CVProjectService{}
 	err := json.NewDecoder(r.Body).Decode(&schema)
 	if err != nil {
 		utils.HandleInternalError(w, err)
