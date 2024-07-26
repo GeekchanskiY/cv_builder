@@ -133,12 +133,19 @@ func (c *UtilsController) ExportJSON(w http.ResponseWriter, _ *http.Request, _ h
 		return
 	}
 
+	projectServices, err := c.projectRepo.GetAllServicesReadable()
+	if err != nil {
+		utils.HandleInternalError(w, err)
+		return
+	}
+
 	var data = schemas.FullDatabaseData{
 		Projects:                projects,
 		Domains:                 domains,
 		Companies:               companies,
 		Employees:               employees,
 		ProjectDomains:          projectDomains,
+		ProjectServices:         projectServices,
 		Responsibilities:        responsibilities,
 		ResponsibilitySynonyms:  responsibilitySynonyms,
 		ResponsibilityConflicts: responsibilityConflicts,
@@ -352,6 +359,25 @@ func (c *UtilsController) ImportJSON(w http.ResponseWriter, r *http.Request, _ h
 	}
 
 	log.Printf("ProjectDomains: provided %d, created: %d", len(data.ProjectDomains), createdItems)
+
+	createdTotal += createdItems
+	createdItems = 0
+
+	for _, projectService := range data.ProjectServices {
+		created, err = c.projectRepo.CreateServiceIfNotExists(projectService)
+
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if created {
+			createdItems++
+		}
+	}
+
+	log.Printf("ProjectServices: provided %d, created: %d", len(data.ProjectDomains), createdItems)
+
 	createdTotal += createdItems
 	createdItems = 0
 

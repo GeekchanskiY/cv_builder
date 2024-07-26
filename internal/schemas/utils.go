@@ -10,6 +10,7 @@ type FullDatabaseData struct {
 	Employees               []Employee                       `json:"employees"`
 	Projects                []Project                        `json:"projects"`
 	ProjectDomains          []ProjectDomainReadable          `json:"project_domains"`
+	ProjectServices         []ProjectServiceReadable         `json:"project_services"`
 	Responsibilities        []ResponsibilityReadable         `json:"responsibilities"`
 	ResponsibilityConflicts []ResponsibilityConflictReadable `json:"responsibility_conflicts"`
 	ResponsibilitySynonyms  []ResponsibilitySynonymReadable  `json:"responsibility_synonyms"`
