@@ -10,7 +10,7 @@ delete from cv_service_responsibilities cascade;
 delete from cv_services cascade;
 delete from cv_projects cascade;
 
-delete from  companies cascade;
+delete from companies cascade;
 delete from cvs cascade;
 delete from domains cascade;
 delete from employees cascade;
