@@ -1,6 +1,9 @@
 package schemas
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type CV struct {
 	Id         int    `json:"id"`
@@ -51,10 +54,10 @@ type CVServiceResponsibility struct {
 }
 
 type CVBuildStatus struct {
-	Id        int       `json:"id"`
-	CVId      int       `json:"cv_id"`
-	Status    string    `json:"status"`
-	Logs      string    `json:"logs"`
-	StartTime time.Time `json:"start_time"`
-	EndTime   time.Time `json:"end_time"`
+	Id        int          `json:"id"`
+	CVId      int          `json:"cv_id"`
+	Status    string       `json:"status"`
+	Logs      string       `json:"logs"`
+	StartTime time.Time    `json:"start_time"`
+	EndTime   sql.NullTime `json:"end_time"`
 }
