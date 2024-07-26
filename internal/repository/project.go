@@ -276,7 +276,7 @@ func (repo *ProjectRepository) CreateDomainsIfNotExists(schema schemas.ProjectDo
 		WHERE pd.project_id = p.id
 		AND pd.domain_id = d.id 
 		);`
-	log.Println(schema)
+
 	r, err := repo.db.Exec(q, schema.ProjectName, schema.DomainName, schema.Comments)
 
 	if err != nil {
