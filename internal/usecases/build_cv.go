@@ -83,7 +83,7 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
 	nameBytes := sha256.Sum256(data)
 	nameString := hex.EncodeToString(nameBytes[0:])
 
-	// Generation new
+	// Generation new CV base
 	newCV := schemas.CV{
 		Name:       nameString,
 		VacancyId:  vacancyID,
