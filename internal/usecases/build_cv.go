@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"crypto/sha256"
+	"database/sql"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -104,6 +105,10 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
 		Status:    "queued",
 		Logs:      fmt.Sprintf("CV Build init: %s", newCV.Name),
 		StartTime: time.Now(),
+		EndTime: sql.NullTime{
+			Time:  time.Time{},
+			Valid: false,
+		},
 	}
 	cvStatusId, err := uc.cvRepo.CreateCVBuildStatus(cvBuildStatus)
 	if err != nil {
