@@ -149,6 +149,45 @@ func (repo *SkillRepository) Get(id int) (skill schemas.Skill, err error) {
 	return skill, err
 }
 
+func (repo *SkillRepository) GetAllChildrenSkills(id int) (skills []schemas.Skill, err error) {
+	q := `WITH RECURSIVE cte as (
+		select id, name, description, parent_id from skills where id = $1
+		union all
+		select s.id, s.name, s.description, s.parent_id from skills s inner join cte on s.parent_id=cte.id
+	) select * from cte;`
+
+	rows, err := repo.db.Query(q, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+			log.Println("Error closing rows: ", err)
+		}
+	}(rows)
+
+	for rows.Next() {
+		var skill schemas.Skill
+		if err := rows.Scan(&skill.Id, &skill.Name, &skill.Description, &skill.ParentId); err != nil {
+			return nil, err
+		}
+		skills = append(skills, skill)
+	}
+
+	if err := rows.Err(); err != nil {
+		// Here's not nil, err. I'm not sure why, but:
+		// https://go.dev/doc/database/querying
+		// documentation has the same issue
+
+		return skills, err
+	}
+
+	return skills, nil
+}
+
 func (repo *SkillRepository) GetConflicts(id int) (conflicts []schemas.SkillConflict, err error) {
 	q := `SELECT id, skill_1_id, skill_2_id, comment, priority 
 	FROM skill_conflicts
