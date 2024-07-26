@@ -258,7 +258,7 @@ func (c *CVController) DeleteProject(w http.ResponseWriter, r *http.Request, _ h
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (c *CVController) GetCVProjectService(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
+func (c *CVController) GetCVService(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	var schemes []schemas.CVProjectService
 	cvServiceId, err := strconv.Atoi(p.ByName("id"))
 	if err != nil {
