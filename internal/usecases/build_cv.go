@@ -97,7 +97,7 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
 		cvChan <- 0
 		return
 	}
-	log.Println(fmt.Sprintf("New CV ID: %d", cvId))
+	log.Println(fmt.Sprintf("New CV build status ID: %d", cvId))
 
 	// Generating cv build status
 	cvBuildStatus := schemas.CVBuildStatus{
