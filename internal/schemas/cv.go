@@ -49,3 +49,11 @@ type CVServiceResponsibility struct {
 	// Order used to keep the same order of cv responsibilities between document generations
 	OrderNum int `json:"order_num"`
 }
+
+type CVBuildStatus struct {
+	Id        int       `json:"id"`
+	CVId      int       `json:"cv_id"`
+	Status    string    `json:"status"`
+	StartTime time.Time `json:"start_time"`
+	EndTime   time.Time `json:"end_time"`
+}
