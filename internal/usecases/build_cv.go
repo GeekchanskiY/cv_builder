@@ -97,7 +97,38 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
 		return
 	}
 	log.Println(fmt.Sprintf("New CV ID: %d", cvId))
-	cvChan <- cvId
+
+	// Generating cv build status
+	cvBuildStatus := schemas.CVBuildStatus{
+		CVId:      cvId,
+		Status:    "queued",
+		Logs:      fmt.Sprintf("CV Build init: %s", newCV.Name),
+		StartTime: time.Now(),
+	}
+	cvStatusId, err := uc.cvRepo.CreateCVBuildStatus(cvBuildStatus)
+	if err != nil {
+		log.Println("Error creating CV build status")
+		cvChan <- 0
+		return
+	}
+
+	// returning cv build status id for further creation
+	cvChan <- cvStatusId
+
+	// Getting required data
+	requiredSkills, err := uc.vacancyRepo.GetSkills(vacancyData.Id)
+	if err != nil {
+		log.Println("Error getting required skills")
+		return
+	}
+	log.Println(fmt.Sprintf("Required Skills: %d", len(requiredSkills)))
+
+	requiredDomains, err := uc.vacancyRepo.GetDomains(vacancyData.Id)
+	if err != nil {
+		log.Println("Error getting required domains")
+		return
+	}
+	log.Println(fmt.Sprintf("Required domains: %d", len(requiredDomains)))
 
 	log.Println(employeeData)
 	log.Println(vacancyData)
