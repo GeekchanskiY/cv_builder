@@ -143,4 +143,10 @@ create table if not exists vacancy_domains(
     vacancy_id int references vacancies(id),
     domain_id int references domains(id),
     priority int
-)
+);
+
+create table if not exists cv_build_statuses(
+    id serial primary key,
+    cv_id int references cvs(id),
+    status VARCHAR(16) NOT NULL CHECK ( status IN ('ready', 'building', 'queued'))
+);
