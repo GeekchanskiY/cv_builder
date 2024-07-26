@@ -135,9 +135,41 @@
   ],
   "project_domains": [
     {
-      "domain_name": "VFX",
-      "project_name": "VFX assets storage and integration",
-      "comments": "project works with lots of vfx tools"
+      "domain_name": "CRM",
+      "project_name": "CRM system",
+      "comments": "CRM is... CRM!"
+    },
+    {
+      "domain_name": "database development",
+      "project_name": "CRM system",
+      "comments": "CRM database is usually one of the most complex cases of database build designs"
+    }
+  ],
+  "project_services": [
+    {
+      "project_name": "CRM system",
+      "name": "users service",
+      "description": "crm always must have a standalone service for user management. It has too much separate requests."
+    },
+    {
+      "project_name": "CRM system",
+      "name": "statistics service",
+      "description": "It's useful for crm to have a standalone service for collecting all of the data."
+    },
+    {
+      "project_name": "CRM system",
+      "name": "integrations service",
+      "description": "Usually crm has lots of integrations with different payment systems, suppliers, etc."
+    },
+    {
+      "project_name": "CRM system",
+      "name": "products service",
+      "description": "If CRM offers something to user (always, actually), it must store all of the data in a standalone service"
+    },
+    {
+      "project_name": "CRM system",
+      "name": "orders service",
+      "description": "It depends on products service. Allows to create separate order management"
     }
   ],
   "responsibilities": [
@@ -304,8 +336,8 @@
   ],
   "skill_conflicts": [
     {
-      "skill_1_name": "blender",
-      "skill_2_name": "3ds max",
+      "skill_1_name": "Python Flask",
+      "skill_2_name": "Python FastAPI",
       "comment": "these applications do the same things. It's way not too useful to use them both in the same project",
       "priority": 5
     }
