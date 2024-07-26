@@ -49,7 +49,7 @@ func (c *CVBuilderController) Build(w http.ResponseWriter, r *http.Request, _ ht
 	cvChan := make(chan int)
 
 	// Running building a CV
-	go c.useCase.BuildCV(requestData.EmployeeID, requestData.VacancyID, cvChan)
+	go c.useCase.BuildCV(requestData.EmployeeID, requestData.VacancyID, requestData.Microservices, cvChan)
 
 	select {
 	// returning CV build request ID to be able to track status of the building in future

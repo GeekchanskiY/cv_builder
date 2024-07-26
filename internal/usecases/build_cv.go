@@ -12,6 +12,13 @@ import (
 	"time"
 )
 
+const (
+	juniorExperienceYears = 0
+	middleExperienceYears = 3
+	seniorExperienceYears = 5
+	leadExperienceYears   = 7
+)
+
 type CVBuilderUseCase struct {
 	projectRepo        *repository.ProjectRepository
 	domainRepo         *repository.DomainRepository
@@ -51,7 +58,7 @@ type CVNameHash struct {
 	CreationTime time.Time `json:"creation_time"`
 }
 
-func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
+func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID, microservices int, cvChan chan int) {
 	log.Println("Building CV")
 
 	vacancyData, err := uc.vacancyRepo.Get(vacancyID)
@@ -146,6 +153,46 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID int, cvChan chan int) {
 		for _, skill := range predictedSkillsPart {
 			predictedSkills = append(predictedSkills, skill)
 		}
+	}
+
+	// Calculating amount of projects
+	var projectsAmount int
+
+	if vacancyData.Experience >= juniorExperienceYears {
+		projectsAmount = 1
+	}
+
+	if vacancyData.Experience >= middleExperienceYears {
+		projectsAmount = 2
+	}
+
+	if vacancyData.Experience >= seniorExperienceYears {
+		projectsAmount = 3
+	}
+
+	if vacancyData.Experience >= leadExperienceYears {
+		projectsAmount = 4
+	}
+
+	// defining amount of projects with different architectures
+	var monolithProjectsAmount = projectsAmount
+	var microserviceProjectsAmount = 0
+	if microservices == 1 {
+		microserviceProjectsAmount = projectsAmount / 2
+		monolithProjectsAmount = projectsAmount - microserviceProjectsAmount
+	}
+
+	if microservices == 2 {
+		if projectsAmount >= 3 {
+			monolithProjectsAmount = 1
+			microserviceProjectsAmount = projectsAmount - monolithProjectsAmount
+		}
+	}
+
+	// searching for projects
+	var projects []schemas.Project
+	for i := 0; i < projectsAmount; i++ {
+		log.Println(projects)
 	}
 
 	log.Println(fmt.Sprintf("Amount of skills to work with: %d", len(predictedSkills)))
