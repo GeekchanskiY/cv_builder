@@ -8,7 +8,7 @@ drop table if exists skill_domains cascade ;
 
 
 drop table if exists cv_service_responsibilities cascade ;
-drop table if exists cv_services cascade ;
+drop table if exists cv_project_services cascade ;
 drop table if exists cv_projects cascade ;
 
 drop table if exists companies cascade ;
