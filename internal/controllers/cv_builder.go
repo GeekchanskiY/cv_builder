@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type CVBuilderController struct {
@@ -37,13 +38,24 @@ func (c *CVBuilderController) Build(w http.ResponseWriter, r *http.Request, _ ht
 
 	// Running building a CV
 	go c.useCase.BuildCV(requestData.EmployeeID, requestData.VacancyID, cvChan)
-	newId := <-cvChan
-	log.Println(requestData)
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	_, err = w.Write([]byte("build queued, new CV ID: " + strconv.Itoa(newId)))
-	if err != nil {
-		log.Println("Error writing response")
+	select {
+	case cv := <-cvChan:
+		log.Println("New CV id:", cv)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, err = w.Write([]byte("build queued, new CV ID: " + strconv.Itoa(cv)))
+		if err != nil {
+			log.Println("Error writing response")
+		}
+	case <-time.After(5 * time.Second):
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, err = w.Write([]byte("Error creating CV"))
+		if err != nil {
+			log.Println("Error writing response")
+		}
+
 	}
+
 }
