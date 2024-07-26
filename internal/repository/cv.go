@@ -439,3 +439,15 @@ func (repo *CVRepository) DeleteCVServiceResponsibility(schema schemas.CVService
 	_, err := repo.db.Exec(q, schema.Id)
 	return err
 }
+
+func (repo *CVRepository) CreateCVBuildStatus(schema schemas.CVBuildStatus) (newId int, err error) {
+	q := `INSERT INTO cv_build_statuses(cv_id, status, logs, start_time, end_time) values ($1, $2, $3, $3, $5) returning id`
+	err = repo.db.QueryRow(
+		q, schema.CVId, schema.Status, schema.Logs, schema.StartTime, schema.EndTime,
+	).Scan(&newId)
+	if err != nil {
+		return 0, err
+	}
+
+	return newId, nil
+}
