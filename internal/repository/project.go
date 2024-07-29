@@ -104,7 +104,7 @@ func (repo *ProjectRepository) GetMicroservicesByDomains(domainIds []int) (schem
 		                and pdd.domain_id IN ($1)
 	)
 	`
-	rows, err := repo.db.Query(q)
+	rows, err := repo.db.Query(q, domainIds)
 
 	if err != nil {
 		return nil, err
