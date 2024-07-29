@@ -9,7 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var required_envs = [...]string{
+var requiredEnvs = [...]string{
 	"db_host",
 	"db_port",
 	"db_user",
@@ -32,10 +32,10 @@ func LoadConfig() {
 		log.Fatalf("Error loading .env file. REMINDER: .env file should be in the config directory")
 	}
 	log.Println("-----------------------------------")
-	for _, env := range required_envs {
+	for _, env := range requiredEnvs {
 		if os.Getenv(env) == "" {
 			log.Println("ERROR: not all required .env values presents in the .env file")
-			log.Printf("Required values: %v", required_envs)
+			log.Printf("Required values: %v", requiredEnvs)
 			log.Fatalf("%s is not set in the .env file.", env)
 		}
 
