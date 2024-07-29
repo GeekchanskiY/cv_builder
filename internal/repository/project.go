@@ -2,6 +2,8 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
+	"github.com/lib/pq"
 	"log"
 
 	"github.com/GeekchanskiY/cv_builder/internal/schemas"
@@ -97,14 +99,18 @@ func (repo *ProjectRepository) GetMicroservicesByDomains(domainIds []int) (schem
 	FROM projects p
 	JOIN project_services ps ON ps.project_id = p.id
 	JOIN project_domains pd ON pd.project_id = p.id
-	WHERE pd.domain_id = ANY($1)
+	WHERE pd.domain_id = ANY ($1::int[])
 	ORDER BY (
 		SELECT COUNT(*) from project_domains pdd 
 		                where pdd.project_id = p.id
-		                and pdd.domain_id IN ($1)
+		                and pdd.domain_id = ANY ($1::int[])
 	)
 	`
-	rows, err := repo.db.Query(q, domainIds)
+	if len(domainIds) == 0 {
+		return nil, errors.New("domainIds cant be empty")
+	}
+
+	rows, err := repo.db.Query(q, pq.Array(domainIds))
 
 	if err != nil {
 		return nil, err
