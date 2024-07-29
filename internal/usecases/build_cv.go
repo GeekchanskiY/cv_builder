@@ -200,6 +200,17 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID, microservices int, cvC
 	}
 
 	log.Println(fmt.Sprintf("Amount of skills to work with: %d", len(predictedSkills)))
+	var vacancyDomainIds []int
+	for _, domainID := range requiredVacancyDomains {
+		vacancyDomainIds = append(vacancyDomainIds, domainID.DomainId)
 
+	}
+	predictedProjects, err := uc.projectRepo.GetMicroservicesByDomains(vacancyDomainIds)
+	if err != nil {
+		log.Println("Error predicting projects")
+		return
+	}
+	log.Println(predictedProjects)
+	log.Println(len(predictedProjects))
 	log.Println("CV Build Process finished")
 }
