@@ -30,6 +30,20 @@ func (repo *ResponsibilityRepository) Create(schema schemas.Responsibility) (new
 	return newId, nil
 }
 
+func (repo *ResponsibilityRepository) Count() (res int, err error) {
+	q := `SELECT COUNT(*) FROM responsibilities`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of responsibilities: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *ResponsibilityRepository) CreateIfNotExists(schema schemas.ResponsibilityReadable) (created bool, err error) {
 	// Cast is required
 	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
