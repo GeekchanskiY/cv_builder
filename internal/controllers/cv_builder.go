@@ -98,7 +98,7 @@ func (c *CVBuilderController) Healthcheck(w http.ResponseWriter, _ *http.Request
 	}
 
 	w.WriteHeader(http.StatusOK)
-	_, err = w.Write([]byte(fmt.Sprintf("Available: %s", available)))
+	_, err = w.Write([]byte(fmt.Sprintf("Available: %#v", available)))
 	if err != nil {
 		log.Println("Error writing response")
 	}
