@@ -42,6 +42,20 @@ func (repo *SkillRepository) Create(skill schemas.Skill) (int, error) {
 	return newId, nil
 }
 
+func (repo *SkillRepository) Count() (res int, err error) {
+	q := `SELECT COUNT(*) FROM skills`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of skills: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *SkillRepository) CreateIfNotExists(schema schemas.SkillReadable) (created bool, err error) {
 	// Cast is required
 	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
