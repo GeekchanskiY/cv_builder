@@ -143,6 +143,11 @@
       "domain_name": "database development",
       "project_name": "CRM system",
       "comments": "CRM database is usually one of the most complex cases of database build designs"
+    },
+    {
+      "domain_name": "backend development",
+      "project_name": "CRM system",
+      "comments": "CRM system has largest backend part from most of typical projects"
     }
   ],
   "project_services": [
