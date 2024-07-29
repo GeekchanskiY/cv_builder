@@ -31,6 +31,20 @@ func (repo *ProjectRepository) Create(schema schemas.Project) (int, error) {
 	return newId, nil
 }
 
+func (repo *ProjectRepository) Count() (res int, err error) {
+	q := `SELECT COUNT(*) FROM projects`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of projects: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *ProjectRepository) CreateIfNotExists(schema schemas.Project) (created bool, err error) {
 	q := `INSERT INTO projects(name, description) 
 	SELECT CAST($1 AS VARCHAR), $2
