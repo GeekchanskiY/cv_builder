@@ -62,5 +62,5 @@ func CreateApp() fx.Option {
 
 func main() {
 	config.LoadConfig()
-	fx.New(CreateApp()).Run()
+	fx.New(CreateApp(), fx.NopLogger).Run()
 }
