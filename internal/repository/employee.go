@@ -30,6 +30,20 @@ func (repo *EmployeeRepository) Create(employee schemas.Employee) (newId int, er
 	return newId, nil
 }
 
+func (repo *EmployeeRepository) Count() (res int, err error) {
+	q := `SELECT COUNT(*) FROM employees`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of employees: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *EmployeeRepository) CreateIfNotExists(schema schemas.Employee) (created bool, err error) {
 	q := `INSERT INTO employees(name, about_me, image_url, real_experience) 
 	SELECT CAST($1 AS VARCHAR), $2, $3, $4
