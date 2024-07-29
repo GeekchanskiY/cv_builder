@@ -366,6 +366,20 @@ func (repo *ProjectRepository) GetServices(id int) (schemes []schemas.ProjectSer
 	return schemes, nil
 }
 
+func (repo *ProjectRepository) CountServices() (res int, err error) {
+	q := `SELECT COUNT(*) FROM project_services`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of project services: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *ProjectRepository) GetAllServices() (schemes []schemas.ProjectService, err error) {
 	q := `SELECT id, project_id, name, description 
 	FROM project_services`
