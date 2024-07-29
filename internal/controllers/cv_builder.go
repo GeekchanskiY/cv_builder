@@ -84,3 +84,22 @@ func (c *CVBuilderController) Build(w http.ResponseWriter, r *http.Request, _ ht
 	}
 
 }
+
+func (c *CVBuilderController) Healthcheck(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
+	available, err := c.useCase.CheckDataAvailability()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
+		_, err = w.Write([]byte("Internal Server Error"))
+		if err != nil {
+			log.Println("Error writing response")
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write([]byte(fmt.Sprintf("Available: %s", available)))
+	if err != nil {
+		log.Println("Error writing response")
+	}
+}
