@@ -84,7 +84,7 @@ type CVNameHash struct {
 
 func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID, microservices int, cvChan chan int) {
 	log.Println("Building CV")
-
+	log.Println(uc.CheckDataAvailability())
 	vacancyData, err := uc.vacancyRepo.Get(vacancyID)
 	if err != nil {
 		log.Println("Error getting vacancy data")
@@ -242,6 +242,87 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID, microservices int, cvC
 // CheckDataAvailability is used for handler to check if minimal required amount of data presents in the database
 // to create a cv for a senior developer. Remember: it can't be less, but should be more
 func (uc CVBuilderUseCase) CheckDataAvailability() (available bool, err error) {
+	var amount int
+
+	// Companies
+
+	amount, err = uc.companyRepo.Count()
+	if err != nil {
+		return false, err
+	}
+	if amount < companiesRequired {
+		return false, nil
+	}
+
+	// Employees
+
+	amount, err = uc.employeeRepo.Count()
+	if err != nil {
+		return false, err
+	}
+	if amount < employeesRequired {
+		return false, nil
+	}
+
+	// Projects
+
+	amount, err = uc.projectRepo.Count()
+	if err != nil {
+		return false, err
+	}
+	if amount < projectsRequired {
+		return false, nil
+	}
+
+	// Project services
+
+	amount, err = uc.projectRepo.CountServices()
+	if err != nil {
+		return false, err
+	}
+	if amount < projectServicesRequired {
+		return false, nil
+	}
+
+	// Vacancies
+
+	amount, err = uc.vacancyRepo.Count()
+	if err != nil {
+		return false, err
+	}
+	if amount < vacanciesRequired {
+		return false, nil
+	}
+
+	// Domains
+
+	amount, err = uc.domainRepo.Count()
+	if err != nil {
+		return false, err
+	}
+	if amount < domainsRequired {
+		return false, nil
+	}
+
+	// Skills
+
+	amount, err = uc.skillRepo.Count()
+	if err != nil {
+		return false, err
+	}
+	if amount < skillsRequired {
+		return false, nil
+	}
+
+	// Responsibilities
+
+	amount, err = uc.responsibilityRepo.Count()
+	if err != nil {
+		return false, err
+	}
+	if amount < responsibilitiesRequired {
+		return false, nil
+	}
 
 	return true, nil
 }
