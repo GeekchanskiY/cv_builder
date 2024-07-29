@@ -13,10 +13,34 @@ import (
 )
 
 const (
+	// Experience constant
 	juniorExperienceYears = 0
 	middleExperienceYears = 3
 	seniorExperienceYears = 5
 	leadExperienceYears   = 7
+
+	// Responsibilities constants
+	leadMaxResponsibilityAmount = 24
+	leadMinResponsibilityAmount = 20
+
+	seniorMaxResponsibilityAmount = 20
+	seniorMinResponsibilityAmount = 16
+
+	middleMaxResponsibilityAmount = 16
+	middleMinResponsibilityAmount = 12
+
+	juniorMaxResponsibilityAmount = 16
+	juniorMinResponsibilityAmount = 10
+
+	// Minimal requirements
+	companiesRequired        = 1
+	employeesRequired        = 1
+	projectsRequired         = 8
+	vacanciesRequired        = 1
+	projectServicesRequired  = 16 // (4 monoliths, 4 with 3 services)
+	domainsRequired          = 12
+	skillsRequired           = 56 //(24 * 4 = 56)
+	responsibilitiesRequired = 224
 )
 
 type CVBuilderUseCase struct {
@@ -213,4 +237,11 @@ func (uc CVBuilderUseCase) BuildCV(employeeID, vacancyID, microservices int, cvC
 	log.Println(predictedProjects)
 	log.Println(len(predictedProjects))
 	log.Println("CV Build Process finished")
+}
+
+// CheckDataAvailability is used for handler to check if minimal required amount of data presents in the database
+// to create a cv for a senior developer. Remember: it can't be less, but should be more
+func (uc CVBuilderUseCase) CheckDataAvailability() (available bool, err error) {
+
+	return true, nil
 }
