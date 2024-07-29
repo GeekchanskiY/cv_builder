@@ -29,6 +29,20 @@ func (repo *DomainRepository) Create(domain schemas.Domain) (int, error) {
 	return newId, nil
 }
 
+func (repo *DomainRepository) Count() (res int, err error) {
+	q := `SELECT COUNT(*) FROM domains`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of domains: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *DomainRepository) CreateIfNotExists(schema schemas.Domain) (created bool, err error) {
 	// Cast is required
 	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
