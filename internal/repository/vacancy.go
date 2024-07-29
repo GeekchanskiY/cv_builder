@@ -30,6 +30,20 @@ func (repo *VacanciesRepository) Create(schema schemas.Vacancy) (int, error) {
 	return newId, nil
 }
 
+func (repo *VacanciesRepository) Count() (res int, err error) {
+	q := `SELECT COUNT(*) FROM vacancies`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of vacancies: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *VacanciesRepository) CreateIfNotExists(schema schemas.VacancyReadable) (created bool, err error) {
 	q := `INSERT INTO vacancies(name, company_id, link, description, published_at, experience) 
 	SELECT CAST($1 AS VARCHAR), (select id from companies where name = $2), $3, $4, $5, $6
