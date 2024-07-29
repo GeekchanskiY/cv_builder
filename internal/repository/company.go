@@ -32,6 +32,20 @@ func (repo *CompanyRepository) Create(company schemas.Company) (int, error) {
 	return newId, nil
 }
 
+func (repo *CompanyRepository) Count() (res int, err error) {
+	q := `SELECT COUNT(*) FROM companies`
+
+	err = repo.db.QueryRow(q).Scan(&res)
+
+	if err != nil {
+		log.Println("Error getting amount of companies: ", err)
+
+		return 0, err
+	}
+
+	return res, nil
+}
+
 func (repo *CompanyRepository) CreateIfNotExists(company schemas.Company) (created bool, err error) {
 	// Cast is required
 	// https://stackoverflow.com/questions/31733790/postgresql-parameter-issue-1
