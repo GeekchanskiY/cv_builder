@@ -45,26 +45,6 @@
   ],
   "domains": [
     {
-      "name": "backend development",
-      "description": "general backend development specifications"
-    },
-    {
-      "name": "frontend development",
-      "description": "general frontend development specifications"
-    },
-    {
-      "name": "devOPS",
-      "description": "general devOPS specification"
-    },
-    {
-      "name": "secOPS",
-      "description": "general decOPS specification"
-    },
-    {
-      "name": "database development",
-      "description": "general database deveiopment specification"
-    },
-    {
       "name": "IoT",
       "description": "Internet of things"
     },
@@ -93,8 +73,64 @@
       "description": "VFX development"
     },
     {
-      "name": "gamedev",
+      "name": "gameDev",
       "description": "game development"
+    },
+    {
+      "name": "e-commerce",
+      "description": "activity of electronically buying or selling products on online services"
+    },
+    {
+      "name": "big data",
+      "description": "so big... very data..."
+    },
+    {
+      "name": "bank",
+      "description": "bank system development"
+    },
+    {
+      "name": "blockchain",
+      "description": "scam, MMM, etc."
+    },
+    {
+      "name": "finance",
+      "description": "game development"
+    },
+    {
+      "name": "AI",
+      "description": "artificial intelligence research and development"
+    },
+    {
+      "name": "ADS",
+      "description": "advertisement engines development"
+    },
+    {
+      "name": "Insurance",
+      "description": "protection from financial loss in which, in exchange for a fee, a party agrees to compensate another party in the event of a certain loss, damage, or injury. It is a form of risk management, primarily used to protect against the risk of a contingent or uncertain loss."
+    },
+    {
+      "name": "e-commerce",
+      "description": "activity of electronically buying or selling products on online services"
+    },
+    {
+      "name": "data science",
+      "description": "interdisciplinary academic field that uses statistics, scientific computing, scientific methods, processes, scientific visualization, algorithms and systems to extract or extrapolate knowledge and insights from potentially noisy, structured, or unstructured data."
+    },
+    {
+      "name": "telecom",
+      "description": "telecom systems development (actually, it's a CRM subdomain"
+    },
+    {
+      "name": "travel",
+      "description": "travel platform development"
+    },
+    {
+      "name": "education",
+      "description": "educational system development"
+    },
+    {
+      "name": "military",
+      "description": "military systems development"
     }
   ],
   "employees": [
