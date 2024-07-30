@@ -205,17 +205,52 @@
     {
       "domain_name": "CRM",
       "project_name": "CRM system",
-      "comments": "CRM is... CRM!"
+      "comments": "todo: add"
     },
     {
-      "domain_name": "database development",
-      "project_name": "CRM system",
-      "comments": "CRM database is usually one of the most complex cases of database build designs"
+      "domain_name": "CMS",
+      "project_name": "Remote job search app",
+      "comments": "todo: add"
     },
     {
-      "domain_name": "backend development",
-      "project_name": "CRM system",
-      "comments": "CRM system has largest backend part from most of typical projects"
+      "domain_name": "healthcare",
+      "project_name": "Cosmetics analog search service",
+      "comments": "todo: add"
+    },
+    {
+      "domain_name": "telecom",
+      "project_name": "Telecom CRM system",
+      "comments": "todo: add"
+    },
+    {
+      "domain_name": "education",
+      "project_name": "Educational platform",
+      "comments": "todo: add"
+    },
+    {
+      "domain_name": "gambling",
+      "project_name": "Online casino and betting service",
+      "comments": "todo: add"
+    },
+    {
+      "domain_name": "e-commerce",
+      "project_name": "Shoe suppliers services",
+      "comments": "todo: add"
+    },
+    {
+      "domain_name": "e-commerce",
+      "project_name": "Restaurants interactive menu",
+      "comments": "todo: add"
+    },
+    {
+      "domain_name": "VFX",
+      "project_name": "VFX assets storage and integration",
+      "comments": "todo: add"
+    },
+    {
+      "domain_name": "logistics",
+      "project_name": "Logistics service for workwear distributor",
+      "comments": "todo: add"
     }
   ],
   "project_services": [
@@ -247,7 +282,7 @@
   ],
   "responsibilities": [
     {
-      "name": "vfx tools optimization",
+      "name": "Python testing - pytest",
       "priority": 5,
       "skill_name": "VFX",
       "experience": 5,
