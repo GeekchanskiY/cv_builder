@@ -136,7 +136,7 @@
   "employees": [
     {
       "name": "Nikita Shabanov",
-      "about_me": "stuff",
+      "about_me": "Japanese meme here",
       "image_url": "",
       "real_experience": 1
     },
@@ -145,6 +145,18 @@
       "about_me": "stuff",
       "image_url": "",
       "real_experience": 5
+    },
+    {
+      "name": "Grigory Nesterov",
+      "about_me": "cool PR manager",
+      "image_url": "",
+      "real_experience": 2
+    },
+    {
+      "name": "Dmitry Malafei",
+      "about_me": "senior software engineer/team lead",
+      "image_url": "",
+      "real_experience": 7
     }
   ],
   "projects": [
