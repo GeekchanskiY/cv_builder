@@ -170,7 +170,7 @@
     },
     {
       "name": "Cosmetics analog search service",
-      "description": "A remote job search app that allows users to find job vacancies in various industries that offer remote work options. The app scrapes websites with job postings and extracts relevant information such as job title, job description, company name, location, and application requirements."
+      "description": "Application that allows you to find a better, healthier, cheaper cosmetics by a large amount of parameters. Various data sources allow you to see cosmetics ingredients rating based on inci database, pubchem database, and a lot of different expert sources."
     },
     {
       "name": "Logistics service for workwear distributor",
@@ -179,6 +179,26 @@
     {
       "name": "VFX assets storage and integration",
       "description": "Service for integration of the ShotGrid cloud asset storage into the Houdini and Maya, and various optimizations for their rendering. Contains complex math and physics algorhytms, and improved resulting performance for almost 5 times."
+    },
+    {
+      "name": "Restaurants interactive menu",
+      "description": "Service for restaurants which contains interactive menu, overview of different restaurants in their network"
+    },
+    {
+      "name": "Shoe suppliers services",
+      "description": "Services for shoe supplier which allows to check current stocks in different warehouses, simplify different logistics, and also analyze business"
+    },
+    {
+      "name": "Online casino and betting service",
+      "description": "Services for an online casino, which include logic for customer interactions, betting services, etc."
+    },
+    {
+      "name": "Educational platform",
+      "description": "Educational platform, which allows teachers to interact with students, store tests, video-lessons, presentations, etc."
+    },
+    {
+      "name": "Telecom CRM system",
+      "description": "Analog of SAP CPQ service, but with much better performance and higher level of customization because of the manually written logic and order constructors."
     }
   ],
   "project_domains": [
