@@ -1,8 +1,9 @@
-# cv_builder
-
-### Notes
-Maybe create to each technology it's color or add preview images(mascots etc.) to identify cv content from list preview
-
-Routing may look a little bit inconvenient. It's caused by httproutes => I cant do route like /:id/skills when /:id/ exists...
+# cv builder
 
 
+### ZEN of CV Builder 
+Any microservice project may be monolith, but not all the monolith apps may be microservices \
+More data is predefined is better, than less \
+Sometimes even the same responsibility can conflict with itself \
+The more relations present in the database - the better cv you will have in result \
+Abuse the system, hate HR's, be a punk!
