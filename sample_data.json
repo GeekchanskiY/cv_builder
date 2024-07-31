@@ -341,6 +341,195 @@
       "skill_name": "creating database schema",
       "experience": 3,
       "comments": "denormalize database to improve performance"
+    },
+    {
+      "name": "code refactoring",
+      "priority": 3,
+      "skill_name": "go basics",
+      "experience": 2,
+      "comments": "refactoring code to improve readability, scalability, performance, etc."
+    },
+    {
+      "name": "configuring aws storage classes",
+      "priority": 5,
+      "skill_name": "AWS S3",
+      "experience": 3,
+      "comments": "s3 has different storage classes for different purposes"
+    },
+    {
+      "name": "setting up Django application",
+      "priority": 3,
+      "skill_name": "python Django",
+      "experience": 5,
+      "comments": "default configuration, but usually has complex bottlenecks, that's why it's experience is this high"
+    },
+    {
+      "name": "writing raw sql",
+      "priority": 3,
+      "skill_name": "python Django - ORM",
+      "experience": 5,
+      "comments": "sometimes it's easier to write raw sql queries to avoid ORM issues"
+    },
+    {
+      "name": "resolving orm problems",
+      "priority": 1,
+      "skill_name": "python Django - ORM",
+      "experience": 5,
+      "comments": "select related, prefetch related"
+    },
+    {
+      "name": "designing nosql storage",
+      "priority": 1,
+      "skill_name": "key-value nosql database",
+      "experience": 5,
+      "comments": "even if nosql database has no strict models, it's also needs to be designed"
+    },
+    {
+      "name": "configuring AWS DynamoDB",
+      "priority": 5,
+      "skill_name": "AWS DynamoDB",
+      "experience": 5,
+      "comments": "read the AWS docs"
+    },
+    {
+      "name": "configuring Azure cloud infrastructure",
+      "priority": 5,
+      "skill_name": "Azure",
+      "experience": 5,
+      "comments": "complex design of cloud part"
+    },
+    {
+      "name": "configuring AWS cloud infrastructure",
+      "priority": 5,
+      "skill_name": "AWS",
+      "experience": 5,
+      "comments": "complex design of cloud part"
+    },
+    {
+      "name": "configuring GCP cloud infrastructure",
+      "priority": 5,
+      "skill_name": "AWS",
+      "experience": 5,
+      "comments": "complex design of cloud part"
+    },
+    {
+      "name": "configuring kafka consumer groups",
+      "priority": 5,
+      "skill_name": "kafka consumer groups",
+      "experience": 5,
+      "comments": "complex design of cloud part"
+    },
+    {
+      "name": "creating kafka dead letter queue topic",
+      "priority": 5,
+      "skill_name": "kafka dlq",
+      "experience": 5,
+      "comments": "usually it requires a separate service. read this topic carefully"
+    },
+    {
+      "name": "configuring grpc",
+      "priority": 5,
+      "skill_name": "grpc",
+      "experience": 5,
+      "comments": "configuring grpc exchange models"
+    },
+    {
+      "name": "writing complex docker-compose.yml",
+      "priority": 3,
+      "skill_name": "docker-compose",
+      "experience": 3,
+      "comments": "adding different networks, volumes, health checks, dependencies, etc."
+    },
+    {
+      "name": "writing docker-compose.yml",
+      "priority": 5,
+      "skill_name": "docker-compose",
+      "experience": 1,
+      "comments": "configuring docker-compose file"
+    },
+    {
+      "name": "sql database development",
+      "priority": 5,
+      "skill_name": "sql database development",
+      "experience": 1,
+      "comments": "creating all the designed stuff"
+    },
+    {
+      "name": "configuring RabbitMQ",
+      "priority": 5,
+      "skill_name": "rabbitMQ",
+      "experience": 1,
+      "comments": "setting up queues, routing keys, etc."
+    },
+    {
+      "name": "configuring AWS ElasticSearch",
+      "priority": 5,
+      "skill_name": "Amazon ElasticSearch Service",
+      "experience": 3,
+      "comments": "setup"
+    },
+    {
+      "name": "creating database views and materialized views",
+      "priority": 5,
+      "skill_name": "creating database views",
+      "experience": 1,
+      "comments": "views & materialized views"
+    },
+    {
+      "name": "writing complex business logic",
+      "priority": 5,
+      "skill_name": "go complex business logic",
+      "experience": 3,
+      "comments": "cant comment, depends on project"
+    },
+    {
+      "name": "configure AWS SNS",
+      "priority": 1,
+      "skill_name": "AWS SNS",
+      "experience": 3,
+      "comments": "read AWS docs"
+    },
+    {
+      "name": "configure AWS SQS",
+      "priority": 1,
+      "skill_name": "AWS SQS",
+      "experience": 3,
+      "comments": "read AWS docs"
+    },
+    {
+      "name": "configure AWS Cognito",
+      "priority": 1,
+      "skill_name": "AWS Cognito",
+      "experience": 3,
+      "comments": "read AWS docs"
+    },
+    {
+      "name": "setup Flask application",
+      "priority": 4,
+      "skill_name": "python Flask",
+      "experience": 3,
+      "comments": "create project structure, setup config files, etc."
+    },
+    {
+      "name": "database administration",
+      "priority": 5,
+      "skill_name": "database administration",
+      "experience": 5,
+      "comments": "creating users, roles, configuring permissions, etc."
+    },
+    {
+      "name": "advanced work with go mutexes",
+      "priority": 1,
+      "skill_name": "go mutex",
+      "experience": 3,
+      "comments": "using different mutexes"
+    },
+    {
+      "name": "setup Tornado application",
+      "priority": 1,
+      "skill_name": "python Tornado",
+      "experience": 3,
+      "comments": "create project structure, setup config files, etc."
     }
   ],
   "responsibility_conflicts": [
@@ -636,12 +825,12 @@
       "parent_name": "message brokers"
     },
     {
-      "name": "creating dlq",
+      "name": "kafka dlq",
       "description": "kafka does not have built-in dead letter queue",
       "parent_name": "kafka"
     },
     {
-      "name": "creating kafka consumer groups",
+      "name": "kafka consumer groups",
       "description": "system design",
       "parent_name": "kafka"
     },
