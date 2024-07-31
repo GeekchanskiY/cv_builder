@@ -476,6 +476,26 @@
       "parent_name": "AWS"
     },
     {
+      "name": "AWS Cognito",
+      "description": "identity management service used for user identity and data synchronization",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS Aurora",
+      "description": "RDBMS (Relational Database Management System) which is built with mysql and postgresql for the cloud",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS Cloudwatch",
+      "description": "detects uncommon changes in the environment, set an alert, troubleshoots issues, and take automated actions.",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS S3 Glacier",
+      "description": "It is a long-term, secure, durable storage class for data archiving at the lowest cost and milliseconds of access",
+      "parent_name": "AWS"
+    },
+    {
       "name": "Azure",
       "description": "system design",
       "parent_name": "cloud"
