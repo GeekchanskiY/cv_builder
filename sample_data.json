@@ -561,6 +561,71 @@
       "parent_name": "cloud"
     },
     {
+      "name": "google VPC",
+      "description": "google virtual private cloud",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google app engine",
+      "description": "lets you create and host applications",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google kubernetes engine",
+      "description": "gcp k8's",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud container registry",
+      "description": "service designed for storing private container images",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud functions",
+      "description": "serverless computing",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud load balancing",
+      "description": "distributes internet traffic",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud delivery network",
+      "description": "GCP CDN",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud storage",
+      "description": "storing and accessing data",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud sql",
+      "description": "sql",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud bigtable",
+      "description": "managing large-scale structured data",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud datastore",
+      "description": "nosql",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud bigquery",
+      "description": "fully managed data warehouse that enables analytics on massive datasets",
+      "parent_name": "GCP"
+    },
+    {
+      "name": "google cloud IAM",
+      "description": "identity management",
+      "parent_name": "GCP"
+    },
+    {
       "name": "message brokers",
       "description": "system design",
       "parent_name": "devOPS"
