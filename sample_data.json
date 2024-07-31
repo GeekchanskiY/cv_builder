@@ -278,6 +278,11 @@
       "project_name": "CRM system",
       "name": "orders service",
       "description": "It depends on products service. Allows to create separate order management"
+    },
+    {
+      "project_name": "Educational platform",
+      "name": "users service",
+      "description": "It depends on products service. Allows to create separate order management"
     }
   ],
   "responsibilities": [
