@@ -501,6 +501,36 @@
       "parent_name": "cloud"
     },
     {
+      "name": "message brokers",
+      "description": "system design",
+      "parent_name": "devOPS"
+    },
+    {
+      "name": "kafka",
+      "description": "system design",
+      "parent_name": "message brokers"
+    },
+    {
+      "name": "creating dlq",
+      "description": "kafka does not have built-in dead letter queue",
+      "parent_name": "kafka"
+    },
+    {
+      "name": "creating kafka consumer groups",
+      "description": "system design",
+      "parent_name": "kafka"
+    },
+    {
+      "name": "creating kafka topics",
+      "description": "system design",
+      "parent_name": "kafka"
+    },
+    {
+      "name": "rabbitMQ",
+      "description": "system design",
+      "parent_name": "message brokers"
+    },
+    {
       "name": "docker",
       "description": "system design",
       "parent_name": "devOPS"
@@ -524,6 +554,121 @@
       "name": "go development",
       "description": "go development",
       "parent_name": null
+    },
+    {
+      "name": "go web development",
+      "description": "go development",
+      "parent_name": "go development"
+    },
+    {
+      "name": "go basics",
+      "description": "go development",
+      "parent_name": "go development"
+    },
+    {
+      "name": "go complex business logic",
+      "description": "go development",
+      "parent_name": "go development"
+    },
+    {
+      "name": "go optimization",
+      "description": "go development",
+      "parent_name": "go development"
+    },
+    {
+      "name": "go uber/fx",
+      "description": "large go DI package",
+      "parent_name": "go basics"
+    },
+    {
+      "name": "go concurrency",
+      "description": "go development",
+      "parent_name": "go basics"
+    },
+    {
+      "name": "goroutines",
+      "description": "go development",
+      "parent_name": "go concurrency"
+    },
+    {
+      "name": "go channels",
+      "description": "go development",
+      "parent_name": "go concurrency"
+    },
+    {
+      "name": "go mutex",
+      "description": "go development",
+      "parent_name": "go concurrency"
+    },
+    {
+      "name": "go wait groups",
+      "description": "go development",
+      "parent_name": "go concurrency"
+    },
+    {
+      "name": "go testing",
+      "description": "go development",
+      "parent_name": "go basics"
+    },
+    {
+      "name": "go testing package",
+      "description": "go development",
+      "parent_name": "go testing"
+    },
+    {
+      "name": "go testify/assert",
+      "description": "go development",
+      "parent_name": "go testing"
+    },
+    {
+      "name": "go test containers",
+      "description": "go development",
+      "parent_name": "go testing"
+    },
+    {
+      "name": "go routing",
+      "description": "go development",
+      "parent_name": "go web development"
+    },
+    {
+      "name": "go database management",
+      "description": "go development",
+      "parent_name": "go web development"
+    },
+    {
+      "name": "grpc",
+      "description": "go development",
+      "parent_name": "go web development"
+    },
+    {
+      "name": "gorm",
+      "description": "go development",
+      "parent_name": "go database management"
+    },
+    {
+      "name": "go sql package",
+      "description": "go development",
+      "parent_name": "go database management"
+    },
+    {
+      "name": "custom routing",
+      "description": "go development",
+      "parent_name": "go routing"
+    },
+    {
+      "name": "httprouter",
+      "description": "go development",
+      "parent_name": "go routing"
+    },
+    {
+      "name": "go mux",
+      "description": "go development",
+      "parent_name": "go routing"
+    },
+    {
+      "name": "go chi",
+      "description": "go development",
+      "parent_name": "go routing"
     },
     {
       "name": "ruby development",
@@ -584,6 +729,16 @@
       "name": "redis",
       "description": "databases development",
       "parent_name": "key-value nosql database"
+    },
+    {
+      "name": "caching with redis",
+      "description": "databases development",
+      "parent_name": "redis"
+    },
+    {
+      "name": "creating message broker with redis",
+      "description": "databases development",
+      "parent_name": "redis"
     },
     {
       "name": "mongodb",
