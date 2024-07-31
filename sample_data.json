@@ -530,6 +530,34 @@
       "skill_name": "python Tornado",
       "experience": 3,
       "comments": "create project structure, setup config files, etc."
+    },
+    {
+      "name": "setup kafka consumer groups",
+      "priority": 5,
+      "skill_name": "kafka consumer groups",
+      "experience": 3,
+      "comments": "different consumer groups for work with different topics, consumers, etc."
+    },
+    {
+      "name": "setup GCP infrastructure",
+      "priority": 5,
+      "skill_name": "GCP",
+      "experience": 5,
+      "comments": "setup all GCP services from projects"
+    },
+    {
+      "name": "setup Azure DevOPS",
+      "priority": 5,
+      "skill_name": "Azure DevOPS",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setup Data Factory",
+      "priority": 5,
+      "skill_name": "Azure Data Factory",
+      "experience": 5,
+      "comments": "read the docs"
     }
   ],
   "responsibility_conflicts": [
