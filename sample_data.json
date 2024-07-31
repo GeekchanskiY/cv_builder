@@ -322,7 +322,7 @@
   ],
   "responsibilities": [
     {
-      "name": "Python testing - pytest",
+      "name": "python testing - pytest",
       "priority": 5,
       "skill_name": "VFX",
       "experience": 5,
@@ -349,129 +349,159 @@
   ],
   "skills": [
     {
-      "name": "Python development",
+      "name": "python development",
       "description": "working with python",
       "parent_name": null
     },
     {
-      "name": "Python package management",
+      "name": "go development",
+      "description": "go development",
+      "parent_name": null
+    },
+    {
+      "name": "ruby development",
+      "description": "ruby development",
+      "parent_name": null
+    },
+    {
+      "name": "databases",
+      "description": "go development",
+      "parent_name": null
+    },
+    {
+      "name": "database development",
+      "description": "dba",
+      "parent_name": null
+    },
+    {
+      "name": "database administration",
+      "description": "go development",
+      "parent_name": null
+    },
+    {
+      "name": "database design",
+      "description": "go development",
+      "parent_name": null
+    },
+    {
+      "name": "python package management",
       "description": "working with python package managers",
-      "parent_name": "Python development"
+      "parent_name": "python development"
     },
     {
-      "name": "Python package management - PyPI",
+      "name": "python package management - PyPI",
       "description": "working with python package managers",
-      "parent_name": "Python package management"
+      "parent_name": "python package management"
     },
     {
-      "name": "Python package management - Pip",
+      "name": "python package management - Pip",
       "description": "working with python package managers",
-      "parent_name": "Python package management"
+      "parent_name": "python package management"
     },
     {
-      "name": "Python package management - Conda",
+      "name": "python package management - Conda",
       "description": "working with python package managers",
-      "parent_name": "Python package management"
+      "parent_name": "python package management"
     },
     {
-      "name": "Python package management - Poetry",
+      "name": "python package management - Poetry",
       "description": "working with python package managers",
-      "parent_name": "Python package management"
+      "parent_name": "python package management"
     },
     {
-      "name": "Python testing",
+      "name": "python testing",
       "description": "testing in python",
-      "parent_name": "Python development"
+      "parent_name": "python development"
     },
     {
-      "name": "Python testing - doctest",
+      "name": "python testing - doctest",
       "description": "testing in python",
-      "parent_name": "Python testing"
+      "parent_name": "python testing"
     },
     {
-      "name": "Python testing - nose",
+      "name": "python testing - nose",
       "description": "testing in python",
-      "parent_name": "Python testing"
+      "parent_name": "python testing"
     },
     {
-      "name": "Python testing - pytest",
+      "name": "python testing - pytest",
       "description": "testing in python",
-      "parent_name": "Python testing"
+      "parent_name": "python testing"
     },
     {
-      "name": "Python testing - unittest",
+      "name": "python testing - unittest",
       "description": "testing in python",
-      "parent_name": "Python testing"
+      "parent_name": "python testing"
     },
     {
-      "name": "Python web development",
+      "name": "python web development",
       "description": "web development in python",
-      "parent_name": "Python development"
+      "parent_name": "python development"
     },
     {
-      "name": "Python Django",
+      "name": "python Django",
       "description": "python web development with django",
-      "parent_name": "Python web development"
+      "parent_name": "python web development"
     },
     {
-      "name": "Python Django - signals",
+      "name": "python Django - signals",
       "description": "Using signals in django",
-      "parent_name": "Python Django"
+      "parent_name": "python Django"
     },
     {
-      "name": "Python Django - setup",
+      "name": "python Django - setup",
       "description": "setting up django application, with configuring apps, config files, connections, etc.",
-      "parent_name": "Python Django"
+      "parent_name": "python Django"
     },
     {
-      "name": "Python Django - admin",
+      "name": "python Django - admin",
       "description": "Using complex admin panels in django",
-      "parent_name": "Python Django"
+      "parent_name": "python Django"
     },
     {
-      "name": "Python Django - ORM",
+      "name": "python Django - ORM",
       "description": "Using Django ORM in django",
-      "parent_name": "Python Django"
+      "parent_name": "python Django"
     },
     {
-      "name": "Python Django - templates",
+      "name": "python Django - templates",
       "description": "Using Django templates in django",
-      "parent_name": "Python Django"
+      "parent_name": "python Django"
     },
     {
-      "name": "Python Django - DRF",
+      "name": "python Django - DRF",
       "description": "Using Django Rest Framework in django",
-      "parent_name": "Python Django"
+      "parent_name": "python Django"
     },
     {
-      "name": "Python Django - DRF - Serializers",
+      "name": "python Django - DRF - Serializers",
       "description": "Using Django Rest Framework serializers",
-      "parent_name": "Python Django - DRF"
+      "parent_name": "python Django - DRF"
     },
     {
-      "name": "Python Django - DRF - Viewsets",
+      "name": "python Django - DRF - Viewsets",
       "description": "Using Django Rest Framework serializers",
-      "parent_name": "Python Django - DRF"
+      "parent_name": "python Django - DRF"
     },
     {
-      "name": "Python FastAPI",
+      "name": "python FastAPI",
       "description": "python web development with FastAPI",
-      "parent_name": "Python web development"
+      "parent_name": "python web development"
     },
     {
-      "name": "Python Flask",
+      "name": "python Flask",
       "description": "python web development with Flask",
-      "parent_name": "Python web development"
+      "parent_name": "python web development"
     },
     {
-      "name": "Python Tornado",
+      "name": "python Tornado",
       "description": "python web development with Tornado",
-      "parent_name": "Python web development"
+      "parent_name": "python web development"
     },
     {
-      "name": "Python Sanic",
+      "name": "python Sanic",
       "description": "python web development with Sanic",
-      "parent_name": "Python web development"
+      "parent_name": "python web development"
     }
   ],
   "skill_domains": [
@@ -484,8 +514,8 @@
   ],
   "skill_conflicts": [
     {
-      "skill_1_name": "Python Flask",
-      "skill_2_name": "Python FastAPI",
+      "skill_1_name": "python Flask",
+      "skill_2_name": "python FastAPI",
       "comment": "these applications do the same things. It's way not too useful to use them both in the same project",
       "priority": 5
     }
