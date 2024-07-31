@@ -486,6 +486,11 @@
       "parent_name": "AWS"
     },
     {
+      "name": "AWS API Gateway",
+      "description": "API Gateway",
+      "parent_name": "AWS"
+    },
+    {
       "name": "AWS Cloudwatch",
       "description": "detects uncommon changes in the environment, set an alert, troubleshoots issues, and take automated actions.",
       "parent_name": "AWS"
@@ -497,7 +502,62 @@
     },
     {
       "name": "Azure",
-      "description": "system design",
+      "description": "microsoft azure web services",
+      "parent_name": "cloud"
+    },
+    {
+      "name": "Azure Active Directory",
+      "description": "single sign-on and multi-factor authentication as an enterprise identity service to protect them",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure CDN",
+      "description": "content delivery network",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure Data Factory",
+      "description": "data-driven workflow in cloud computing",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure SQL",
+      "description": "sql lol",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure Functions",
+      "description": "serverless computing",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure CosmosDB",
+      "description": "noSQL database",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure DevOPS",
+      "description": "software as a service (SaaS) platform",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure Backup",
+      "description": "allows simple data protection tools",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure Virtual Machine",
+      "description": "creates VM's",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "Azure Service Bus",
+      "description": "message broker",
+      "parent_name": "Azure"
+    },
+    {
+      "name": "GCP",
+      "description": "google cloud platform",
       "parent_name": "cloud"
     },
     {
