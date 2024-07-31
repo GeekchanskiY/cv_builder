@@ -327,14 +327,28 @@
       "skill_name": "VFX",
       "experience": 5,
       "comments": "vfx tools optimization"
+    },
+    {
+      "name": "database schema normalization",
+      "priority": 5,
+      "skill_name": "creating database schema",
+      "experience": 3,
+      "comments": "ensuring to have all normal forms a realized in database"
+    },
+    {
+      "name": "database schema denormalization",
+      "priority": 5,
+      "skill_name": "creating database schema",
+      "experience": 3,
+      "comments": "denormalize database to improve performance"
     }
   ],
   "responsibility_conflicts": [
     {
-      "responsibility_1_name": "vfx tools optimization",
-      "responsibility_2_name": "vfx tools optimization",
-      "comment": "test2",
-      "priority": 10
+      "responsibility_1_name": "database schema normalization",
+      "responsibility_2_name": "database schema denormalization",
+      "comment": "it's not logical to have normalization and denormalization in one cv, but it can be in different services",
+      "priority": 2
     }
   ],
   "responsibility_synonyms": [
@@ -345,6 +359,14 @@
     {
       "responsibility_name": "optimization 2",
       "name": "complex optimization"
+    },
+    {
+      "responsibility_name": "database schema normalization",
+      "name": "database normalization"
+    },
+    {
+      "responsibility_name": "database schema denormalization",
+      "name": "database denormalization"
     }
   ],
   "skills": [
@@ -365,23 +387,73 @@
     },
     {
       "name": "databases",
-      "description": "go development",
-      "parent_name": null
-    },
-    {
-      "name": "database development",
-      "description": "dba",
+      "description": "databases development",
       "parent_name": null
     },
     {
       "name": "database administration",
-      "description": "go development",
-      "parent_name": null
+      "description": "databases development",
+      "parent_name": "databases"
+    },
+    {
+      "name": "database optimization",
+      "description": "databases development",
+      "parent_name": "database administration"
+    },
+    {
+      "name": "database finding bottlenecks",
+      "description": "databases development",
+      "parent_name": "database optimization"
+    },
+    {
+      "name": "database query optimization",
+      "description": "databases development",
+      "parent_name": "database optimization"
+    },
+    {
+      "name": "database stress testing",
+      "description": "databases development",
+      "parent_name": "database optimization"
+    },
+    {
+      "name": "database query optimization",
+      "description": "databases development",
+      "parent_name": "database optimization"
     },
     {
       "name": "database design",
-      "description": "go development",
-      "parent_name": null
+      "description": "databases development",
+      "parent_name": "databases"
+    },
+    {
+      "name": "database refactoring",
+      "description": "databases development",
+      "parent_name": "databases"
+    },
+    {
+      "name": "creating database indexes",
+      "description": "databases development",
+      "parent_name": "database design"
+    },
+    {
+      "name": "creating database views",
+      "description": "databases development",
+      "parent_name": "database design"
+    },
+    {
+      "name": "creating database triggers",
+      "description": "databases development",
+      "parent_name": "database design"
+    },
+    {
+      "name": "creating database functions and procedures",
+      "description": "databases development",
+      "parent_name": "database design"
+    },
+    {
+      "name": "creating database schema",
+      "description": "databases development",
+      "parent_name": "database design"
     },
     {
       "name": "python package management",
