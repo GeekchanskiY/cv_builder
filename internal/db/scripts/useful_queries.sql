@@ -6,4 +6,4 @@ select * from projects p left join project_domains pd on pd.project_id  = p.id w
 select s.name, s.parent_id from skills s left join responsibilities r on r.skill_id = s.id where r.id is null;
 
 -- used to check which skills have less responsibilities
-select s.name, count(r.id) from skills s left join responsibilities r on r.skill_id = s.id group by s.name;
+select s.name as skill_name, count(r.id) as responsibilities_amount from skills s left join responsibilities r on r.skill_id = s.id group by s.name ORDER BY responsibilities_amount DESC;
