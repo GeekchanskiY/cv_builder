@@ -282,7 +282,42 @@
     {
       "project_name": "Educational platform",
       "name": "users service",
-      "description": "It depends on products service. Allows to create separate order management"
+      "description": "Allows to manage users registering, auth, etc."
+    },
+    {
+      "project_name": "Educational platform",
+      "name": "teachers service",
+      "description": "Allows to create and manage student boards, set marks, set events, etc."
+    },
+    {
+      "project_name": "Educational platform",
+      "name": "edu service",
+      "description": "Stores and manages from of interactive video-lessons, tests completion, etc. "
+    },
+    {
+      "project_name": "Educational platform",
+      "name": "supporting service",
+      "description": "stores all the media data, sends notifications, etc."
+    },
+    {
+      "project_name": "Remote job search app",
+      "name": "cms engine",
+      "description": "hub for all of the services, sends notifications, etc."
+    },
+    {
+      "project_name": "Remote job search app",
+      "name": "admin service",
+      "description": "allows users to easily administrate their contents"
+    },
+    {
+      "project_name": "Remote job search app",
+      "name": "content service",
+      "description": "allows users to create content types and fill it"
+    },
+    {
+      "project_name": "Remote job search app",
+      "name": "template service",
+      "description": "modifies templates and allows to dynamically insert contents on it"
     }
   ],
   "responsibilities": [
