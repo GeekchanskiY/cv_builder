@@ -322,11 +322,11 @@
   ],
   "responsibilities": [
     {
-      "name": "python testing - pytest",
+      "name": "designing database schema",
       "priority": 5,
-      "skill_name": "VFX",
+      "skill_name": "creating database schema",
       "experience": 5,
-      "comments": "vfx tools optimization"
+      "comments": "designing database schema using different tools like draw.io"
     },
     {
       "name": "database schema normalization",
@@ -376,6 +376,131 @@
       "parent_name": null
     },
     {
+      "name": "system design",
+      "description": "system design",
+      "parent_name": null
+    },
+    {
+      "name": "network configuration",
+      "description": "system design",
+      "parent_name": "system design"
+    },
+    {
+      "name": "devOPS",
+      "description": "system design",
+      "parent_name": "system design"
+    },
+    {
+      "name": "cloud",
+      "description": "system design",
+      "parent_name": "devOPS"
+    },
+    {
+      "name": "AWS",
+      "description": "amazon web services",
+      "parent_name": "cloud"
+    },
+    {
+      "name": "AWS S3",
+      "description": "simple storage service",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS Lambda functions",
+      "description": "serverless computing",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS EC2",
+      "description": "elastic compute cloud",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS ECS",
+      "description": "elastic container service",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS EKS",
+      "description": "elastic kubernetes service",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS SQS",
+      "description": "simple queue service",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS VPC",
+      "description": "virtual private cloud",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "Amazon ElasticSearch Service",
+      "description": "elasticsearch",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS CloudFormation",
+      "description": "enables users to model and manage infrastructure resources in an automated and secure manner",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS RDS",
+      "description": "relational database service",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS IAM",
+      "description": "identity & access management",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS EFS",
+      "description": "elastic file system",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS CloudFront",
+      "description": "service for content delivery networks",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS SNS",
+      "description": "simple notification service",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "AWS DynamoDB",
+      "description": "serverless, document database key-value NoSQL database",
+      "parent_name": "AWS"
+    },
+    {
+      "name": "Azure",
+      "description": "system design",
+      "parent_name": "cloud"
+    },
+    {
+      "name": "docker",
+      "description": "system design",
+      "parent_name": "devOPS"
+    },
+    {
+      "name": "docker-compose",
+      "description": "system design",
+      "parent_name": "docker"
+    },
+    {
+      "name": "kubernetes",
+      "description": "system design",
+      "parent_name": "docker"
+    },
+    {
+      "name": "secOPS",
+      "description": "system design",
+      "parent_name": "system design"
+    },
+    {
       "name": "go development",
       "description": "go development",
       "parent_name": null
@@ -389,6 +514,61 @@
       "name": "databases",
       "description": "databases development",
       "parent_name": null
+    },
+    {
+      "name": "database development",
+      "description": "databases development",
+      "parent_name": "database development"
+    },
+    {
+      "name": "sql database development",
+      "description": "databases development",
+      "parent_name": "database development"
+    },
+    {
+      "name": "postgresql",
+      "description": "databases development",
+      "parent_name": "sql database development"
+    },
+    {
+      "name": "microsoft sql",
+      "description": "databases development",
+      "parent_name": "sql database development"
+    },
+    {
+      "name": "oracle sql",
+      "description": "databases development",
+      "parent_name": "sql database development"
+    },
+    {
+      "name": "mysql",
+      "description": "databases development",
+      "parent_name": "sql database development"
+    },
+    {
+      "name": "nosql database development",
+      "description": "databases development",
+      "parent_name": "database development"
+    },
+    {
+      "name": "key-value nosql database",
+      "description": "databases development",
+      "parent_name": "nosql database development"
+    },
+    {
+      "name": "document-oriented nosql database",
+      "description": "databases development",
+      "parent_name": "nosql database development"
+    },
+    {
+      "name": "redis",
+      "description": "databases development",
+      "parent_name": "key-value nosql database"
+    },
+    {
+      "name": "mongodb",
+      "description": "databases development",
+      "parent_name": "document-oriented nosql database"
     },
     {
       "name": "database administration",
