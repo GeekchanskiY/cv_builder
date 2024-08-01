@@ -691,6 +691,181 @@
       "skill_name": "redis",
       "experience": 2,
       "comments": "read the docs"
+    },
+    {
+      "name": "setting up ms sql database",
+      "priority": 3,
+      "skill_name": "microsoft sql",
+      "experience": 2,
+      "comments": "read the docs"
+    },
+    {
+      "name": "configure k8's clusters in GKE",
+      "priority": 5,
+      "skill_name": "google kubernetes engine",
+      "experience": 4,
+      "comments": "read the docs"
+    },
+    {
+      "name": "configure Conda",
+      "priority": 1,
+      "skill_name": "python package management - Conda",
+      "experience": 2,
+      "comments": "read the docs"
+    },
+    {
+      "name": "build application infrastructure",
+      "priority": 4,
+      "skill_name": "devOPS",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "create gc bigtable instance (todo: do smth interesting here)",
+      "priority": 5,
+      "skill_name": "google cloud bigtable",
+      "experience": 4,
+      "comments": "read the docs"
+    },
+    {
+      "name": "create gc container registry (todo: do smth interesting here)",
+      "priority": 5,
+      "skill_name": "google cloud container registry",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "testing with nose",
+      "priority": 5,
+      "skill_name": "python testing - nose",
+      "experience": 2,
+      "comments": "read the docs"
+    },
+    {
+      "name": "designing database",
+      "priority": 5,
+      "skill_name": "database design",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "help in designing database",
+      "priority": 5,
+      "skill_name": "database design",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "database stress testing",
+      "priority": 5,
+      "skill_name": "database stress testing",
+      "experience": 4,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setup and configure NoSQL database",
+      "priority": 4,
+      "skill_name": "nosql database development",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "configure k8's clusters",
+      "priority": 5,
+      "skill_name": "kubernetes",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "creating unit tests with pytest",
+      "priority": 5,
+      "skill_name": "python testing - pytest",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "writing http router with chi",
+      "priority": 3,
+      "skill_name": "go chi",
+      "experience": 1,
+      "comments": "read the docs"
+    },
+    {
+      "name": "writing complex logic with wait groups",
+      "priority": 1,
+      "skill_name": "go wait groups",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "created http routing with mux",
+      "priority": 3,
+      "skill_name": "go mux",
+      "experience": 1,
+      "comments": "read the docs"
+    },
+    {
+      "name": "created IAM roles",
+      "priority": 3,
+      "skill_name": "google cloud IAM",
+      "experience": 4,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setup and configure AWS Aurora",
+      "priority": 3,
+      "skill_name": "AWS Aurora",
+      "experience": 4,
+      "comments": "read the docs"
+    },
+    {
+      "name": "creating and managing ip address pools",
+      "priority": 5,
+      "skill_name": "network configuration",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "configuring GCP VPC",
+      "priority": 5,
+      "skill_name": "google VPC",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setting up mongodb",
+      "priority": 5,
+      "skill_name": "mongodb",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "configuring AWS CloudFront",
+      "priority": 5,
+      "skill_name": "AWS CloudFront",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "ensuring service architecture security",
+      "priority": 5,
+      "skill_name": "secOPS",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setting up kafka",
+      "priority": 5,
+      "skill_name": "kafka",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "complex code optimization",
+      "priority": 5,
+      "skill_name": "go optimization",
+      "experience": 3,
+      "comments": "read the docs"
     }
   ],
   "responsibility_conflicts": [
