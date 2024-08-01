@@ -558,6 +558,139 @@
       "skill_name": "Azure Data Factory",
       "experience": 5,
       "comments": "read the docs"
+    },
+    {
+      "name": "setup GCP infrastructure",
+      "priority": 5,
+      "skill_name": "GCP",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setup IaaS in Azure DevOPS",
+      "priority": 5,
+      "skill_name": "Azure DevOPS",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setup kubernetes in AWS EKS",
+      "priority": 5,
+      "skill_name": "AWS EKS",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "deploy and configure EC2 instances",
+      "priority": 5,
+      "skill_name": "AWS EC2",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setting up complex database connection patterns",
+      "priority": 5,
+      "skill_name": "go database management",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "refactor python dependencies",
+      "priority": 5,
+      "skill_name": "python package management - Pip",
+      "experience": 2,
+      "comments": "read the docs"
+    },
+    {
+      "name": "writing python scripts",
+      "priority": 5,
+      "skill_name": "python development",
+      "experience": 1,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setup Azure CDN",
+      "priority": 5,
+      "skill_name": "Azure CDN",
+      "experience": 1,
+      "comments": "read the docs"
+    },
+    {
+      "name": "create DI-based project structure with fx",
+      "priority": 3,
+      "skill_name": "go uber/fx",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "deploy docker containers in AWS ECS",
+      "priority": 3,
+      "skill_name": "AWS ECS",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "Configure AWS CloudWatch",
+      "priority": 3,
+      "skill_name": "AWS CloudWatch",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "scripting in go",
+      "priority": 3,
+      "skill_name": "go development",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "configuring Django signals",
+      "priority": 3,
+      "skill_name": "python Django - signals",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "designing project architecture",
+      "priority": 5,
+      "skill_name": "system design",
+      "experience": 7,
+      "comments": "read the docs"
+    },
+    {
+      "name": "help in designing project architecture",
+      "priority": 4,
+      "skill_name": "system design",
+      "experience": 5,
+      "comments": "read the docs"
+    },
+    {
+      "name": "Writing DRF application",
+      "priority": 3,
+      "skill_name": "python Django - DRF",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "Writing complex DRF serializers",
+      "priority": 3,
+      "skill_name": "python Django - DRF - Serializers",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "Creating Sanic application",
+      "priority": 3,
+      "skill_name": "python Sanic",
+      "experience": 3,
+      "comments": "read the docs"
+    },
+    {
+      "name": "setting up redis database",
+      "priority": 3,
+      "skill_name": "redis",
+      "experience": 2,
+      "comments": "read the docs"
     }
   ],
   "responsibility_conflicts": [
