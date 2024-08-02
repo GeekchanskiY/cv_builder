@@ -866,6 +866,132 @@
       "skill_name": "go optimization",
       "experience": 3,
       "comments": "read the docs"
+    },
+    {
+      "name": "building and optimizing database indexes",
+      "priority": 5,
+      "skill_name": "creating database indexes",
+      "experience": 3,
+      "comments": "explain/explain analyze"
+    },
+    {
+      "name": "writing services in go",
+      "priority": 5,
+      "skill_name": "go web development",
+      "experience": 1,
+      "comments": "frameworks could be mentioned here"
+    },
+    {
+      "name": "building & optimizing gorm queries",
+      "priority": 5,
+      "skill_name": "gorm",
+      "experience": 1,
+      "comments": "also should be mentioned why not raw sql"
+    },
+    {
+      "name": "building & optimizing gorm queries",
+      "priority": 5,
+      "skill_name": "gorm",
+      "experience": 1,
+      "comments": "also should be mentioned why not raw sql"
+    },
+    {
+      "name": "building application architecture in cloud",
+      "priority": 1,
+      "skill_name": "cloud",
+      "experience": 5,
+      "comments": "too wide resp, only for manual insert"
+    },
+    {
+      "name": "setup oracle sql pdb",
+      "priority": 5,
+      "skill_name": "oracle",
+      "experience": 5,
+      "comments": "pdb - pluggable database"
+    },
+    {
+      "name": "setup database instances in AWS RDS",
+      "priority": 5,
+      "skill_name": "AWS RDS",
+      "experience": 3,
+      "comments": "database should be mentioned also"
+    },
+    {
+      "name": "created complex dockerfiles",
+      "priority": 5,
+      "skill_name": "docker",
+      "experience": 3,
+      "comments": "for example with custom build/deploy images"
+    },
+    {
+      "name": "setup secure network in AWS VPC",
+      "priority": 5,
+      "skill_name": "AWS VPC",
+      "experience": 3,
+      "comments": "use address pools, also could mention allow-any, deny-any, and other policies"
+    },
+    {
+      "name": "create custom go routes",
+      "priority": 2,
+      "skill_name": "go routing",
+      "experience": 3,
+      "comments": "could mention about middlewares, parameter handling, etc."
+    },
+    {
+      "name": "writing raw sql queries",
+      "priority": 3,
+      "skill_name": "go sql package",
+      "experience": 3,
+      "comments": "-"
+    },
+    {
+      "name": "created IAM roles",
+      "priority": 3,
+      "skill_name": "AWS IAM",
+      "experience": 5,
+      "comments": "usually it's 5-10 roles for different developers, cloud admin, etc."
+    },
+    {
+      "name": "deployed application on GCP app engine",
+      "priority": 2,
+      "skill_name": "google app engine",
+      "experience": 3,
+      "comments": "-"
+    },
+    {
+      "name": "write tests with testify/assert",
+      "priority": 1,
+      "skill_name": "go testify/assert",
+      "experience": 1,
+      "comments": "-"
+    },
+    {
+      "name": "implemented API response caching with redis",
+      "priority": 4,
+      "skill_name": "caching with redis",
+      "experience": 3,
+      "comments": "a separate service on a high level is used for this purposes. Usually it's something like API Gateway"
+    },
+    {
+      "name": "setup mysql",
+      "priority": 4,
+      "skill_name": "mysql",
+      "experience": 3,
+      "comments": "users, roles, databases could be mentioned here"
+    },
+    {
+      "name": "optimized fastAPI application",
+      "priority": 5,
+      "skill_name": "python FastAPI",
+      "experience": 3,
+      "comments": "used DI instead of regular parameter passing to avoid re-initialization of repositories, for example"
+    },
+    {
+      "name": "implemented advanced concurrency patterns to improve performance",
+      "priority": 5,
+      "skill_name": "go concurrency",
+      "experience": 5,
+      "comments": "Multiplexing, Channels as a handle on a service, Restoring sequencing, https://go.dev/talks/2012/concurrency.slide#1"
     }
   ],
   "responsibility_conflicts": [
