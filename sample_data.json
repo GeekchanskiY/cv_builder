@@ -905,7 +905,7 @@
     {
       "name": "setup oracle sql pdb",
       "priority": 5,
-      "skill_name": "oracle",
+      "skill_name": "oracle sql",
       "experience": 5,
       "comments": "pdb - pluggable database"
     },
@@ -992,6 +992,104 @@
       "skill_name": "go concurrency",
       "experience": 5,
       "comments": "Multiplexing, Channels as a handle on a service, Restoring sequencing, https://go.dev/talks/2012/concurrency.slide#1"
+    },
+    {
+      "name": "updated package dependencies",
+      "priority": 2,
+      "skill_name": "python package management",
+      "experience": 3,
+      "comments": "removed deprecated packages, updated to newer versions, etc."
+    },
+    {
+      "name": "creating 'dead letter queue' for kafka",
+      "priority": 4,
+      "skill_name": "creating dlq",
+      "experience": 5,
+      "comments": "kafka does not have built-in dlq, but you should think why shall you need it"
+    },
+    {
+      "name": "advanced usage of go channels",
+      "priority": 4,
+      "skill_name": "go channels",
+      "experience": 5,
+      "comments": "single & bidirectional, use empty structs, etc."
+    },
+    {
+      "name": "build project architecture in gcp",
+      "priority": 4,
+      "skill_name": "google cloud storage",
+      "experience": 5,
+      "comments": "single & bidirectional, use empty structs, etc."
+    },
+    {
+      "name": "create different deployment environments",
+      "priority": 4,
+      "skill_name": "python Django - setup",
+      "experience": 5,
+      "comments": "for example, add to default DEBUG=True/False stage bool, with different behaviour"
+    },
+    {
+      "name": "write tests",
+      "priority": 4,
+      "skill_name": "python testing",
+      "experience": 5,
+      "comments": "unit, integration, regression, stress, etc."
+    },
+    {
+      "name": "implemented different messaging patterns",
+      "priority": 5,
+      "skill_name": "message brokers",
+      "experience": 5,
+      "comments": "add tracing fields, circuit breaker, etc."
+    },
+    {
+      "name": "created custom routers",
+      "priority": 5,
+      "skill_name": "custom routing",
+      "experience": 5,
+      "comments": "middlewares, request parameters, etc."
+    },
+    {
+      "name": "store data in gcp datastore",
+      "priority": 2,
+      "skill_name": "google cloud datastore",
+      "experience": 3,
+      "comments": "-"
+    },
+    {
+      "name": "creating message broker with redis",
+      "priority": 4,
+      "skill_name": "creating message broker with redis",
+      "experience": 4,
+      "comments": "-"
+    },
+    {
+      "name": "-",
+      "priority": 4,
+      "skill_name": "document-oriented nosql database",
+      "experience": 4,
+      "comments": "-"
+    },
+    {
+      "name": "configured psql MVCC",
+      "priority": 5,
+      "skill_name": "postgresql",
+      "experience": 4,
+      "comments": "multi version concurrency control, vacuum, etc."
+    },
+    {
+      "name": "testing with doctest",
+      "priority": 5,
+      "skill_name": "python testing - doctest",
+      "experience": 3,
+      "comments": "-"
+    },
+    {
+      "name": "testing with doctest",
+      "priority": 5,
+      "skill_name": "python testing - doctest",
+      "experience": 3,
+      "comments": "-"
     }
   ],
   "responsibility_conflicts": [
