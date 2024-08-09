@@ -3,14 +3,15 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/GeekchanskiY/cv_builder/internal/schemas/requests"
-	"github.com/GeekchanskiY/cv_builder/internal/usecases"
-	"github.com/GeekchanskiY/cv_builder/internal/utils"
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/solndev/cv_builder/internal/schemas/requests"
+	"github.com/solndev/cv_builder/internal/usecases"
+	"github.com/solndev/cv_builder/internal/utils"
 )
 
 type CVBuilderController struct {

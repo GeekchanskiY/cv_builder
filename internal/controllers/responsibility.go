@@ -2,13 +2,14 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/GeekchanskiY/cv_builder/internal/utils"
 	"net/http"
 	"strconv"
 
-	"github.com/GeekchanskiY/cv_builder/internal/repository"
-	"github.com/GeekchanskiY/cv_builder/internal/schemas"
+	"github.com/solndev/cv_builder/internal/utils"
+
 	"github.com/julienschmidt/httprouter"
+	"github.com/solndev/cv_builder/internal/repository"
+	"github.com/solndev/cv_builder/internal/schemas"
 )
 
 type ResponsibilityController struct {

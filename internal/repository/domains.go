@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/GeekchanskiY/cv_builder/internal/schemas"
+	"github.com/solndev/cv_builder/internal/schemas"
 )
 
 type DomainRepository struct {

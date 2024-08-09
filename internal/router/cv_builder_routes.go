@@ -1,9 +1,10 @@
 package router
 
 import (
-	"github.com/GeekchanskiY/cv_builder/internal/controllers"
-	"github.com/julienschmidt/httprouter"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/solndev/cv_builder/internal/controllers"
 )
 
 const cvBuilderRoutePrefix = "/cv_builder"

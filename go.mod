@@ -1,4 +1,4 @@
-module github.com/GeekchanskiY/cv_builder
+module github.com/solndev/cv_builder
 
 go 1.22.3
 

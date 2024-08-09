@@ -3,12 +3,13 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/GeekchanskiY/cv_builder/internal/repository"
-	"github.com/GeekchanskiY/cv_builder/internal/schemas"
-	"github.com/GeekchanskiY/cv_builder/internal/utils"
-	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
+	"github.com/solndev/cv_builder/internal/repository"
+	"github.com/solndev/cv_builder/internal/schemas"
+	"github.com/solndev/cv_builder/internal/utils"
 )
 
 type UtilsController struct {

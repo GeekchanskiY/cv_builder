@@ -1,6 +1,6 @@
 package requests
 
-import "github.com/GeekchanskiY/cv_builder/internal/schemas/interfaces"
+import "github.com/solndev/cv_builder/internal/schemas/interfaces"
 
 type BuildRequest struct {
 	interfaces.Validatable

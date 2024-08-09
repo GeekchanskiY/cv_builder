@@ -3,10 +3,11 @@ package repository
 import (
 	"database/sql"
 	"errors"
-	"github.com/lib/pq"
 	"log"
 
-	"github.com/GeekchanskiY/cv_builder/internal/schemas"
+	"github.com/lib/pq"
+
+	"github.com/solndev/cv_builder/internal/schemas"
 )
 
 type ProjectRepository struct {

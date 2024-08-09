@@ -1,15 +1,16 @@
 package main
 
 import (
-	"github.com/GeekchanskiY/cv_builder/internal/usecases"
 	"net/http"
 
-	"github.com/GeekchanskiY/cv_builder/internal/config"
-	"github.com/GeekchanskiY/cv_builder/internal/controllers"
-	database "github.com/GeekchanskiY/cv_builder/internal/db"
-	"github.com/GeekchanskiY/cv_builder/internal/repository"
-	"github.com/GeekchanskiY/cv_builder/internal/router"
-	"github.com/GeekchanskiY/cv_builder/internal/server"
+	"github.com/solndev/cv_builder/internal/usecases"
+
+	"github.com/solndev/cv_builder/internal/config"
+	"github.com/solndev/cv_builder/internal/controllers"
+	database "github.com/solndev/cv_builder/internal/db"
+	"github.com/solndev/cv_builder/internal/repository"
+	"github.com/solndev/cv_builder/internal/router"
+	"github.com/solndev/cv_builder/internal/server"
 
 	"go.uber.org/fx"
 )

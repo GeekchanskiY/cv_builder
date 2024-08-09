@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 
-	"github.com/GeekchanskiY/cv_builder/internal/controllers"
 	"github.com/julienschmidt/httprouter"
+	"github.com/solndev/cv_builder/internal/controllers"
 )
 
 const skillRoutePrefix = "/skills"

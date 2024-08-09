@@ -6,10 +6,11 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/GeekchanskiY/cv_builder/internal/repository"
-	"github.com/GeekchanskiY/cv_builder/internal/schemas"
 	"log"
 	"time"
+
+	"github.com/solndev/cv_builder/internal/repository"
+	"github.com/solndev/cv_builder/internal/schemas"
 )
 
 const (
